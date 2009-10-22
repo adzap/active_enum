@@ -1,0 +1,83 @@
+ActiveEnum
+==========
+
+Define enum classes in Rails and use them to enumerate ActiveRecord attributes. Enum values are stored in memory
+at the moment but I plan to add database and yaml.
+
+Example
+=======
+
+Define an enum class with values
+
+  class Sex < ActiveEnum::Base
+    value :id => 1, :name => 'Male'
+    value :id => 2, :name => 'Female'
+
+Define using implicit id values
+
+  class Sex < ActiveEnum::Base
+    value :name => 'Male'
+    value :name => 'Female'
+  end
+
+Enum class usage
+
+  Sex[1]        # => 'Male'
+  Sex['Male']   # => 1
+  Sex[:male]    # => 1
+  Sex.to_select # => [['Male', 1], ['Female',2]] for select form helpers
+
+Use the enum to enumerate an ActiveRecord model attribute
+
+  class User < ActiveRecord::Base
+    enumerate :sex, :with => Sex
+  end
+
+Skip the with option if the enum can be implied from the attribute
+  class User < ActiveRecord::Base
+    enumerate :sex
+  end
+
+Access the enum value and the enum values using the attribute method
+
+  user = User.new
+  user.sex = 1
+  user.sex      # => 1
+  user.sex.id   # => 1
+  user.sex.name # => 'Male'
+  user.sex.enum #=> Sex
+
+Default to return the enum name value for enumerated attribute
+
+  ActiveEnum.use_name_as_value = true
+  user.sex # => 'Male'
+
+Define enum classes in bulk without class files
+
+  ActiveEnum.define do
+
+    # defines Sex
+    enum(:sex) do
+      value :name => 'Male'
+      value :name => 'Female'
+    end
+
+    # defines Language 
+    enum(:language) do
+      value :name => 'English'
+      value :name => 'German'
+    end
+
+  end
+
+
+TODO
+=======
+- more docs
+- storage options of memory, database or yaml
+- use custom method name for the enumerated attribute
+- possibly allow string enum values to assigned to attributes
+- add enum value class for instances if there is a need
+
+
+Copyright (c) 2009 Adam Meehan, released under the MIT license
