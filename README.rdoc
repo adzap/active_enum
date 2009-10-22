@@ -5,6 +5,11 @@ of similar plugins that I liked and does it they way I prefer.
 
 Enum values are stored in memory at the moment but I plan to add database and yaml. 
 
+== Install
+
+  ./script/install plugin git://github.com/adzap/active_enum.git # for now, will gemify
+
+
 == Example
 
 Define an enum class with values
