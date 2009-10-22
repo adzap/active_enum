@@ -51,7 +51,7 @@ Default to return the enum name value for enumerated attribute
   ActiveEnum.use_name_as_value = true
   user.sex # => 'Male'
 
-Define enum classes in bulk without class files
+Define enum classes in bulk without class files, in an initializer file for example.
 
   ActiveEnum.define do
 
