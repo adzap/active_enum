@@ -74,6 +74,7 @@ Define enum classes in bulk without class files
 TODO
 =======
 - more docs
+- acts_as_enum for existing models
 - storage options of memory, database or yaml
 - use custom method name for the enumerated attribute
 - possibly allow string enum values to assigned to attributes
