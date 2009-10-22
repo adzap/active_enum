@@ -28,6 +28,24 @@ describe ActiveEnum::Base do
     enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
   end
 
+  it 'should raise error is the id is a duplicate' do
+    lambda do
+      define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 1, :name => 'Name 2'
+      end
+    end.should raise_error(ActiveEnum::DuplicateValue)
+  end
+
+  it 'should raise error is the name is a duplicate' do
+    lambda do
+      define_enum do
+        value :id => 1, :name => 'Name'
+        value :id => 2, :name => 'Name'
+      end
+    end.should raise_error(ActiveEnum::DuplicateValue)
+  end
+
   it 'should return sorted values by id from :all' do
     enum = define_enum do
       value :id => 2, :name => 'Name 2'

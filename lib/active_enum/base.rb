@@ -1,4 +1,6 @@
 module ActiveEnum
+  class DuplicateValue < StandardError; end
+
   class Base
 
     class << self
@@ -8,10 +10,11 @@ module ActiveEnum
       #
       def value(enum_value={})
         @values ||= [] 
-        unless enum_value[:id]
-          enum_value[:id] = max_id + 1 
-        end
-        @values << [enum_value[:id], enum_value[:name]]
+
+        id = enum_value[:id] || next_id
+        check_duplicate(id, enum_value[:name])
+
+        @values << [id, enum_value[:name]]
         @values.sort! {|a,b| a[0] <=> b[0] }
       end
 
@@ -56,8 +59,16 @@ module ActiveEnum
 
       private
       
-      def max_id
-        ids.max || 0
+      def next_id
+        (ids.max || 0) + 1
+      end
+
+      def check_duplicate(id, name)
+        if find_by_id(id)
+          raise ActiveEnum::DuplicateValue, "The id #{id} is already defined for #{self} enum."
+        elsif find_by_name(name)
+          raise ActiveEnum::DuplicateValue, "The name #{name} is already defined for #{self} enum."
+        end
       end
 
     end

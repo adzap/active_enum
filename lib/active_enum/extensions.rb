@@ -30,7 +30,7 @@ module ActiveEnum
 
       define_method(method_name) do |arg|
         if arg.is_a?(Symbol)
-          value = enum[arg] 
+          value = enum[arg]
           send(original_method, value)
         else
           send(original_method, arg)
