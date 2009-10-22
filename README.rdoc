@@ -1,11 +1,9 @@
-ActiveEnum
-==========
+= ActiveEnum
 
 Define enum classes in Rails and use them to enumerate ActiveRecord attributes. Enum values are stored in memory
 at the moment but I plan to add database and yaml.
 
-Example
-=======
+== Example
 
 Define an enum class with values
 
@@ -72,14 +70,13 @@ Define enum classes in bulk without class files
   end
 
 
-TODO
-=======
-- more docs
-- acts_as_enum for existing models
-- storage options of memory, database or yaml
-- use custom method name for the enumerated attribute
-- possibly allow string enum values to assigned to attributes
-- add enum value class for instances if there is a need
+== TODO
+* more docs
+* acts_as_enum for existing models
+* storage options of memory, database or yaml
+* use custom method name for the enumerated attribute
+* possibly allow string enum values to assigned to attributes
+* add enum value class for instances if there is a need
 
 
 Copyright (c) 2009 Adam Meehan, released under the MIT license
