@@ -37,7 +37,7 @@ Skip the with option if the enum can be implied from the attribute
     enumerate :sex
   end
 
-Access the enum value and the enum values using the attribute method
+Access the enum values and the enum class using the attribute method proxy
 
   user = User.new
   user.sex = 1
