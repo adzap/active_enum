@@ -7,7 +7,9 @@ Enum values are stored in memory at the moment but I plan to add database and ya
 
 == Install
 
-  ./script/install plugin git://github.com/adzap/active_enum.git # for now, will gemify
+Its a plugin for now but will gemify later
+
+  ./script/install plugin git://github.com/adzap/active_enum.git
 
 
 == Example
