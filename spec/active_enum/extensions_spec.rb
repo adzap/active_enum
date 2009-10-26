@@ -7,43 +7,44 @@ end
 
 describe ActiveEnum::Extensions do
   before do
-    person_class = define_model do
+    Person.class_eval do
       enumerate :sex, :with => Sex
     end
-    @person = person_class.new(:sex =>1) 
+    @person = Person.new(:sex =>1)
   end
 
   it 'should add class :enumerate method to ActiveRecord' do
-    define_model.should respond_to(:enumerate)
+    ActiveRecord::Base.should respond_to(:enumerate)
+  end
+
+  it 'should add class :enum_for method to ActiveRecord' do
+    ActiveRecord::Base.should respond_to(:enum_for)
   end
 
   it 'should allow implicit enumeration class from attribute name' do
-    person_class = define_model do
+    Person.class_eval do
       enumerate :sex
     end
-    person_class.new.sex.enum.should == Sex
+    Person.enum_for(:sex).should == Sex
   end
 
   it 'should raise error if implicit enumeration class cannot be found' do
     lambda do
-      define_model { enumerate :first_name }
+      Person.class_eval { enumerate :first_name }
     end.should raise_error(ActiveEnum::EnumNotFound)
   end
 
   describe "attribute with value" do
     it 'should return enum id for value' do
-      sex = @person.sex
-      sex.id.should == 1
+      @person.sex(:id).should == 1
     end
 
     it 'should return enum name for value' do
-      sex = @person.sex
-      sex.name.should == 'Male'
+      @person.sex(:name).should == 'Male'
     end
 
     it 'should return enum class for attribute' do
-      sex = @person.sex
-      sex.enum.should == Sex
+      @person.sex(:enum).should == Sex
     end
   end
 
@@ -53,18 +54,15 @@ describe ActiveEnum::Extensions do
     end
 
     it 'should return nil enum id' do
-      sex = @person.sex
-      sex.id.should be_nil
+      @person.sex(:id).should be_nil
     end
 
     it 'should return nil enum name' do
-      sex = @person.sex
-      sex.name.should be_nil
+      @person.sex(:name).should be_nil
     end
 
     it 'should return enum class for attribute' do
-      sex = @person.sex
-      sex.enum.should == Sex
+      @person.sex(:enum).should == Sex
     end
   end
 
@@ -74,18 +72,42 @@ describe ActiveEnum::Extensions do
     end
 
     it 'should return nil enum id' do
-      sex = @person.sex
-      sex.id.should be_nil
+      @person.sex(:id).should be_nil
     end
 
     it 'should return nil enum name' do
-      sex = @person.sex
-      sex.name.should be_nil
+      @person.sex(:name).should be_nil
     end
 
     it 'should return enum class for attribute' do
-      sex = @person.sex
-      sex.enum.should == Sex
+      @person.sex(:enum).should == Sex
+    end
+  end
+
+  describe "attribute question method" do
+    before do
+      @person.sex = 1
+    end
+
+    it 'should return normal value without arg' do
+      @person.sex?.should be_true
+      @person.sex = nil
+      @person.sex?.should be_false
+    end
+
+    it 'should return true if string name matches for id value' do
+      @person.sex?("Male").should be_true
+    end
+
+    it 'should return true if symbol name matches for id value' do
+      @person.sex?(:male).should be_true
+      @person.sex?(:Male).should be_true
+    end
+
+    it 'should return false if name does not match for id value' do
+      @person.sex?("Female").should be_false
+      @person.sex?(:female).should be_false
+      @person.sex?(:Female).should be_false
     end
   end
 
@@ -109,16 +131,12 @@ describe ActiveEnum::Extensions do
     end
 
     it 'should return text name value for attribute' do
-      @person.sex.should == 'Male' 
+      @person.sex.should == 'Male'
     end
-    
+
     after(:all) do
       ActiveEnum.use_name_as_value = false
     end
-  end
-
-  def define_model(&block)
-    Class.new(Person, &block)
   end
 
 end

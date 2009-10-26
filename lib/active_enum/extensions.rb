@@ -3,55 +3,118 @@ module ActiveEnum
 
   module Extensions
 
-    # Some of this stolen and modified from Roxy gem by Ryan Daigle
-    def setup_active_enum_proxy(name, enum)
-      define_attribute_methods unless generated_methods?
-
-      original_method = instance_method(name)
-
-      new_method = "proxied_#{name}"
-      alias_method new_method, "#{name}"
-      
-      if original_method.arity == 0
-        define_method(name) do
-          (@enum_proxy_for ||= {})[name] ||= ActiveEnum::Proxy.new(self, original_method, nil, enum)
-        end
-      else
-        define_method(name) do |*args|
-          ActiveEnum::Proxy.new(self, original_method, args, enum)
-        end
-      end      
+    def self.included(base)
+      base.extend ClassMethods
+      base.class_inheritable_accessor :enumerated_attributes
+      base.enumerated_attributes = {}
     end
 
-    def define_enum_write_method(name, enum)
-      method_name = "#{name}=".to_sym
-      original_method = "#{name}_without_enum=".to_sym
-      alias_method original_method, method_name
+    module ClassMethods
 
-      define_method(method_name) do |arg|
-        if arg.is_a?(Symbol)
-          value = enum[arg]
-          send(original_method, value)
-        else
-          send(original_method, arg)
+      # Declare an attribute to be enumerated by an enum class
+      #
+      #   enumerate :sex, :with => Sex
+      #   enumerate :sex # implies a Sex enum class exists
+      #
+      def enumerate(attribute, options={})
+        enum = options[:with]
+        unless enum
+          enum = attribute.to_s.classify.constantize
         end
-      end
-    end
 
-    def enumerate(method, options={})
-      enum = options[:with]
-      unless enum
-        enum = method.to_s.classify.constantize
+        self.enumerated_attributes[attribute.to_sym] = enum
+
+        define_active_enum_read_method(attribute)
+        define_active_enum_write_method(attribute)
+        define_active_enum_question_method(attribute)
+      rescue NameError => e
+        raise e unless e.message =~ /uninitialized constant/
+        raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
       end
-      
-      setup_active_enum_proxy(method, enum)
-      define_enum_write_method(method, enum)
-    rescue NameError => e
-      raise e unless e.message =~ /uninitialized constant/
-      raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{method}' in class #{self}. Specify the enum class using the :with option."
+
+      def enum_for(attribute)
+        self.enumerated_attributes[attribute.to_sym]
+      end
+
+      # Define read method to allow an argument for the enum component
+      #
+      #   user.sex
+      #   user.sex(:id)
+      #   user.sex(:name)
+      #   user.sex(:enum)
+      #
+      def define_active_enum_read_method(attribute)
+        unless instance_method_already_implemented?(attribute)
+          define_read_method(attribute.to_sym, attribute.to_s, columns_hash[attribute])
+        end
+
+        old_method = "#{attribute}_without_enum"
+        define_method("#{attribute}_with_enum") do |*arg|
+          arg = arg.first
+          value = send(old_method)
+
+          enum = self.class.enum_for(attribute)
+          case arg
+          when :id
+            value if enum.find_by_id(value)
+          when :name
+            enum[value]
+          when :enum
+            enum
+          else
+            ActiveEnum.use_name_as_value ? enum[value] : value
+          end
+        end
+
+        alias_method_chain attribute, :enum
+      end
+
+      # Define write method to also handle enum value
+      #
+      #   user.sex = 1
+      #   user.sex = :male
+      #
+      def define_active_enum_write_method(attribute)
+        unless instance_method_already_implemented?("#{attribute}=")
+          define_write_method(attribute.to_sym)
+        end
+
+        old_method = "#{attribute}_without_enum="
+        define_method("#{attribute}_with_enum=") do |arg|
+          enum = self.class.enum_for(attribute)
+          if arg.is_a?(Symbol)
+            value = enum[arg]
+            send(old_method, value)
+          else
+            send(old_method, arg)
+          end
+        end
+
+        alias_method_chain "#{attribute}=".to_sym, :enum
+      end
+
+      # Define question method to check enum value against attribute value
+      #
+      #   user.sex?(:male)
+      #
+      def define_active_enum_question_method(attribute)
+        define_question_method(attribute) unless instance_method_already_implemented?("#{attribute}?")
+
+        old_method = "#{attribute}_without_enum?"
+        define_method("#{attribute}_with_enum?") do |*arg|
+          arg = arg.first
+          if arg
+            send(attribute) == self.class.enum_for(attribute)[arg]
+          else
+            send(old_method)
+          end
+        end
+        alias_method_chain "#{attribute}?".to_sym, :enum
+      end
+
     end
 
   end
 end
 
-ActiveRecord::Base.extend ActiveEnum::Extensions
+ActiveRecord::Base.send :include, ActiveEnum::Extensions
