@@ -28,6 +28,15 @@ describe ActiveEnum::Extensions do
     Person.enum_for(:sex).should == Sex
   end
 
+  it 'should allow implicit enumeration class from block' do
+    Person.class_eval do
+      enumerate :sex do
+        value :id => 1, :name => 'Male'
+      end
+    end
+    Person.enum_for(:sex).should == PersonSex
+  end
+
   it 'should raise error if implicit enumeration class cannot be found' do
     lambda do
       Person.class_eval { enumerate :first_name }

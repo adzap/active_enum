@@ -17,11 +17,19 @@ module ActiveEnum
       #     enumerate :sex, :with => Sex
       #     enumerate :sex # implies a Sex enum class exists
       #
-      def enumerate(attribute, options={})
+      #     # Pass a block to create implicit enum class as ModelAttribute e.g. PersonSex 
+      #     enumerate :sex do
+      #       value :id => 1, :name => 'Male'
+      #     end
+      #
+      def enumerate(attribute, options={}, &block)
         attribute = attribute.to_sym
-        enum = options[:with]
-        unless enum
-          enum = attribute.to_s.classify.constantize
+        if block_given?
+          enum_name = "#{self.to_s.underscore}_#{attribute}"
+          ActiveEnum.define { enum(enum_name, &block) }
+          enum = enum_name.classify.constantize
+        else
+          enum = options[:with] || attribute.to_s.classify.constantize
         end
 
         self.enumerated_attributes[attribute] = enum
