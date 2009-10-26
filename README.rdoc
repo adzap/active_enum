@@ -46,8 +46,18 @@ Use the enum to enumerate an ActiveRecord model attribute
   end
 
 Skip the with option if the enum can be implied from the attribute
+
   class User < ActiveRecord::Base
     enumerate :sex
+  end
+
+Define enum class implicitly in enumerate block
+
+  class User < ActiveRecord::Base
+    # defines UserSex enum
+    enumerate :sex do
+      value :name => 'Male'
+    end
   end
 
 Access the enum values and the enum class using the attribute method with a symbol for the enum component you want
@@ -94,6 +104,7 @@ Define enum classes in bulk without class files, in an initializer file for exam
 
   end
 
+All defined enum classes are stored in ActiveEnum.enum_classes array if you need look them up or iterate over them.
 
 == TODO
 * more docs
@@ -104,13 +115,5 @@ Define enum classes in bulk without class files, in an initializer file for exam
 * question methods for enum names e.g. user.male?
 * possibly allow string enum values to assigned to attributes
 * add enum value class for instances if there is a need
-* define enum class implicitly in enumerate block, e.g.
-
-  class User < ActiveRecord::Base
-    # defines UserSex enum
-    enumerate :sex do
-      value :name => 'Male'
-    end
-  end
 
 Copyright (c) 2009 Adam Meehan, released under the MIT license
