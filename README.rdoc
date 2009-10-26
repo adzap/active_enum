@@ -65,7 +65,7 @@ You can check if the attribute value matches a particular enum value by passing 
   user.sex?(:male)    # => true
   user.sex?(:Male)    # => true
   user.sex?('Male')   # => true
-  user.sex?('Female') # => true
+  user.sex?('Female') # => false
 
 A convience method on the class is available to the enum class of any enumerated attribute
 
