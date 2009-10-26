@@ -12,17 +12,19 @@ module ActiveEnum
     module ClassMethods
 
       # Declare an attribute to be enumerated by an enum class
-      #
-      #   enumerate :sex, :with => Sex
-      #   enumerate :sex # implies a Sex enum class exists
+      # 
+      #   class Person < ActiveRecord::Base
+      #     enumerate :sex, :with => Sex
+      #     enumerate :sex # implies a Sex enum class exists
       #
       def enumerate(attribute, options={})
+        attribute = attribute.to_sym
         enum = options[:with]
         unless enum
           enum = attribute.to_s.classify.constantize
         end
 
-        self.enumerated_attributes[attribute.to_sym] = enum
+        self.enumerated_attributes[attribute] = enum
 
         define_active_enum_read_method(attribute)
         define_active_enum_write_method(attribute)
@@ -45,7 +47,7 @@ module ActiveEnum
       #
       def define_active_enum_read_method(attribute)
         unless instance_method_already_implemented?(attribute)
-          define_read_method(attribute.to_sym, attribute.to_s, columns_hash[attribute])
+          define_read_method(attribute, attribute.to_s, columns_hash[attribute.to_s])
         end
 
         old_method = "#{attribute}_without_enum"
@@ -76,7 +78,7 @@ module ActiveEnum
       #
       def define_active_enum_write_method(attribute)
         unless instance_method_already_implemented?("#{attribute}=")
-          define_write_method(attribute.to_sym)
+          define_write_method(attribute)
         end
 
         old_method = "#{attribute}_without_enum="

@@ -35,6 +35,10 @@ describe ActiveEnum::Extensions do
   end
 
   describe "attribute with value" do
+    it 'should return value with no arg' do
+      @person.sex.should == 1
+    end
+
     it 'should return enum id for value' do
       @person.sex(:id).should == 1
     end
@@ -53,6 +57,10 @@ describe ActiveEnum::Extensions do
       @person.sex = nil
     end
 
+    it 'should return nil with no arg' do
+      @person.sex.should be_nil
+    end
+
     it 'should return nil enum id' do
       @person.sex(:id).should be_nil
     end
@@ -69,6 +77,10 @@ describe ActiveEnum::Extensions do
   describe "attribute with undefined value" do
     before do
       @person.sex = -1
+    end
+
+    it 'should return value with no arg' do
+      @person.sex.should == -1
     end
 
     it 'should return nil enum id' do
