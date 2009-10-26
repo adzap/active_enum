@@ -1,6 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ActiveEnum::Base do
+  it 'should return empty array from :all method when no values defined' do
+    ActiveEnum.enum_classes = []
+    class NewEnum < ActiveEnum::Base
+    end
+    ActiveEnum.enum_classes.should == [NewEnum]
+  end
 
   it 'should return empty array from :all method when no values defined' do
     define_enum.all.should == []

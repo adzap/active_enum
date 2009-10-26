@@ -5,6 +5,10 @@ module ActiveEnum
 
     class << self
       
+      def inherited(subclass)
+        ActiveEnum.enum_classes << subclass
+      end
+
       # :id => 1, :title => 'Foo'
       # :title => 'Foo'
       #

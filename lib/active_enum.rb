@@ -3,6 +3,9 @@ require 'active_enum/extensions'
 require 'active_enum/version'
 
 module ActiveEnum
+  mattr_accessor :enum_classes
+  self.enum_classes = []
+
   mattr_accessor :use_name_as_value
   self.use_name_as_value = false
 
