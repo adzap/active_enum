@@ -55,12 +55,7 @@ module ActiveEnum
       end
 
       def lookup_by_name(index)
-        case index
-        when String
-          @values.rassoc(index)
-        when Symbol
-          @values.rassoc(index.to_s) || @values.rassoc(index.to_s.titleize)
-        end
+        @values.rassoc(index.to_s) || @values.rassoc(index.to_s.titleize)
       end
       
       def next_id

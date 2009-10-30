@@ -106,9 +106,21 @@ Define enum classes in bulk without class files, in an initializer file for exam
 
 All defined enum classes are stored in ActiveEnum.enum_classes array if you need look them up or iterate over them.
 
+You can make an existing model class behave like an enum class with acts_as_enum
+
+  class User < ActiveRecord::Base
+    acts_as_enum :name_column => 'first_name'
+  end
+
+Giving you the familiar enum methods
+
+  User[1]
+  User['Dave']
+  User.to_select
+
+
 == TODO
 * more docs
-* acts_as_enum for existing models
 * storage options of memory, database or yaml
 * use custom method name for the enumerated attribute
 * named_scopes

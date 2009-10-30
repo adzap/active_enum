@@ -46,7 +46,7 @@ module ActiveEnum
       end
 
       def lookup_by_name(index)
-        enum_values.send("find_by_#{active_enum_options[:name_column]}", index.to_s)
+        enum_values.find(:first, :conditions => ["#{active_enum_options[:name_column]} like ?", index.to_s])
       end
 
     end
