@@ -1,5 +1,6 @@
 require 'active_enum/base'
 require 'active_enum/extensions'
+require 'active_enum/acts_as_enum'
 require 'active_enum/version'
 
 module ActiveEnum

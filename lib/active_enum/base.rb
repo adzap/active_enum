@@ -26,19 +26,6 @@ module ActiveEnum
         @values || []
       end
 
-      def find_by_id(index)
-        @values.assoc(index)
-      end
-
-      def find_by_name(index)
-        case index
-        when String
-          @values.rassoc(index)
-        when Symbol
-          @values.rassoc(index.to_s) || @values.rassoc(index.to_s.titleize)
-        end
-      end
-
       def ids
         @values.map {|v| v[0] }
       end
@@ -53,24 +40,37 @@ module ActiveEnum
 
       def [](index)
         if index.is_a?(Fixnum)
-          row = find_by_id(index)
+          row = lookup_by_id(index)
           row[1] if row
         else
-          row = find_by_name(index)
+          row = lookup_by_name(index)
           row[0] if row
         end
       end
 
       private
+
+      def lookup_by_id(index)
+        @values.assoc(index)
+      end
+
+      def lookup_by_name(index)
+        case index
+        when String
+          @values.rassoc(index)
+        when Symbol
+          @values.rassoc(index.to_s) || @values.rassoc(index.to_s.titleize)
+        end
+      end
       
       def next_id
         (ids.max || 0) + 1
       end
 
       def check_duplicate(id, name)
-        if find_by_id(id)
+        if lookup_by_id(id)
           raise ActiveEnum::DuplicateValue, "The id #{id} is already defined for #{self} enum."
-        elsif find_by_name(name)
+        elsif lookup_by_name(name)
           raise ActiveEnum::DuplicateValue, "The name #{name} is already defined for #{self} enum."
         end
       end

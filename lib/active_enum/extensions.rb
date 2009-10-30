@@ -66,7 +66,7 @@ module ActiveEnum
           enum = self.class.enum_for(attribute)
           case arg
           when :id
-            value if enum.find_by_id(value)
+            value if enum[value]
           when :name
             enum[value]
           when :enum

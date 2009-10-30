@@ -5,7 +5,6 @@ require 'rubygems'
 require 'spec/autorun'
 
 require 'active_record'
-
 require 'active_enum'
 
 RAILS_ROOT = File.dirname(__FILE__)
