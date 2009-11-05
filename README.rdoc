@@ -7,10 +7,13 @@ Enum values are stored in memory at the moment but I plan to add database and ya
 
 == Install
 
-Plugin for now will gemify later
+On Gemcutter:
 
-  ./script/install plugin git://github.com/adzap/active_enum.git
+  sudo gem install active_enum
 
+And add to your Rails environment.rb
+
+  config.gem 'active_enum'
 
 == Example
 
