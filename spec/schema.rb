@@ -4,6 +4,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string   :first_name
     t.string   :last_name
     t.integer  :sex
+    t.integer  :attending
+    t.integer  :staying
   end
 
   create_table :sexes, :force => true do |t|

@@ -21,25 +21,32 @@ module ActiveEnum
       #     enumerate :sex do
       #       value :id => 1, :name => 'Male'
       #     end
+			#
+			#     # Multiple attributes with same enum
+      #     enumerate :to, :from, :with => Sex
       #
-      def enumerate(attribute, options={}, &block)
-        attribute = attribute.to_sym
-        if block_given?
-          enum_name = "#{self.to_s.underscore}_#{attribute}"
-          ActiveEnum.define { enum(enum_name, &block) }
-          enum = enum_name.classify.constantize
-        else
-          enum = options[:with] || attribute.to_s.classify.constantize
-        end
+      def enumerate(*attributes, &block)
+				options = attributes.extract_options!
+				attributes.each do |attribute|
+					begin
+						if block_given?
+							enum_name = "#{self.to_s.underscore}_#{attribute}"
+							ActiveEnum.define { enum(enum_name, &block) }
+							enum = enum_name.classify.constantize
+						else
+							enum = options[:with] || attribute.to_s.classify.constantize
+						end
+						attribute = attribute.to_sym
+						self.enumerated_attributes[attribute] = enum
 
-        self.enumerated_attributes[attribute] = enum
-
-        define_active_enum_read_method(attribute)
-        define_active_enum_write_method(attribute)
-        define_active_enum_question_method(attribute)
-      rescue NameError => e
-        raise e unless e.message =~ /uninitialized constant/
-        raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
+						define_active_enum_read_method(attribute)
+						define_active_enum_write_method(attribute)
+						define_active_enum_question_method(attribute)
+					rescue NameError => e
+						raise e unless e.message =~ /uninitialized constant/
+						raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
+					end
+				end
       end
 
       def enum_for(attribute)

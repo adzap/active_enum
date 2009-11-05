@@ -63,6 +63,12 @@ Define enum class implicitly in enumerate block
     end
   end
 
+Multiple attributes with same enum
+
+  class Patient < ActiveRecord::Base
+    enumerate :to, :from, :with => Sex
+  end
+
 Access the enum values and the enum class using the attribute method with a symbol for the enum component you want
 
   user = User.new
