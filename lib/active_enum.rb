@@ -12,7 +12,7 @@ module ActiveEnum
 
   class Configuration
     def enum(name, &block)
-      class_name = name.to_s.classify
+      class_name = name.to_s.camelize
       class_def = <<-end_eval
         class #{class_name} < ActiveEnum::Base
         end
