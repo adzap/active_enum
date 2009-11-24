@@ -60,6 +60,15 @@ describe ActiveEnum::Base do
     enum.all.first[0].should == 1
   end
 
+  it 'should return sorted values by id using order setting from :all' do
+    enum = define_enum do
+			order :desc
+      value :id => 1, :name => 'Name 1'
+      value :id => 2, :name => 'Name 2'
+    end
+    enum.all.first[0].should == 2
+  end
+
   it 'should return array of ids' do
     enum = define_enum do
       value :id => 1, :name => 'Name 1'
@@ -111,6 +120,15 @@ describe ActiveEnum::Base do
       value :id => 2, :name => 'Name 2'
     end
     enum.to_select.should == [['Name 1',1], ['Name 2',2]]
+  end
+
+  it 'should return array sorted using order setting from to_select' do
+    enum = define_enum() do
+			order :desc
+      value :id => 1, :name => 'Name 1'
+      value :id => 2, :name => 'Name 2'
+    end
+    enum.to_select.should == [['Name 2',2], ['Name 1',1]]
   end
 
   def define_enum(&block)

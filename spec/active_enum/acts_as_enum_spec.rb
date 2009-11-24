@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class Person < ActiveRecord::Base
-  acts_as_enum :name_column => 'first_name'
+  acts_as_enum :name_column => 'first_name', :order => :desc
 end
 
 describe ActiveEnum::ActsAsEnum do

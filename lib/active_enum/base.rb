@@ -19,8 +19,14 @@ module ActiveEnum
         check_duplicate(id, enum_value[:name])
 
         @values << [id, enum_value[:name]]
-        @values.sort! {|a,b| a[0] <=> b[0] }
+				sort_values!
       end
+
+      # order enum values using :asc or :desc
+      #
+			def order(order)
+				@order = order
+			end
 
       def all
         @values || []
@@ -35,7 +41,7 @@ module ActiveEnum
       end
 
       def to_select
-        @values.map {|v| [v[1], v[0]] }
+				@values.map {|v| [v[1], v[0]] }
       end
 
       def [](index)
@@ -69,6 +75,15 @@ module ActiveEnum
           raise ActiveEnum::DuplicateValue, "The name #{name} is already defined for #{self} enum."
         end
       end
+
+			def sort_values!
+				case (@order || :asc)
+				when :asc
+					@values.sort! {|a,b| a[0] <=> b[0] }
+				when :desc
+					@values.sort! {|a,b| b[0] <=> a[0] }
+				end
+			end
 
     end
 
