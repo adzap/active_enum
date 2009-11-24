@@ -14,7 +14,7 @@ module ActiveEnum
         named_scope :enum_values,
                       :select     => "#{primary_key}, #{active_enum_options[:name_column]}",
                       :conditions => active_enum_options[:conditions],
-                      :order      => "id #{active_enum_options[:order]}"
+                      :order      => "#{primary_key} #{active_enum_options[:order]}"
       end
 
       def ids
