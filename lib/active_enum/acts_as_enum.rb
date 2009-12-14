@@ -3,12 +3,13 @@ module ActiveEnum
   module ActsAsEnum
 
     def self.included(base)
-      base.extend ClassMethods
+      base.extend MacroMethods
     end
 
-    module ClassMethods
+    module MacroMethods
 
       def acts_as_enum(options={})
+        extend ClassMethods
         class_inheritable_accessor :active_enum_options
         self.active_enum_options = options.reverse_merge(:name_column => 'name')
         named_scope :enum_values,
@@ -16,6 +17,10 @@ module ActiveEnum
                       :conditions => active_enum_options[:conditions],
                       :order      => "#{primary_key} #{active_enum_options[:order]}"
       end
+
+    end
+
+    module ClassMethods
 
       def ids
         enum_values.map {|v| v.id }
