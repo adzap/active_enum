@@ -12,12 +12,12 @@ module ActiveEnum
     module ClassMethods
 
       # Declare an attribute to be enumerated by an enum class
-      # 
+      #
       #   class Person < ActiveRecord::Base
       #     enumerate :sex, :with => Sex
       #     enumerate :sex # implies a Sex enum class exists
       #
-      #     # Pass a block to create implicit enum class as ModelAttribute e.g. PersonSex 
+      #     # Pass a block to create implicit enum class namespaced by model e.g. Person::Sex
       #     enumerate :sex do
       #       value :id => 1, :name => 'Male'
       #     end
@@ -30,9 +30,10 @@ module ActiveEnum
 				attributes.each do |attribute|
 					begin
 						if block_given?
-							enum_name = "#{self.to_s.underscore}_#{attribute}"
-							ActiveEnum.define { enum(enum_name, &block) }
-							enum = enum_name.classify.constantize
+              enum_class_name = "#{self.name}::#{attribute.to_s.camelize}"
+              eval("class #{enum_class_name} < ActiveEnum::Base; end")
+						  enum = enum_class_name.constantize
+              enum.class_eval &block
 						else
 							enum = options[:with] || attribute.to_s.classify.constantize
 						end
