@@ -12,12 +12,6 @@ class Accepted < ActiveEnum::Base
 end
 
 describe ActiveEnum::Extensions do
-  before do
-    Person.class_eval do
-      enumerate :sex, :with => Sex
-    end
-    @person = Person.new(:sex =>1)
-  end
 
   it 'should add class :enumerate method to ActiveRecord' do
     ActiveRecord::Base.should respond_to(:enumerate)
@@ -57,121 +51,134 @@ describe ActiveEnum::Extensions do
     end.should raise_error(ActiveEnum::EnumNotFound)
   end
 
-  describe "attribute with value" do
-    it 'should return value with no arg' do
-      @person.sex.should == 1
-    end
-
-    it 'should return enum id for value' do
-      @person.sex(:id).should == 1
-    end
-
-    it 'should return enum name for value' do
-      @person.sex(:name).should == 'Male'
-    end
-
-    it 'should return enum class for attribute' do
-      @person.sex(:enum).should == Sex
-    end
-  end
-
-  describe "nil attribute value" do
-    before do
-      @person.sex = nil
-    end
-
-    it 'should return nil with no arg' do
-      @person.sex.should be_nil
-    end
-
-    it 'should return nil enum id' do
-      @person.sex(:id).should be_nil
-    end
-
-    it 'should return nil enum name' do
-      @person.sex(:name).should be_nil
-    end
-
-    it 'should return enum class for attribute' do
-      @person.sex(:enum).should == Sex
-    end
-  end
-
-  describe "attribute with undefined value" do
-    before do
-      @person.sex = -1
-    end
-
-    it 'should return value with no arg' do
-      @person.sex.should == -1
-    end
-
-    it 'should return nil enum id' do
-      @person.sex(:id).should be_nil
-    end
-
-    it 'should return nil enum name' do
-      @person.sex(:name).should be_nil
-    end
-
-    it 'should return enum class for attribute' do
-      @person.sex(:enum).should == Sex
-    end
-  end
-
-  describe "attribute question method" do
-    before do
-      @person.sex = 1
-    end
-
-    it 'should return normal value without arg' do
-      @person.sex?.should be_true
-      @person.sex = nil
-      @person.sex?.should be_false
-    end
-
-    it 'should return true if string name matches for id value' do
-      @person.sex?("Male").should be_true
-    end
-
-    it 'should return true if symbol name matches for id value' do
-      @person.sex?(:male).should be_true
-      @person.sex?(:Male).should be_true
-    end
-
-    it 'should return false if name does not match for id value' do
-      @person.sex?("Female").should be_false
-      @person.sex?(:female).should be_false
-      @person.sex?(:Female).should be_false
-    end
-  end
-
-  describe "assigning enum name symbol to attribute" do
-
-    it 'should store id value when valid enum name' do
-      @person.sex = :female
-      @person.sex.should == 2
-    end
-
-    it 'should store nil value when invalid enum name' do
-      @person.sex = :invalid
-      @person.sex.should == nil
-    end
-
-  end
-
-  describe "use enum name as attribute value" do
+  describe "attribute" do
     before(:all) do
-      ActiveEnum.use_name_as_value = true
+      reset_class Person do
+        enumerate :sex, :with => Sex
+      end
     end
 
-    it 'should return text name value for attribute' do
-      @person.sex.should == 'Male'
+    before do
+      @person = Person.new(:sex =>1)
     end
 
-    after(:all) do
-      ActiveEnum.use_name_as_value = false
+    describe "with value" do
+      it 'should return value with no arg' do
+        @person.sex.should == 1
+      end
+
+      it 'should return enum id for value' do
+        @person.sex(:id).should == 1
+      end
+
+      it 'should return enum name for value' do
+        @person.sex(:name).should == 'Male'
+      end
+
+      it 'should return enum class for attribute' do
+        @person.sex(:enum).should == Sex
+      end
     end
+
+    describe "with nil value" do
+      before do
+        @person.sex = nil
+      end
+
+      it 'should return nil with no arg' do
+        @person.sex.should be_nil
+      end
+
+      it 'should return nil enum id' do
+        @person.sex(:id).should be_nil
+      end
+
+      it 'should return nil enum name' do
+        @person.sex(:name).should be_nil
+      end
+
+      it 'should return enum class for attribute' do
+        @person.sex(:enum).should == Sex
+      end
+    end
+
+    describe "with undefined value" do
+      before do
+        @person.sex = -1
+      end
+
+      it 'should return value with no arg' do
+        @person.sex.should == -1
+      end
+
+      it 'should return nil enum id' do
+        @person.sex(:id).should be_nil
+      end
+
+      it 'should return nil enum name' do
+        @person.sex(:name).should be_nil
+      end
+
+      it 'should return enum class for attribute' do
+        @person.sex(:enum).should == Sex
+      end
+    end
+
+    describe "question method" do
+      before do
+        @person.sex = 1
+      end
+
+      it 'should return normal value without arg' do
+        @person.sex?.should be_true
+        @person.sex = nil
+        @person.sex?.should be_false
+      end
+
+      it 'should return true if string name matches for id value' do
+        @person.sex?("Male").should be_true
+      end
+
+      it 'should return true if symbol name matches for id value' do
+        @person.sex?(:male).should be_true
+        @person.sex?(:Male).should be_true
+      end
+
+      it 'should return false if name does not match for id value' do
+        @person.sex?("Female").should be_false
+        @person.sex?(:female).should be_false
+        @person.sex?(:Female).should be_false
+      end
+    end
+
+    describe "with value as enum name symbol" do
+
+      it 'should store id value when valid enum name' do
+        @person.sex = :female
+        @person.sex.should == 2
+      end
+
+      it 'should store nil value when invalid enum name' do
+        @person.sex = :invalid
+        @person.sex.should == nil
+      end
+
+    end
+
+    describe "with value as enum name" do
+      before(:all) do
+        ActiveEnum.use_name_as_value = true
+      end
+
+      it 'should return text name value for attribute' do
+        @person.sex.should == 'Male'
+      end
+
+      after(:all) do
+        ActiveEnum.use_name_as_value = false
+      end
+    end
+
   end
 
 end
