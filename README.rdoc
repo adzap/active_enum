@@ -137,6 +137,22 @@ Giving you the familiar enum methods
   User['Dave']
   User.to_select
 
+=== Formtastic
+
+If you are a formtastic user you can use the extension for an enum input.
+
+In an initialiser:
+
+  require 'active_enum/formtastic'
+
+Then in a form you can use the :enum type for attribute inputs which are enumerated.
+
+  <% semantic_form_for(@person) do |f| %>
+    <%= f.input :sex, :as => :enum %>
+  <% end %>
+
+This will output a select with the option values taken from the enum class for the attribute.
+
 
 == TODO
 * more docs
@@ -144,7 +160,5 @@ Giving you the familiar enum methods
 * use custom method name for the enumerated attribute
 * named_scopes
 * question methods for enum names e.g. user.male?
-* possibly allow string enum values to assigned to attributes
-* add enum value class for instances if there is a need
 
 Copyright (c) 2009 Adam Meehan, released under the MIT license
