@@ -7,10 +7,6 @@ require 'lib/active_enum/version'
 
 GEM_NAME = "active_enum"
 GEM_VERSION = ActiveEnum::VERSION
-AUTHOR   = "Adam Meehan"
-EMAIL    = "adam.meehan@gmail.com"
-HOMEPAGE = "http://github.com/adzap/active_enum"
-SUMMARY  = "Define enum classes in Rails and use them to enumerate ActiveRecord attributes"
 
 spec = Gem::Specification.new do |s|
   s.name = GEM_NAME
@@ -19,12 +15,12 @@ spec = Gem::Specification.new do |s|
   s.rubyforge_project = "active_enum"
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.rdoc"]
-  s.summary = SUMMARY
+  s.summary = "Define enum classes in Rails and use them to enumerate ActiveRecord attributes"
   s.description = s.summary
-  s.author = AUTHOR
-  s.email = EMAIL
-  s.homepage = HOMEPAGE
-  
+  s.author = "Adam Meehan"
+  s.email = "adam.meehan@gmail.com"
+  s.homepage = "http://github.com/adzap/active_enum"
+
   s.require_path = 'lib'
   s.autorequire = GEM_NAME
   s.files = %w(MIT-LICENSE README.rdoc Rakefile) + Dir.glob("{lib,spec}/**/*")
