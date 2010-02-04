@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_enum}
-  s.version = "0.6.0"
+  s.version = "0.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adam Meehan"]
   s.autorequire = %q{active_enum}
-  s.date = %q{2009-12-28}
+  s.date = %q{2010-02-04}
   s.description = %q{Define enum classes in Rails and use them to enumerate ActiveRecord attributes}
   s.email = %q{adam.meehan@gmail.com}
   s.extra_rdoc_files = ["README.rdoc"]
