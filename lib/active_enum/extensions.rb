@@ -26,6 +26,8 @@ module ActiveEnum
       #     enumerate :to, :from, :with => Sex
       #
       def enumerate(*attributes, &block)
+        define_attribute_methods unless generated_methods?
+
 				options = attributes.extract_options!
 				attributes.each do |attribute|
 					begin
@@ -62,10 +64,6 @@ module ActiveEnum
       #   user.sex(:enum)
       #
       def define_active_enum_read_method(attribute)
-        unless instance_method_already_implemented?(attribute)
-          define_read_method(attribute, attribute.to_s, columns_hash[attribute.to_s])
-        end
-
         old_method = "#{attribute}_without_enum"
         define_method("#{attribute}_with_enum") do |*arg|
           arg = arg.first
@@ -93,10 +91,6 @@ module ActiveEnum
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-        unless instance_method_already_implemented?("#{attribute}=")
-          define_write_method(attribute)
-        end
-
         old_method = "#{attribute}_without_enum="
         define_method("#{attribute}_with_enum=") do |arg|
           enum = self.class.enum_for(attribute)
@@ -116,8 +110,6 @@ module ActiveEnum
       #   user.sex?(:male)
       #
       def define_active_enum_question_method(attribute)
-        define_question_method(attribute) unless instance_method_already_implemented?("#{attribute}?")
-
         old_method = "#{attribute}_without_enum?"
         define_method("#{attribute}_with_enum?") do |*arg|
           arg = arg.first
