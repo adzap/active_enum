@@ -13,13 +13,13 @@ module ActiveEnum
       # :title => 'Foo'
       #
       def value(enum_value={})
-        @values ||= [] 
+        @values ||= []
 
         id = enum_value[:id] || next_id
         check_duplicate(id, enum_value[:name])
 
         @values << [id, enum_value[:name]]
-				sort_values!
+				sort_values! unless @order == :as_defined
       end
 
       # order enum values using :asc or :desc

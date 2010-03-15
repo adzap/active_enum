@@ -60,13 +60,33 @@ describe ActiveEnum::Base do
     enum.all.first[0].should == 1
   end
 
-  it 'should return sorted values by id using order setting from :all' do
-    enum = define_enum do
-			order :desc
-      value :id => 1, :name => 'Name 1'
-      value :id => 2, :name => 'Name 2'
+  context "sorting" do
+    it 'should return values ascending by default' do
+      enum = define_enum do
+        value :id => 2, :name => 'Name 2'
+        value :id => 1, :name => 'Name 1'
+      end
+      enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
     end
-    enum.all.first[0].should == 2
+
+    it 'should return sorted values by id using order setting' do
+      enum = define_enum do
+        order :desc
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.all.should == [[2, 'Name 2'], [1,'Name 1']]
+    end
+
+    it 'should return sorted values by id using order setting' do
+      enum = define_enum do
+        order :as_defined
+        value :id => 3, :name => 'Name 3'
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.all.should == [[3,'Name 3'], [1,'Name 1'], [2, 'Name 2']]
+    end
   end
 
   it 'should return array of ids' do
