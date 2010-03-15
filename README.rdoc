@@ -35,21 +35,28 @@ Beware that if you change the order of values defined in an enum which don't hav
 This could corrupt your data if the enum values have been stored in a model record, as they will no longer map to
 the original enum.
 
-You can also define the sort order of returned values
-
-  class Sex < ActiveEnum::Base
-    order :desc
-
-    value :id => 1, :name => 'Male'
-    value :id => 2, :name => 'Female'
-  end
-
 Enum class usage
 
   Sex[1]        # => 'Male'
   Sex['Male']   # => 1
   Sex[:male]    # => 1
   Sex.to_select # => [['Male', 1], ['Female',2]] for select form helpers
+
+=== Ordering
+
+To define the sorting of returned values use the order method. Which is useful for to_select method.
+
+  class Sex < ActiveEnum::Base
+    order :asc
+
+    value :id => 1, :name => 'Male'
+    value :id => 2, :name => 'Female'
+  end
+
+By default the order is ascending (:asc) but you can also choose descending (:desc) or in order of definition (:as_defined).
+The last option is useful when supplying id values but have a specific order needed to display them.
+
+=== Enumerate model attributes
 
 Use the enum to enumerate an ActiveRecord model attribute
 
@@ -79,6 +86,8 @@ Multiple attributes with same enum
     enumerate :to, :from, :with => Sex
   end
 
+=== Attribute value lookup
+
 Access the enum values and the enum class using the attribute method with a symbol for the enum component you want
 
   user = User.new
@@ -89,6 +98,13 @@ Access the enum values and the enum class using the attribute method with a symb
   user.sex(:name)  # => 'Male'
   user.sex(:enum)  # => Sex
 
+You can set the default to return the enum name value for enumerated attribute
+
+  ActiveEnum.use_name_as_value = true
+  user.sex # => 'Male'
+
+=== Boolean check
+
 You can check if the attribute value matches a particular enum value by passing the enum value as an argument to the question method
 
   user.sex?(:male)    # => true
@@ -96,14 +112,13 @@ You can check if the attribute value matches a particular enum value by passing 
   user.sex?('Male')   # => true
   user.sex?('Female') # => false
 
-A convience method on the class is available to the enum class of any enumerated attribute
+=== Enum lookup
+
+A convenience method on the class is available to the enum class of any enumerated attribute
 
   User.enum_for(:sex) # => Sex
 
-You can set the default to return the enum name value for enumerated attribute
-
-  ActiveEnum.use_name_as_value = true
-  user.sex # => 'Male'
+=== Bulk definition
 
 Define enum classes in bulk without class files, in an initializer file for example.
 
@@ -124,6 +139,8 @@ Define enum classes in bulk without class files, in an initializer file for exam
   end
 
 All defined enum classes are stored in ActiveEnum.enum_classes array if you need look them up or iterate over them.
+
+=== Model as enum or acts_as_enum
 
 You can make an existing model class behave like an enum class with acts_as_enum
 
