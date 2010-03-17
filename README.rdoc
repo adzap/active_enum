@@ -24,6 +24,13 @@ Define an enum class with values
     value :id => 2, :name => 'Female'
   end
 
+Define with id as the key
+
+  class Sex < ActiveEnum::Base
+    value 1 => 'Male'
+    value 2 => 'Female'
+  end
+
 Define using implicit id values
 
   class Sex < ActiveEnum::Base

@@ -1,24 +1,26 @@
 module ActiveEnum
   class DuplicateValue < StandardError; end
+  class InvalidValue < StandardError; end
 
   class Base
 
     class << self
-      
+
       def inherited(subclass)
         ActiveEnum.enum_classes << subclass
       end
 
-      # :id => 1, :title => 'Foo'
-      # :title => 'Foo'
+      # :name => 'Foo', implicit ID
+      # :id => 1, :name => 'Foo'
+      # 1 => 'Foo'
       #
-      def value(enum_value={})
+      def value(enum_value)
         @values ||= []
 
-        id = enum_value[:id] || next_id
-        check_duplicate(id, enum_value[:name])
+        id, name = id_and_name(enum_value)
+        check_duplicate(id, name)
 
-        @values << [id, enum_value[:name]]
+        @values << [id, name]
 				sort_values! unless @order == :as_defined
       end
 
@@ -63,7 +65,17 @@ module ActiveEnum
       def lookup_by_name(index)
         @values.rassoc(index.to_s) || @values.rassoc(index.to_s.titleize)
       end
-      
+
+      def id_and_name(hash)
+        if hash.has_key?(:id) || hash.has_key?(:name)
+          return (hash[:id] || next_id), hash[:name]
+        elsif hash.keys.first.is_a?(Fixnum)
+          return *Array(hash).first
+        else
+          raise ActiveEnum::InvalidValue, "The value supplied, #{hash}, is not a valid format."
+        end
+      end
+
       def next_id
         (ids.max || 0) + 1
       end

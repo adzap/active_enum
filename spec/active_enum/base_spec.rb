@@ -26,6 +26,13 @@ describe ActiveEnum::Base do
     enum.all.should == [[1,'Name']]
   end
 
+  it 'should allow me to define a value as hash with id as key and name as value' do
+    enum = define_enum do
+      value 1 => 'Name'
+    end
+    enum.all.should == [[1,'Name']]
+  end
+
   it 'should increment value ids when defined without ids' do
     enum = define_enum do
       value :name => 'Name 1'
