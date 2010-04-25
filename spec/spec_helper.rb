@@ -20,9 +20,10 @@ module SpecHelper
   def reset_class(klass, &block)
     name = klass.name.to_sym
     Object.send(:remove_const, name)
-    Object.const_set(name, Class.new(ActiveRecord::Base))
+    eval "class #{klass}#{' < ' + klass.superclass.to_s if klass.superclass != Class}; end", TOPLEVEL_BINDING
     new_klass = Object.const_get(name)
     new_klass.class_eval &block if block_given?
+    new_klass
   end
 end
 
