@@ -41,7 +41,7 @@ describe ActiveEnum::Base do
     enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
   end
 
-  it 'should raise error is the id is a duplicate' do
+  it 'should raise error if the id is a duplicate' do
     lambda do
       define_enum do
         value :id => 1, :name => 'Name 1'
@@ -50,7 +50,7 @@ describe ActiveEnum::Base do
     end.should raise_error(ActiveEnum::DuplicateValue)
   end
 
-  it 'should raise error is the name is a duplicate' do
+  it 'should raise error if the name is a duplicate' do
     lambda do
       define_enum do
         value :id => 1, :name => 'Name'
