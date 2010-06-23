@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'active_enum/storage/active_record_store'
 
-class TestARStoreEnum < ActiveEnum::Base
-end
+class TestARStoreEnum < ActiveEnum::Base; end
+class TestOtherAREnum < ActiveEnum::Base; end
 
 describe ActiveEnum::Storage::ActiveRecordStore do
   attr_accessor :store
@@ -14,35 +14,55 @@ describe ActiveEnum::Storage::ActiveRecordStore do
 
   context '#set' do
     it 'should store values in array' do
-      store.set 1, 'test name'
-      store.values.should == [[1, 'test name']]
+      store.set 1, 'Name 1'
+      store.values.should == [[1, 'Name 1']]
+    end
+  end
+
+  context "#values" do
+    it 'should return only values for enum' do
+      alt_store.set 1, 'Other Name 1'
+      store.set 1, 'Name 1'
+      store.values.should == [[1, 'Name 1']]
     end
   end
 
   context "#get_by_id" do
     it 'should return the value for a given id' do
-      store.set 1, 'test name'
-      store.get_by_id(1).should == [1, 'test name']
+      store.set 1, 'Name 1'
+      store.get_by_id(1).should == [1, 'Name 1']
     end
 
     it 'should return nil when id not found' do
       store.get_by_id(1).should be_nil
     end
+
+    it 'should return value for correct enum' do
+      alt_store.set 1, 'Other Name 1'
+      store.set 1, 'Name 1'
+      store.get_by_id(1).should == [1, 'Name 1']
+    end
   end
 
   context "#get_by_name" do
     it 'should return the value for a given name' do
-      store.set 1, 'test name'
-      store.get_by_name('test name').should == [1, 'test name']
+      store.set 1, 'Name 1'
+      store.get_by_name('Name 1').should == [1, 'Name 1']
     end
 
     it 'should return the value with title-cased name for a given lowercase name' do
-      store.set 1, 'Test Name'
-      store.get_by_name('test name').should == [1, 'Test Name']
+      store.set 1, 'Name 1'
+      store.get_by_name('name 1').should == [1, 'Name 1']
     end
 
     it 'should return nil when name not found' do
       store.get_by_name('test name').should be_nil
+    end
+    
+    it 'should return value for correct enum' do
+      alt_store.set 1, 'Other Name 1'
+      store.set 1, 'Name 1'
+      store.get_by_name('Name 1').should == [1, 'Name 1']
     end
   end
 
@@ -79,6 +99,10 @@ describe ActiveEnum::Storage::ActiveRecordStore do
   end
 
   def store
-    @store ||= ActiveEnum::Storage::MemoryStore.new(TestARStoreEnum, @order)
+    @store ||= ActiveEnum::Storage::ActiveRecordStore.new(TestARStoreEnum, @order)
+  end
+
+  def alt_store
+    @alt_store ||= ActiveEnum::Storage::ActiveRecordStore.new(TestOtherAREnum, :asc)
   end
 end
