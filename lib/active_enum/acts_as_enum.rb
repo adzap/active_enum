@@ -12,10 +12,9 @@ module ActiveEnum
         extend ClassMethods
         class_inheritable_accessor :active_enum_options
         self.active_enum_options = options.reverse_merge(:name_column => 'name')
-        named_scope :enum_values,
-                      :select     => "#{primary_key}, #{active_enum_options[:name_column]}",
-                      :conditions => active_enum_options[:conditions],
-                      :order      => "#{primary_key} #{active_enum_options[:order]}"
+        scope :enum_values, select("#{primary_key}, #{active_enum_options[:name_column]}").
+                            where(active_enum_options[:conditions]).
+                            order("#{primary_key} #{active_enum_options[:order]}")
       end
 
     end
@@ -51,7 +50,7 @@ module ActiveEnum
       end
 
       def lookup_by_name(index)
-        enum_values.find(:first, :conditions => ["#{active_enum_options[:name_column]} like ?", index.to_s])
+        enum_values.where("#{active_enum_options[:name_column]} like ?", index.to_s).first
       end
 
     end
