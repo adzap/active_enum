@@ -81,7 +81,7 @@ Define enum class implicitly from enumerate block. Enum class is namespaced by m
 
   class User < ActiveRecord::Base
 
-    # defines User::Sex
+    # defines User::Sex enum class
     enumerate :sex do
       value :name => 'Male'
     end
