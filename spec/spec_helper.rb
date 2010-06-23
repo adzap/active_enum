@@ -2,7 +2,8 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'spec'))
 
 require 'rubygems'
-require 'spec/autorun'
+require 'rspec/autorun'
+require 'rspec/rails'
 
 require 'active_record'
 require 'active_enum'
@@ -27,6 +28,6 @@ module SpecHelper
   end
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.include SpecHelper
 end
