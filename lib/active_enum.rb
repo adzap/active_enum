@@ -1,6 +1,7 @@
 require 'active_enum/base'
 require 'active_enum/extensions'
 require 'active_enum/acts_as_enum'
+require 'active_enum/storage/abstract_store'
 require 'active_enum/version'
 
 module ActiveEnum
@@ -9,6 +10,9 @@ module ActiveEnum
 
   mattr_accessor :use_name_as_value
   self.use_name_as_value = false
+
+  mattr_accessor :storage
+  self.storage = :memory
 
   class Configuration
     def enum(name, &block)
