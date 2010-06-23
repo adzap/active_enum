@@ -62,12 +62,9 @@ module ActiveEnum
       #   user.sex(:enum)
       #
       def define_active_enum_read_method(attribute)
-        define_read_method(attribute, attribute.to_s, columns_hash[attribute.to_s]) unless instance_method_already_implemented?(attribute.to_s)
-
-        old_method = "#{attribute}_without_enum"
-        define_method("#{attribute}_with_enum") do |*arg|
+        define_method("#{attribute}") do |*arg|
           arg = arg.first
-          value = send(old_method)
+          value = super()
 
           enum = self.class.enum_for(attribute)
           case arg
@@ -81,8 +78,6 @@ module ActiveEnum
             ActiveEnum.use_name_as_value ? enum[value] : value
           end
         end
-
-        alias_method_chain attribute, :enum
       end
 
       # Define write method to also handle enum value
@@ -91,20 +86,15 @@ module ActiveEnum
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-				define_write_method(attribute) unless instance_method_already_implemented?("#{attribute}=")
-
-        old_method = "#{attribute}_without_enum="
-        define_method("#{attribute}_with_enum=") do |arg|
+        define_method("#{attribute}=") do |arg|
           enum = self.class.enum_for(attribute)
           if arg.is_a?(Symbol)
             value = enum[arg]
-            send(old_method, value)
+            super(value)
           else
-            send(old_method, arg)
+            super(arg)
           end
         end
-
-        alias_method_chain :"#{attribute}=", :enum
       end
 
       # Define question method to check enum value against attribute value
@@ -112,18 +102,14 @@ module ActiveEnum
       #   user.sex?(:male)
       #
       def define_active_enum_question_method(attribute)
-        define_question_method(attribute) unless instance_method_already_implemented?("#{attribute}?")
-
-        old_method = "#{attribute}_without_enum?"
-        define_method("#{attribute}_with_enum?") do |*arg|
+        define_method("#{attribute}?") do |*arg|
           arg = arg.first
           if arg
             send(attribute) == self.class.enum_for(attribute)[arg]
           else
-            send(old_method)
+            super
           end
         end
-        alias_method_chain :"#{attribute}?", :enum
       end
 
     end
