@@ -7,6 +7,7 @@ module ActiveEnum
       end
       
       def set(id, name)
+        check_duplicate id, name
         @values << [id, name]
         sort!
       end
@@ -21,6 +22,12 @@ module ActiveEnum
 
       def values
         @values
+      end
+
+      def check_duplicate(id, name)
+        if get_by_id(id) || get_by_name(name)
+          raise ActiveEnum::DuplicateValue
+        end
       end
 
       def sort!

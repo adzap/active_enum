@@ -17,7 +17,6 @@ module ActiveEnum
       #
       def value(enum_value)
         id, name = id_and_name(enum_value)
-        check_duplicate(id, name)
         store.set id, name
       end
 
@@ -67,14 +66,6 @@ module ActiveEnum
 
       def next_id
         ids.max.to_i + 1
-      end
-
-      def check_duplicate(id, name)
-        if store.get_by_id(id)
-          raise ActiveEnum::DuplicateValue, "The id #{id} is already defined for #{self} enum."
-        elsif store.get_by_name(name)
-          raise ActiveEnum::DuplicateValue, "The name #{name} is already defined for #{self} enum."
-        end
       end
 
       def store

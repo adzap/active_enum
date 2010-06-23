@@ -6,25 +6,33 @@ module ActiveEnum
   module Storage
     class ActiveRecordStore < AbstractStore
       def set(id, name)
-        ActiveEnum::Model.create!(:enum_id => id, :name => name , :enum_type => @enum.name)
+        if check_duplicate(id, name)
+          raise ActiveEnum::DuplicateValue
+        else
+          ActiveEnum::Model.create!(:enum_id => id, :name => name , :enum_type => @enum.to_s)
+        end
       end
 
       def get_by_id(id)
-        value = ActiveEnum::Model.find(:first, :conditions => {:enum_id => id, :enum_type => @enum.name})
+        value = ActiveEnum::Model.find(:first, :conditions => {:enum_id => id, :enum_type => @enum.to_s})
         [value.enum_id, value.name] if value
       end
 
       def get_by_name(name)
-        value = ActiveEnum::Model.find(:first, :conditions => "enum_type = '#{@enum.name}' and (name = '#{name}' or name = '#{name.to_s.titleize}')")
+        value = ActiveEnum::Model.find(:first, :conditions => "enum_type = '#{@enum}' and (name = '#{name}' or name = '#{name.to_s.titleize}')")
         [value.enum_id, value.name] if value
       end
 
       def values
-        ActiveEnum::Model.all(:conditions => {:enum_type => @enum.name}, :order => order_by).map {|r| [r.enum_id, r.name] }
+        ActiveEnum::Model.all(:conditions => {:enum_type => @enum.to_s}, :order => order_clause).map {|r| [r.enum_id, r.name] }
       end
 
-      def order_by
-        @order_by ||= case @order
+      def check_duplicate(id, name)
+        ActiveEnum::Model.find(:first, :conditions => "enum_type = '#{@enum}' and (enum_id = #{id} or name = '#{name}' or name = '#{name.to_s.titleize}')")
+      end
+
+      def order_clause
+        @order_clause ||= case @order
         when :asc
           'enum_id ASC'
         when :desc

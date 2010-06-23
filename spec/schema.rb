@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string :enum_type
     t.datetime :modified_at
   end
-  add_index :enums, [:enum_id, :enum_type]
+  add_index :enums, [:enum_id, :enum_type], :unique => true
   add_index :enums, [:name, :enum_type]
   add_index :enums, [:modified_at, :enum_type]
 
