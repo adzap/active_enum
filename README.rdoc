@@ -7,13 +7,14 @@ Enum values are stored in memory at the moment but I plan to add database and ya
 
 == Install
 
-On Gemcutter:
+From version 0.7 onwards this plugin will only have Rails 3 support. If you need Rails 2 compatibility, check the 0.6 branch.
 
-  sudo gem install active_enum
+  gem install active_enum 
 
-And add to your Rails environment.rb
+Put this in your Gemfile
 
-  config.gem 'active_enum'
+  gem 'active_enum'
+
 
 == Example
 
@@ -161,21 +162,36 @@ Giving you the familiar enum methods
   User['Dave']
   User.to_select
 
-=== Formtastic
 
-If you are a formtastic user you can use the extension for an enum input.
+=== Form Helpers
+
+There is support for Formtastic[http://github.com/justinfrench/formtastic] and SimpleForm[http://github.com/plataformatec/simple_form]
+to make it easier to use the enum values as select options. The plugins have an almost identical API which is handy.
+Instructions for each are below.
+
+==== Formtastic
 
 In an initialiser:
 
-  require 'active_enum/formtastic'
+  require 'active_enum/form_helpers/formtastic'
 
-Then in a form you can use the :enum type for attribute inputs which are enumerated.
+Then declare the input for an enumerated attribute as the :enum type.
 
   <% semantic_form_for(@person) do |f| %>
     <%= f.input :sex, :as => :enum %>
   <% end %>
 
-This will output a select with the option values taken from the enum class for the attribute.
+==== SimpleForm
+
+In an initialiser:
+
+  require 'active_enum/form_helpers/simple_form'
+
+Then declare the input for an enumerated attribute as the :enum type.
+
+  <% simple_form_for(@person) do |f| %>
+    <%= f.input :sex, :as => :enum %>
+  <% end %>
 
 
 == TODO
