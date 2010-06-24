@@ -7,13 +7,14 @@ Enum values are stored in memory at the moment but I plan to add database and ya
 
 == Install
 
-On Gemcutter:
+For Rails 2.x only
 
-  sudo gem install active_enum
+  gem install active_enum --version '~> 0.6.0'
 
 And add to your Rails environment.rb
 
-  config.gem 'active_enum'
+  config.gem 'active_enum', :version => '~> 0.6.0'
+
 
 == Example
 
