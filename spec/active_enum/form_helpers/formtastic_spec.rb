@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'formtastic'
 require 'active_enum/form_helpers/formtastic'
 
-describe ActiveEnum::FormHelpers::Formtastic do
+describe 'ActiveEnum::FormHelpers::Formtastic' do
   include RSpec::Rails::HelperExampleGroup
   include Formtastic::SemanticFormHelper
 
@@ -16,13 +16,20 @@ describe ActiveEnum::FormHelpers::Formtastic do
     end
   end
 
-  it "should use enum class for select option values for enum input type" do
+  it "should use enum input type for enumerated attribute" do
     output = semantic_form_for(Person.new, :url => people_path) do |f|
-      concat f.input(:sex, :as => :enum)
+      concat f.input(:sex)
     end
     output.should have_selector('select#person_sex')
     output.should have_xpath('//option[@value=1]', :content => 'Male')
     output.should have_xpath('//option[@value=2]', :content => 'Female')
+  end
+
+  it "should not use enum input type if :as option indicates other type" do
+    output = semantic_form_for(Person.new, :url => people_path) do |f|
+      concat f.input(:sex, :as => :string)
+    end
+    output.should have_selector('input#person_sex')
   end
 
   it "should raise error if attribute for enum input is not enumerated" do

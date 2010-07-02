@@ -1,5 +1,16 @@
 module ActiveEnum
   module FormHelpers
+    module BuilderExtension
+      def self.included(base)
+        base.alias_method_chain :default_input_type, :active_enum
+      end
+
+      def default_input_type_with_active_enum
+        return :enum if @options[:as].nil? && object.class.enum_for(attribute_name)
+        default_input_type_without_active_enum
+      end
+    end
+
     class SimpleForm < SimpleForm::Inputs::CollectionInput
 
       def initialize(builder)
@@ -13,6 +24,8 @@ module ActiveEnum
 end
 
 SimpleForm::FormBuilder.class_eval do
+  include ActiveEnum::FormHelpers::BuilderExtension
+
   map_type :enum, :to => ActiveEnum::FormHelpers::SimpleForm
   alias_method :collection_enum, :collection_select
 end
