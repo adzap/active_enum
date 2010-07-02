@@ -167,31 +167,17 @@ Giving you the familiar enum methods
 
 There is support for Formtastic[http://github.com/justinfrench/formtastic] and SimpleForm[http://github.com/plataformatec/simple_form]
 to make it easier to use the enum values as select options. The plugins have an almost identical API which is handy.
-Instructions for each are below.
+You just need to require the extension for the respective plugin in an initialiser:
 
-==== Formtastic
-
-In an initialiser:
+Formtastic:
 
   require 'active_enum/form_helpers/formtastic'
 
-Then declare the input for an enumerated attribute as the :enum type.
-
-  <% semantic_form_for(@person) do |f| %>
-    <%= f.input :sex, :as => :enum %>
-  <% end %>
-
-==== SimpleForm
-
-In an initialiser:
+Or, SimpleForm:
 
   require 'active_enum/form_helpers/simple_form'
 
-Then declare the input for an enumerated attribute as the :enum type.
-
-  <% simple_form_for(@person) do |f| %>
-    <%= f.input :sex, :as => :enum %>
-  <% end %>
+The input type will be automatically detected for enumerated attributes. You can override with the :as option as normal.
 
 
 == TODO
