@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'simple_form'
 require 'active_enum/form_helpers/simple_form'
 
-describe ActiveEnum::FormHelpers do
+describe 'ActiveEnum::FormHelpers::Simple' do
   include RSpec::Rails::HelperExampleGroup
   include SimpleForm::ActionViewExtensions::FormHelper
 
