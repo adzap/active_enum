@@ -3,15 +3,21 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'spec'))
 
 require 'rubygems'
 require 'rspec/autorun'
-require 'rspec/rails'
 
 require 'active_record'
+require 'action_controller'
+require 'action_view'
+require 'action_mailer'
+
 require 'active_enum'
 
 RAILS_ROOT = File.dirname(__FILE__)
 
+require 'rspec/rails'
+
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
+ActiveRecord::Base.logger = Logger.new('/dev/null')
 
 require 'schema'
 
