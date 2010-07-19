@@ -1,0 +1,5 @@
+[0.8.0] : 2010-07-19
+- Added pluggable storage API
+- Added memory store as default storage
+- Added meta data storage per value has a hash
+- Added enum .meta method to access meta data
