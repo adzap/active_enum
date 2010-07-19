@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
 
   s.require_path = 'lib'
   s.autorequire = GEM_NAME
-  s.files = %w(MIT-LICENSE README.rdoc Rakefile) + Dir.glob("{lib,spec}/**/*")
+  s.files = %w(active_enum.gemspec MIT-LICENSE CHANGELOG README.rdoc Rakefile) + Dir.glob("{lib,spec}/**/*")
 end
 
 desc 'Default: run specs.'
