@@ -73,7 +73,6 @@ module ActiveEnum
       end
 
       def storage_class
-        require "active_enum/storage/#{ActiveEnum.storage}_store"
         "ActiveEnum::Storage::#{ActiveEnum.storage.to_s.classify}Store".constantize
       end
 

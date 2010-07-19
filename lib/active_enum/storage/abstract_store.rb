@@ -1,5 +1,7 @@
 module ActiveEnum
   module Storage
+    autoload :MemoryStore, "active_enum/storage/memory_store"
+
     class NotImplemented < StandardError; end
 
     class AbstractStore 
