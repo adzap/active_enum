@@ -124,6 +124,34 @@ describe ActiveEnum::Extensions do
       end
     end
 
+    describe "with meta data" do
+      before(:all) do
+        reset_class Person do
+          enumerate :sex do
+            value :id => 1, :name => 'Male',   :description => 'Man'
+            value :id => 2, :name => 'Female', :description => 'Woman'
+          end
+        end
+      end
+
+      before do
+        @person = Person.new(:sex =>1)
+      end
+
+      it 'should return meta value for existing key' do
+        @person.sex(:description).should == 'Man'
+      end
+
+      it 'should return nil for missing meta value' do
+        @person.sex(:nonexistent).should be_nil
+      end
+
+      it 'should return nil for missing index' do
+        @person.sex = nil
+        @person.sex(:description).should be_nil
+      end
+    end
+
     describe "question method" do
       before do
         @person.sex = 1

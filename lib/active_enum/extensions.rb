@@ -60,13 +60,14 @@ module ActiveEnum
       #   user.sex(:id)
       #   user.sex(:name)
       #   user.sex(:enum)
+      #   user.sex(:meta_key)
       #
       def define_active_enum_read_method(attribute)
         define_method("#{attribute}") do |*arg|
-          arg = arg.first
+          arg   = arg.first
           value = super()
+          enum  = self.class.enum_for(attribute)
 
-          enum = self.class.enum_for(attribute)
           case arg
           when :id
             value if enum[value]
@@ -74,6 +75,8 @@ module ActiveEnum
             enum[value]
           when :enum
             enum
+          when Symbol
+            (enum.meta(value) || {})[arg]
           else
             ActiveEnum.use_name_as_value ? enum[value] : value
           end
