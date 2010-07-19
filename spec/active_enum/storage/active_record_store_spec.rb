@@ -7,11 +7,6 @@ class TestOtherAREnum < ActiveEnum::Base; end
 describe ActiveEnum::Storage::ActiveRecordStore do
   attr_accessor :store
 
-  before(:all) do
-    @default_storage = ActiveEnum.storage
-    ActiveEnum.storage = :memory
-  end
-
   context '#set' do
     it 'should store values in array' do
       store.set 1, 'Name 1'
@@ -113,10 +108,6 @@ describe ActiveEnum::Storage::ActiveRecordStore do
 
   after do
     ActiveEnum::Model.delete_all
-  end
-
-  after(:all) do
-    ActiveEnum.storage = @default_storage
   end
 
   def store

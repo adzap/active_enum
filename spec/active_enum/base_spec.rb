@@ -1,6 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ActiveEnum::Base do
+
+  it 'should load the storage class instance using the storage setting' do
+    ActiveEnum::Base.send(:store).should be_instance_of(ActiveEnum::Storage::MemoryStore)
+  end
+
   it 'should return empty array from :all method when no values defined' do
     ActiveEnum.enum_classes = []
     class NewEnum < ActiveEnum::Base

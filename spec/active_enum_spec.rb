@@ -17,4 +17,8 @@ describe "Bulk enum definitions" do
     Bar.all.should == [[1,'Bar 1']]
   end
 
+  it 'should use the memory store by default' do
+    ActiveEnum.storage.should == :memory
+  end
+
 end

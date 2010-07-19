@@ -1,16 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'active_enum/storage/memory_store'
 
 class TestMemoryStoreEnum < ActiveEnum::Base
 end
 
 describe ActiveEnum::Storage::MemoryStore do
   attr_accessor :store
-
-  before(:all) do
-    @default_storage = ActiveEnum.storage
-    ActiveEnum.storage = :memory
-  end
 
   context '#set' do
     it 'should store values in array' do
@@ -89,10 +83,6 @@ describe ActiveEnum::Storage::MemoryStore do
       store.set 2, 'Name 2'
       store.values.should == [[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']]
     end
-  end
-
-  after(:all) do
-    ActiveEnum.storage = @default_storage
   end
 
   def store
