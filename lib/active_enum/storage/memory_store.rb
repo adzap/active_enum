@@ -27,12 +27,13 @@ module ActiveEnum
 
       def sort!
         return if @order == :as_defined
-				case @order
-				when :asc
-					values.sort! {|a,b| a[0] <=> b[0] }
-				when :desc
-					values.sort! {|a,b| b[0] <=> a[0] }
-				end
+
+        case @order
+        when :asc
+          values.sort! {|a,b| a[0] <=> b[0] }
+        when :desc
+          values.sort! {|a,b| b[0] <=> a[0] }
+        end
       end
     end
   end
