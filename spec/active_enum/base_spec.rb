@@ -2,74 +2,81 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ActiveEnum::Base do
 
-  it 'should load the storage class instance using the storage setting' do
-    ActiveEnum::Base.send(:store).should be_instance_of(ActiveEnum::Storage::MemoryStore)
-  end
-
-  it 'should return empty array from :all method when no values defined' do
-    ActiveEnum.enum_classes = []
-    class NewEnum < ActiveEnum::Base
+  context ".store" do
+    it 'should load the storage class instance using the storage setting' do
+      ActiveEnum::Base.send(:store).should be_instance_of(ActiveEnum::Storage::MemoryStore)
     end
-    ActiveEnum.enum_classes.should == [NewEnum]
   end
 
-  it 'should return empty array from :all method when no values defined' do
-    define_enum.all.should == []
-  end
-
-  it 'should allow me to define a value with an id and name' do
-    enum = define_enum do
-      value :id => 1, :name => 'Name'
+  context ".enum_classes" do
+    it 'should return all enum classes defined use class definition' do
+      ActiveEnum.enum_classes = []
+      class NewEnum < ActiveEnum::Base; end
+      ActiveEnum.enum_classes.should == [NewEnum]
     end
-    enum.all.should == [[1,'Name']]
-  end
 
-  it 'should allow me to define a value with a name only' do
-    enum = define_enum do
-      value :name => 'Name'
-    end
-    enum.all.should == [[1,'Name']]
-  end
-
-  it 'should allow me to define a value as hash with id as key and name as value' do
-    enum = define_enum do
-      value 1 => 'Name'
-    end
-    enum.all.should == [[1,'Name']]
-  end
-
-  it 'should increment value ids when defined without ids' do
-    enum = define_enum do
-      value :name => 'Name 1'
-      value :name => 'Name 2'
-    end
-    enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
-  end
-
-  it 'should raise error if the id is a duplicate' do
-    lambda do
-      define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 1, :name => 'Name 2'
+    it 'should return all enum classes defined using define block' do
+      ActiveEnum.enum_classes = []
+      ActiveEnum.define do
+        enum(:bulk_new_enum) { }
       end
-    end.should raise_error(ActiveEnum::DuplicateValue)
+      ActiveEnum.enum_classes.should == [BulkNewEnum]
+    end
   end
 
-  it 'should raise error if the name is a duplicate' do
-    lambda do
-      define_enum do
+  context ".all" do
+    it 'should return an empty array when no values defined' do
+      define_enum.all.should == []
+    end
+  end
+
+  context ".value" do
+    it 'should allow me to define a value with an id and name' do
+      enum = define_enum do
         value :id => 1, :name => 'Name'
-        value :id => 2, :name => 'Name'
       end
-    end.should raise_error(ActiveEnum::DuplicateValue)
-  end
-
-  it 'should return sorted values by id from :all' do
-    enum = define_enum do
-      value :id => 2, :name => 'Name 2'
-      value :id => 1, :name => 'Name 1'
+      enum.all.should == [[1,'Name']]
     end
-    enum.all.first[0].should == 1
+
+    it 'should allow me to define a value with a name only' do
+      enum = define_enum do
+        value :name => 'Name'
+      end
+      enum.all.should == [[1,'Name']]
+    end
+
+    it 'should allow me to define a value as hash with id as key and name as value' do
+      enum = define_enum do
+        value 1 => 'Name'
+      end
+      enum.all.should == [[1,'Name']]
+    end
+
+    it 'should increment value ids when defined without ids' do
+      enum = define_enum do
+        value :name => 'Name 1'
+        value :name => 'Name 2'
+      end
+      enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
+    end
+
+    it 'should raise error if the id is a duplicate' do
+      lambda do
+        define_enum do
+          value :id => 1, :name => 'Name 1'
+          value :id => 1, :name => 'Name 2'
+        end
+      end.should raise_error(ActiveEnum::DuplicateValue)
+    end
+
+    it 'should raise error if the name is a duplicate' do
+      lambda do
+        define_enum do
+          value :id => 1, :name => 'Name'
+          value :id => 2, :name => 'Name'
+        end
+      end.should raise_error(ActiveEnum::DuplicateValue)
+    end
   end
 
   context "sorting" do
@@ -101,23 +108,27 @@ describe ActiveEnum::Base do
     end
   end
 
-  it 'should return array of ids' do
-    enum = define_enum do
-      value :id => 1, :name => 'Name 1'
-      value :id => 2, :name => 'Name 2'
+  context ".ids" do
+    it 'should return array of ids' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.ids.should == [1,2]
     end
-    enum.ids.should == [1,2]
   end
 
-  it 'should return array of names' do
-    enum = define_enum do
-      value :id => 1, :name => 'Name 1'
-      value :id => 2, :name => 'Name 2'
+  context ".names" do
+    it 'should return array of names' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.names.should == ['Name 1', 'Name 2']
     end
-    enum.names.should == ['Name 1', 'Name 2']
   end
 
-  describe "element reference method" do
+  context "element reference method" do
 
     it 'should return name when given an id' do
       enum = define_enum do
@@ -146,21 +157,23 @@ describe ActiveEnum::Base do
 
   end
 
-  it 'should return array for select helpers from to_select' do
-    enum = define_enum do
-      value :id => 1, :name => 'Name 1'
-      value :id => 2, :name => 'Name 2'
+  context ".to_select" do
+    it 'should return array for select helpers' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.to_select.should == [['Name 1',1], ['Name 2',2]]
     end
-    enum.to_select.should == [['Name 1',1], ['Name 2',2]]
-  end
 
-  it 'should return array sorted using order setting from to_select' do
-    enum = define_enum() do
-			order :desc
-      value :id => 1, :name => 'Name 1'
-      value :id => 2, :name => 'Name 2'
+    it 'should return array sorted using order setting' do
+      enum = define_enum() do
+        order :desc
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      enum.to_select.should == [['Name 2',2], ['Name 1',1]]
     end
-    enum.to_select.should == [['Name 2',2], ['Name 1',1]]
   end
 
   def define_enum(&block)
