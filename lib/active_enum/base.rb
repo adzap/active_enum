@@ -16,8 +16,7 @@ module ActiveEnum
       # 1 => 'Foo'
       #
       def value(enum_value)
-        id, name = id_and_name(enum_value)
-        store.set id, name
+        store.set *id_and_name_and_meta(enum_value)
       end
 
       # Order enum values. Allowed values are :asc, :desc or :as_defined
@@ -52,11 +51,23 @@ module ActiveEnum
         end
       end
 
+      def meta(index)
+        row = if index.is_a?(Fixnum)
+          store.get_by_id(index)
+        else
+          store.get_by_name(index)
+        end
+        row[2] || {} if row
+      end
+
       private
 
-      def id_and_name(hash)
+      def id_and_name_and_meta(hash)
         if hash.has_key?(:id) || hash.has_key?(:name)
-          return (hash[:id] || next_id), hash[:name]
+          id   = hash.delete(:id) || next_id
+          name = hash.delete(:name)
+          meta = hash
+          return id, name, (meta.blank? ? nil : meta)
         elsif hash.keys.first.is_a?(Fixnum)
           return *Array(hash).first
         else

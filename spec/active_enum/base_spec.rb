@@ -52,6 +52,13 @@ describe ActiveEnum::Base do
       enum.all.should == [[1,'Name']]
     end
 
+    it 'should allow to define meta data value with extra key value pairs' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name', :description => 'extra'
+      end
+      enum.all.should == [[1,'Name',{:description => 'extra'}]]
+    end
+
     it 'should increment value ids when defined without ids' do
       enum = define_enum do
         value :name => 'Name 1'
@@ -77,6 +84,23 @@ describe ActiveEnum::Base do
         end
       end.should raise_error(ActiveEnum::DuplicateValue)
     end
+  end
+
+  context ".meta" do
+    it 'should return meta values hash for a given index value' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name', :description => 'extra'
+      end
+      enum.meta(1).should == {:description => 'extra'}
+    end
+
+    it 'should return empty hash for index with no meta defined' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name'
+      end
+      enum.meta(1).should == {}
+    end
+
   end
 
   context "sorting" do

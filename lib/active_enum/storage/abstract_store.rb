@@ -9,7 +9,7 @@ module ActiveEnum
         @enum, @order = enum_class, order
       end
 
-      def set(id, name)
+      def set(id, name, meta=nil)
         raise NotImplemented
       end
 

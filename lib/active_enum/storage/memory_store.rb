@@ -1,27 +1,22 @@
 module ActiveEnum
   module Storage
     class MemoryStore < AbstractStore
-      def initialize(enum, order)
-        super
-        @values = []
-      end
-      
-      def set(id, name)
+      def set(id, name, meta=nil)
         check_duplicate id, name
-        @values << [id, name]
+        values << [id, name, meta].compact
         sort!
       end
 
       def get_by_id(id)
-        @values.assoc(id)
+        values.assoc(id)
       end
 
       def get_by_name(name)
-        @values.rassoc(name.to_s) || @values.rassoc(name.to_s.titleize) 
+        values.rassoc(name.to_s) || values.rassoc(name.to_s.titleize)
       end
 
       def values
-        @values
+        @values ||= []
       end
 
       def check_duplicate(id, name)
@@ -34,9 +29,9 @@ module ActiveEnum
         return if @order == :as_defined
 				case @order
 				when :asc
-					@values.sort! {|a,b| a[0] <=> b[0] }
+					values.sort! {|a,b| a[0] <=> b[0] }
 				when :desc
-					@values.sort! {|a,b| b[0] <=> a[0] }
+					values.sort! {|a,b| b[0] <=> a[0] }
 				end
       end
     end
