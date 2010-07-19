@@ -43,11 +43,21 @@ Beware that if you change the order of values defined in an enum which don't hav
 This could corrupt your data if the enum values have been stored in a model record, as they will no longer map to
 the original enum.
 
+Define values with meta data
+
+  class Sex < ActiveEnum::Base
+    value :id => 1, :name => 'Male',   :symbol => '♂'
+    value :id => 2, :name => 'Female', :symbol => '♀'
+  end
+
+The meta data can be any other key-value pairs, it's not limited to certain keys.
+
 Enum class usage
 
   Sex[1]        # => 'Male'
   Sex['Male']   # => 1
   Sex[:male]    # => 1
+  Sex.meta(1)   # => { :symbol => '♂' }
   Sex.to_select # => [['Male', 1], ['Female',2]] for select form helpers
 
 === Ordering
@@ -100,11 +110,12 @@ Access the enum values and the enum class using the attribute method with a symb
 
   user = User.new
   user.sex = 1
-  user.sex         # => 1
+  user.sex          # => 1
 
-  user.sex(:id)    # => 1
-  user.sex(:name)  # => 'Male'
-  user.sex(:enum)  # => Sex
+  user.sex(:id)     # => 1
+  user.sex(:name)   # => 'Male'
+  user.sex(:enum)   # => Sex
+  user.sex(:symbol) # => ♂. Can use any meta data key.
 
 You can set the default to return the enum name value for enumerated attribute
 
