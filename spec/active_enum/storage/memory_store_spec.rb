@@ -1,15 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-class TestMemoryStoreEnum < ActiveEnum::Base
-end
+class TestMemoryStoreEnum < ActiveEnum::Base; end
+class TestOtherAREnum < ActiveEnum::Base; end
 
 describe ActiveEnum::Storage::MemoryStore do
   attr_accessor :store
 
   context '#set' do
-    it 'should store values in array' do
+    it 'should store value of id and name' do
       store.set 1, 'test name'
       store.values.should == [[1, 'test name']]
+    end
+
+    it 'should store value of id, name and meta hash' do
+      store.set 1, 'test name', :description => 'meta'
+      store.values.should == [[1, 'test name', {:description => 'meta'}]]
     end
 
     it 'should raise error if duplicate id' do
@@ -31,6 +36,19 @@ describe ActiveEnum::Storage::MemoryStore do
         store.set 1, 'Name 1'
         store.set 2, 'name 1'
       }.should raise_error(ActiveEnum::DuplicateValue)
+    end
+  end
+
+  context "#values" do
+    it 'should return array of stored values' do
+      store.set 1, 'Name 1'
+      store.values.should == [[1, 'Name 1']]
+    end
+
+    it 'should return values for set enum only' do
+      alt_store.set 1, 'Other Name 1'
+      store.set 1, 'Name 1'
+      store.values.should == [[1, 'Name 1']]
     end
   end
 
@@ -87,5 +105,9 @@ describe ActiveEnum::Storage::MemoryStore do
 
   def store
     @store ||= ActiveEnum::Storage::MemoryStore.new(TestMemoryStoreEnum, @order)
+  end
+
+  def alt_store
+    @alt_store ||= ActiveEnum::Storage::MemoryStore.new(TestOtherAREnum, :asc)
   end
 end
