@@ -21,9 +21,9 @@ module ActiveEnum
 
       # Order enum values. Allowed values are :asc, :desc or :as_defined
       #
-			def order(order)
-				@order = order
-			end
+      def order(order)
+        @order = order
+      end
 
       def all
         store.values
