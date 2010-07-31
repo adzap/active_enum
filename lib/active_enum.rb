@@ -17,11 +17,7 @@ module ActiveEnum
   class Configuration
     def enum(name, &block)
       class_name = name.to_s.camelize
-      class_def = <<-end_eval
-        class #{class_name} < ActiveEnum::Base
-        end
-      end_eval
-      eval(class_def, TOPLEVEL_BINDING)
+      eval("class #{class_name} < ActiveEnum::Base; end", TOPLEVEL_BINDING)
       new_enum = Module.const_get(class_name)
       new_enum.class_eval(&block)
     end
