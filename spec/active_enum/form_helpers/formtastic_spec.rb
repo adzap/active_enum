@@ -38,6 +38,13 @@ describe 'ActiveEnum::FormHelpers::Formtastic' do
     }.should raise_error "Attribute 'attending' has no enum class"
   end
 
+  it "should not use enum input type if class does not support ActiveEnum" do
+    output = semantic_form_for(:not_active_record, NotActiveRecord.new, :url => people_path) do |f|
+      concat f.input(:name)
+    end
+    output.should have_selector('input#not_active_record_name')
+  end
+
   def people_path
     '/people'
   end

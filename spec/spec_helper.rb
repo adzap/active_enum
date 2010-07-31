@@ -23,6 +23,11 @@ require 'schema'
 
 class Person < ActiveRecord::Base; end
 
+class NotActiveRecord
+  include ActiveModel::Validations
+  attr_accessor :name
+end
+
 module SpecHelper
   def reset_class(klass, &block)
     name = klass.name.to_sym

@@ -7,7 +7,9 @@ module ActiveEnum
         end
 
         def default_input_type_with_active_enum
-          return :enum if @options[:as].nil? && object.class.enum_for(attribute_name)
+          return :enum if @options[:as].nil? &&
+            object.class.respond_to?(:active_enum_for) &&
+            object.class.active_enum_for(attribute_name)
           default_input_type_without_active_enum
         end
       end
