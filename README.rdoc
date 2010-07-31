@@ -135,7 +135,7 @@ You can check if the attribute value matches a particular enum value by passing 
 
 A convenience method on the class is available to the enum class of any enumerated attribute
 
-  User.enum_for(:sex) # => Sex
+  User.active_enum_for(:sex) # => Sex
 
 === Bulk definition
 

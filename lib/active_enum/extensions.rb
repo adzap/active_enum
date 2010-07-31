@@ -50,7 +50,7 @@ module ActiveEnum
 				end
       end
 
-      def enum_for(attribute)
+      def active_enum_for(attribute)
         self.enumerated_attributes[attribute.to_sym]
       end
 
@@ -66,7 +66,7 @@ module ActiveEnum
         define_method("#{attribute}") do |*arg|
           arg   = arg.first
           value = super()
-          enum  = self.class.enum_for(attribute)
+          enum  = self.class.active_enum_for(attribute)
 
           case arg
           when :id
@@ -90,7 +90,7 @@ module ActiveEnum
       #
       def define_active_enum_write_method(attribute)
         define_method("#{attribute}=") do |arg|
-          enum = self.class.enum_for(attribute)
+          enum = self.class.active_enum_for(attribute)
           if arg.is_a?(Symbol)
             value = enum[arg]
             super(value)
@@ -108,7 +108,7 @@ module ActiveEnum
         define_method("#{attribute}?") do |*arg|
           arg = arg.first
           if arg
-            send(attribute) == self.class.enum_for(attribute)[arg]
+            send(attribute) == self.class.active_enum_for(attribute)[arg]
           else
             super
           end

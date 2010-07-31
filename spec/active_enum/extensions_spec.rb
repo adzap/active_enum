@@ -17,23 +17,23 @@ describe ActiveEnum::Extensions do
     ActiveRecord::Base.should respond_to(:enumerate)
   end
 
-  it 'should add class :enum_for method to ActiveRecord' do
-    ActiveRecord::Base.should respond_to(:enum_for)
+  it 'should add class :active_enum_for method to ActiveRecord' do
+    ActiveRecord::Base.should respond_to(:active_enum_for)
   end
 
   it 'should allow multiple attributes to be enumerated with same enum' do
     Person.class_eval do
       enumerate :attending, :staying, :with => Accepted
     end
-    Person.enum_for(:attending).should == Accepted
-    Person.enum_for(:staying).should == Accepted
+    Person.active_enum_for(:attending).should == Accepted
+    Person.active_enum_for(:staying).should == Accepted
   end
 
   it 'should allow implicit enumeration class from attribute name' do
     Person.class_eval do
       enumerate :sex
     end
-    Person.enum_for(:sex).should == Sex
+    Person.active_enum_for(:sex).should == Sex
   end
 
   it 'should create enum namespaced enum class from block' do
@@ -42,7 +42,7 @@ describe ActiveEnum::Extensions do
         value :id => 1, :name => 'Male'
       end
     end
-    Person.enum_for(:sex).should == Person::Sex
+    Person.active_enum_for(:sex).should == ::Person::Sex
   end
 
   it 'should raise error if implicit enumeration class cannot be found' do

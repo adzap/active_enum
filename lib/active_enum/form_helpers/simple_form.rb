@@ -16,7 +16,7 @@ module ActiveEnum
 
         def initialize(builder)
           super
-          raise "Attribute '#{attribute_name}' has no enum class" unless enum = object.class.enum_for(attribute_name)
+          raise "Attribute '#{attribute_name}' has no enum class" unless enum = object.class.active_enum_for(attribute_name)
           builder.options[:collection] = enum.to_select
         end
         
