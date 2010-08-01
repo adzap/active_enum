@@ -63,24 +63,26 @@ module ActiveEnum
       #   user.sex(:meta_key)
       #
       def define_active_enum_read_method(attribute)
-        define_method("#{attribute}") do |*arg|
-          arg   = arg.first
-          value = super()
-          enum  = self.class.active_enum_for(attribute)
+        class_eval <<-DEF
+          def #{attribute}(arg=nil)
+            value = super()
+            return if value.nil? && arg.nil?
 
-          case arg
-          when :id
-            value if enum[value]
-          when :name
-            enum[value]
-          when :enum
-            enum
-          when Symbol
-            (enum.meta(value) || {})[arg]
-          else
-            ActiveEnum.use_name_as_value ? enum[value] : value
+            enum  = self.class.active_enum_for(:#{attribute})
+            case arg
+            when :id
+              value if enum[value]
+            when :name
+              enum[value]
+            when :enum
+              enum
+            when Symbol
+              (enum.meta(value) || {})[arg]
+            else
+              #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
+            end
           end
-        end
+        DEF
       end
 
       # Define write method to also handle enum value
@@ -89,15 +91,16 @@ module ActiveEnum
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-        define_method("#{attribute}=") do |arg|
-          enum = self.class.active_enum_for(attribute)
-          if arg.is_a?(Symbol)
-            value = enum[arg]
-            super(value)
-          else
-            super(arg)
+        class_eval <<-DEF
+          def #{attribute}=(arg)
+            if arg.is_a?(Symbol)
+              value = self.class.active_enum_for(:#{attribute})[arg]
+              super(value)
+            else
+              super(arg)
+            end
           end
-        end
+        DEF
       end
 
       # Define question method to check enum value against attribute value

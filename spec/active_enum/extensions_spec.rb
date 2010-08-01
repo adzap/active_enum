@@ -198,6 +198,13 @@ describe ActiveEnum::Extensions do
         ActiveEnum.use_name_as_value = true
       end
 
+      before do
+        reset_class Person do
+          enumerate :sex, :with => Sex
+        end
+        @person = Person.new(:sex =>1)
+      end
+
       it 'should return text name value for attribute' do
         @person.sex.should == 'Male'
       end
