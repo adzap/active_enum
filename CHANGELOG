@@ -1,3 +1,10 @@
+[0.8.2] : 2010-08-01
+- Fix method name clash of enum_for which is defined on Object
+- Refactor extension method definitions
+
+[0.8.1] : 2010-07-19
+- Enumerated attribute read method can access meta data using key as argument
+
 [0.8.0] : 2010-07-19
 - Added pluggable storage API
 - Added memory store as default storage
