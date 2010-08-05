@@ -50,7 +50,7 @@ module ActiveEnum
 				end
       end
 
-      def enum_for(attribute)
+      def active_enum_for(attribute)
         self.enumerated_attributes[attribute.to_sym]
       end
 
@@ -63,13 +63,12 @@ module ActiveEnum
       #
       def define_active_enum_read_method(attribute)
         define_read_method(attribute, attribute.to_s, columns_hash[attribute.to_s]) unless instance_method_already_implemented?(attribute.to_s)
-
         old_method = "#{attribute}_without_enum"
         define_method("#{attribute}_with_enum") do |*arg|
           arg = arg.first
           value = send(old_method)
 
-          enum = self.class.enum_for(attribute)
+          enum = self.class.active_enum_for(attribute)
           case arg
           when :id
             value if enum[value]
@@ -91,11 +90,10 @@ module ActiveEnum
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-				define_write_method(attribute) unless instance_method_already_implemented?("#{attribute}=")
-
+        define_write_method(attribute) unless instance_method_already_implemented?("#{attribute}")
         old_method = "#{attribute}_without_enum="
         define_method("#{attribute}_with_enum=") do |arg|
-          enum = self.class.enum_for(attribute)
+          enum = self.class.active_enum_for(attribute)
           if arg.is_a?(Symbol)
             value = enum[arg]
             send(old_method, value)
@@ -118,7 +116,7 @@ module ActiveEnum
         define_method("#{attribute}_with_enum?") do |*arg|
           arg = arg.first
           if arg
-            send(attribute) == self.class.enum_for(attribute)[arg]
+            send(attribute) == self.class.active_enum_for(attribute)[arg]
           else
             send(old_method)
           end
