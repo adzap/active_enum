@@ -15,6 +15,10 @@ Put this in your Gemfile
 
   gem 'active_enum'
 
+Then generate the config initializer file
+
+  rails generate active_enum:install
+
 
 == Example
 
@@ -192,10 +196,7 @@ The input type will be automatically detected for enumerated attributes. You can
 
 
 == TODO
-* more docs
 * storage options of memory, database or yaml
 * use custom method name for the enumerated attribute
-* named_scopes
-* question methods for enum names e.g. user.male?
 
 Copyright (c) 2009 Adam Meehan, released under the MIT license
