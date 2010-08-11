@@ -2,11 +2,11 @@ module ActiveEnum
   class EnumNotFound < StandardError; end
 
   module Extensions
+    extend ActiveSupport::Concern
 
-    def self.included(base)
-      base.extend ClassMethods
-      base.class_inheritable_accessor :enumerated_attributes
-      base.enumerated_attributes = {}
+    included do
+      class_inheritable_accessor :enumerated_attributes
+      self.enumerated_attributes = {}
     end
 
     module ClassMethods
@@ -122,5 +122,3 @@ module ActiveEnum
 
   end
 end
-
-ActiveRecord::Base.send :include, ActiveEnum::Extensions

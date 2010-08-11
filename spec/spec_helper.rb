@@ -19,6 +19,8 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
 ActiveRecord::Base.logger = Logger.new('/dev/null')
 
+ActiveEnum.extend_classes = [ActiveRecord::Base]
+
 require 'schema'
 
 class Person < ActiveRecord::Base; end
