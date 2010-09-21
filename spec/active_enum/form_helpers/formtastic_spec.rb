@@ -39,7 +39,7 @@ describe 'ActiveEnum::FormHelpers::Formtastic' do
   end
 
   it "should not use enum input type if class does not support ActiveEnum" do
-    output = semantic_form_for(:not_active_record, NotActiveRecord.new, :url => people_path) do |f|
+    output = semantic_form_for(NotActiveRecord.new, :as => :not_active_record, :url => people_path) do |f|
       concat f.input(:name)
     end
     output.should have_selector('input#not_active_record_name')
