@@ -26,6 +26,7 @@ module ActiveEnum
       #     enumerate :to, :from, :with => Sex
       #
       def enumerate(*attributes, &block)
+        self.enumerated_attributes ||= {}
 				options = attributes.extract_options!
 				attributes.each do |attribute|
 					begin
@@ -51,7 +52,7 @@ module ActiveEnum
       end
 
       def active_enum_for(attribute)
-        self.enumerated_attributes[attribute.to_sym]
+        self.enumerated_attributes && self.enumerated_attributes[attribute.to_sym]
       end
 
       # Define read method to allow an argument for the enum component
