@@ -20,9 +20,7 @@ spec = Gem::Specification.new do |s|
   s.author = "Adam Meehan"
   s.email = "adam.meehan@gmail.com"
   s.homepage = "http://github.com/adzap/active_enum"
-
   s.require_path = 'lib'
-  s.autorequire = GEM_NAME
   s.files = %w(active_enum.gemspec MIT-LICENSE CHANGELOG README.rdoc Rakefile) + Dir.glob("{lib,spec}/**/*")
 end
 
