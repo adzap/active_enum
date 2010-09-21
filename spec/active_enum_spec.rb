@@ -36,7 +36,6 @@ describe "Bulk enum definitions" do
 
   context ".extend_classes" do
     it 'should add enumerate extensions to given classes' do
-      ActiveEnum.extend_classes = [ActiveRecord::Base, NotActiveRecord]
       ActiveRecord::Base.should respond_to(:enumerate)
       NotActiveRecord.should respond_to(:enumerate)
     end

@@ -1,10 +1,11 @@
 require 'active_enum/base'
 require 'active_enum/extensions'
-require 'active_enum/acts_as_enum'
+require 'active_enum/acts_as_enum' if defined?(ActiveRecord)
 require 'active_enum/storage/abstract_store'
-require 'active_enum/version'
 
 module ActiveEnum
+  autoload :VERSION, 'active_enum/version'
+
   mattr_accessor :enum_classes
   @@enum_classes = []
 
@@ -15,7 +16,7 @@ module ActiveEnum
   @@storage = :memory
 
   mattr_accessor :extend_classes
-  @@extend_classes = []
+  @@extend_classes = [ defined?(ActiveRecord) && ActiveRecord::Base ].compact
 
   def self.extend_classes=(klasses)
     @@extend_classes = klasses
