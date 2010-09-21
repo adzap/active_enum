@@ -1,9 +1,6 @@
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'spec'))
+require 'rspec'
 
-require 'rubygems'
-require 'rspec/autorun'
-
+require 'rails'
 require 'active_record'
 require 'action_controller'
 require 'action_view'
@@ -11,15 +8,19 @@ require 'action_mailer'
 
 require 'active_enum'
 
-RAILS_ROOT = File.dirname(__FILE__)
+module Config
+  class Application < Rails::Application
+    config.generators do |g|
+      g.orm             :active_record
+      g.test_framework  :rspec, :fixture => false
+    end
+  end
+end
 
 require 'rspec/rails'
 
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
-ActiveRecord::Base.logger = Logger.new('/dev/null')
-
-ActiveEnum.extend_classes = [ActiveRecord::Base]
 
 require 'schema'
 
@@ -29,6 +30,8 @@ class NotActiveRecord
   include ActiveModel::Validations
   attr_accessor :name
 end
+
+ActiveEnum.extend_classes = [ActiveRecord::Base, NotActiveRecord]
 
 module SpecHelper
   def reset_class(klass, &block)
