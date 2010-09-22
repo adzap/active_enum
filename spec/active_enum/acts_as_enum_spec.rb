@@ -42,9 +42,7 @@ describe ActiveEnum::ActsAsEnum do
   end
 
   it "should return sorted array from order value for select helpers from to_select" do
-    Person.class_eval do
-      acts_as_enum :name_column => 'first_name', :order => :desc
-    end
+    Person.acts_as_enum :name_column => 'first_name', :order => :desc
     Person.to_select.should == [['John', 2], ['Dave', 1]]
   end
 end
