@@ -6,11 +6,11 @@ module ActiveEnum
           base.alias_method_chain :default_input_type, :active_enum
         end
 
-        def default_input_type_with_active_enum
-          return :enum if @options[:as].nil? &&
-            object.class.respond_to?(:active_enum_for) &&
-            object.class.active_enum_for(attribute_name)
-          default_input_type_without_active_enum
+        def default_input_type_with_active_enum(*args, &block)
+          return :enum if (args.last.is_a?(Hash) ? args.last[:as] : @options[:as]).nil? &&
+                          object.class.respond_to?(:active_enum_for) &&
+                          object.class.active_enum_for(attribute_name)
+          default_input_type_without_active_enum(*args, &block)
         end
       end
 
