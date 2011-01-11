@@ -1,10 +1,6 @@
 module ActiveEnum
   module FormHelpers
     module Formtastic
-      def self.included(base)
-        base.alias_method_chain :default_input_type, :active_enum
-      end
-
       def default_input_type_with_active_enum(method, options)
         return :enum if @object.class.respond_to?(:active_enum_for) && @object.class.active_enum_for(method)
         default_input_type_without_active_enum(method, options)
@@ -19,4 +15,7 @@ module ActiveEnum
   end
 end
 
-Formtastic::SemanticFormBuilder.send :include, ActiveEnum::FormHelpers::Formtastic
+Formtastic::SemanticFormBuilder.class_eval do
+  include ActiveEnum::FormHelpers::Formtastic
+  alias_method_chain :default_input_type, :active_enum
+end
