@@ -1,10 +1,5 @@
 module ActiveEnum
-
   module ActsAsEnum
-
-    def self.included(base)
-      base.extend MacroMethods
-    end
 
     module MacroMethods
 
@@ -58,4 +53,4 @@ module ActiveEnum
   end
 end
 
-ActiveRecord::Base.send :include, ActiveEnum::ActsAsEnum
+ActiveRecord::Base.extend ActiveEnum::ActsAsEnum::MacroMethods
