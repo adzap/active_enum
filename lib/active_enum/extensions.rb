@@ -13,6 +13,7 @@ module ActiveEnum
 
       # Declare an attribute to be enumerated by an enum class
       #
+      # Example:
       #   class Person < ActiveRecord::Base
       #     enumerate :sex, :with => Sex
       #     enumerate :sex # implies a Sex enum class exists
@@ -57,6 +58,7 @@ module ActiveEnum
 
       # Define read method to allow an argument for the enum component
       #
+      # Examples:
       #   user.sex
       #   user.sex(:id)
       #   user.sex(:name)
@@ -88,6 +90,7 @@ module ActiveEnum
 
       # Define write method to also handle enum value
       #
+      # Examples:
       #   user.sex = 1
       #   user.sex = :male
       #
@@ -106,6 +109,7 @@ module ActiveEnum
 
       # Define question method to check enum value against attribute value
       #
+      # Example:
       #   user.sex?(:male)
       #
       def define_active_enum_question_method(attribute)
