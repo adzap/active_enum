@@ -3,8 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'simple_form'
 require 'active_enum/form_helpers/simple_form'
 
-describe ActiveEnum::FormHelpers::SimpleForm do
-  include RSpec::Rails::HelperExampleGroup
+describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
   include SimpleForm::ActionViewExtensions::FormHelper
 
   before do
@@ -26,6 +25,15 @@ describe ActiveEnum::FormHelpers::SimpleForm do
     output.should have_xpath('//option[@value=2]', :content => 'Female')
   end
 
+  it "should use explicit :enum input type" do
+    output = simple_form_for(Person.new, :url => people_path) do |f|
+      concat f.input(:sex, :as => :enum)
+    end
+    output.should have_selector('select#person_sex')
+    output.should have_xpath('//option[@value=1]', :content => 'Male')
+    output.should have_xpath('//option[@value=2]', :content => 'Female')
+  end
+
   it "should not use enum input type if :as option indicates other type" do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:sex, :as => :string)
@@ -34,9 +42,11 @@ describe ActiveEnum::FormHelpers::SimpleForm do
   end
 
   it "should raise error if attribute for enum input is not enumerated" do
-    lambda {
-      simple_form_for(Person.new, :url => people_path) {|f| f.input(:attending, :as => :enum) }
-    }.should raise_error(StandardError, "Attribute 'attending' has no enum class")
+    expect {
+      simple_form_for(Person.new, :url => people_path) do |f|
+        f.input(:attending, :as => :enum)
+      end
+    }.should raise_error "Attribute 'attending' has no enum class"
   end
 
   it "should not use enum input type if class does not support ActiveEnum" do
@@ -44,6 +54,13 @@ describe ActiveEnum::FormHelpers::SimpleForm do
       concat f.input(:name)
     end
     output.should have_selector('input#not_active_record_name')
+  end
+
+  it "should allow non-enum fields to use default input determination" do
+    output = simple_form_for(Person.new, :url => people_path) do |f|
+      concat f.input(:first_name)
+    end
+    output.should have_selector('input#person_first_name')
   end
 
   def people_path
