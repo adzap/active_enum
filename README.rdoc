@@ -7,7 +7,7 @@ Enum values are stored in memory at the moment but I plan to add database and po
 
 == Install
 
-From version 0.7 onwards this plugin will only have Rails 3 support. If you need Rails 2 compatibility, check the 0.6 branch.
+From version 0.7 onwards this plugin will only have Rails 3 support. If you need Rails 2 compatibility, {check the 0.6 branch}[https://github.com/adzap/active_enum/tree/0.6].
 
   gem install active_enum 
 
