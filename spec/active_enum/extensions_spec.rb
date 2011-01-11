@@ -1,17 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class Sex < ActiveEnum::Base
-  value :id => 1, :name => 'Male'
-  value :id => 2, :name => 'Female'
-end
-
-class Accepted < ActiveEnum::Base
-  value :id => 0, :name => 'No'
-  value :id => 1, :name => 'Definitely'
-  value :id => 2, :name => 'Maybe'
-end
-
 describe ActiveEnum::Extensions do
+  class Sex < ActiveEnum::Base
+    value :id => 1, :name => 'Male'
+    value :id => 2, :name => 'Female'
+  end
+
+  class Accepted < ActiveEnum::Base
+    value :id => 0, :name => 'No'
+    value :id => 1, :name => 'Definitely'
+    value :id => 2, :name => 'Maybe'
+  end
 
   it 'should add class :enumerate method to ActiveRecord' do
     ActiveRecord::Base.should respond_to(:enumerate)
@@ -40,12 +39,12 @@ describe ActiveEnum::Extensions do
   end
 
   it 'should raise error if implicit enumeration class cannot be found' do
-    lambda do
+    expect {
       Person.enumerate :first_name
-    end.should raise_error(ActiveEnum::EnumNotFound)
+    }.should raise_error(ActiveEnum::EnumNotFound)
   end
 
-  describe "attribute" do
+  context "attribute" do
     let(:person) { Person.new(:sex => 1) }
 
     before(:all) do
@@ -54,7 +53,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "with value" do
+    context "with value" do
       it 'should return value with no arg' do
         person.sex.should == 1
       end
@@ -72,7 +71,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "with nil value" do
+    context "with nil value" do
       let(:person) { Person.new(:sex => nil) }
 
       it 'should return nil with no arg' do
@@ -92,7 +91,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "with undefined value" do
+    context "with undefined value" do
       let(:person) { Person.new(:sex => -1) }
 
       it 'should return value with no arg' do
@@ -112,7 +111,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "with meta data" do
+    context "with meta data" do
       let(:person) { Person.new(:sex =>1) }
 
       before(:all) do
@@ -138,7 +137,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "question method" do
+    context "question method" do
       it 'should return normal value without arg' do
         person.sex?.should be_true
         person.sex = nil
@@ -161,7 +160,7 @@ describe ActiveEnum::Extensions do
       end
     end
 
-    describe "with value as enum name symbol" do
+    context "with value as enum name symbol" do
 
       it 'should store id value when valid enum name' do
         person.sex = :female
@@ -175,7 +174,7 @@ describe ActiveEnum::Extensions do
 
     end
 
-    describe "with value as enum name" do
+    context "with value as enum name" do
       before(:all) { ActiveEnum.use_name_as_value = true }
       let(:person) { Person.new(:sex =>1) }
 

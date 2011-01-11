@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Bulk enum definitions" do
+describe ActiveEnum do
 
-  context ".define" do
+  describe ".define" do
     it 'should define enum constants using block' do
       ActiveEnum.define do
         enum(:foo) do
@@ -18,7 +18,7 @@ describe "Bulk enum definitions" do
     end
   end
 
-  context ".setup" do
+  describe ".setup" do
     before :all do
       @original = ActiveEnum.use_name_as_value
     end
@@ -34,7 +34,7 @@ describe "Bulk enum definitions" do
     end
   end
 
-  context ".extend_classes" do
+  describe ".extend_classes" do
     it 'should add enumerate extensions to given classes' do
       ActiveRecord::Base.should respond_to(:enumerate)
       NotActiveRecord.should respond_to(:enumerate)

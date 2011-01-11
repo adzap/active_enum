@@ -6,7 +6,7 @@ class TestOtherAREnum < ActiveEnum::Base; end
 describe ActiveEnum::Storage::MemoryStore do
   attr_accessor :store
 
-  context '#set' do
+  describe '#set' do
     it 'should store value of id and name' do
       store.set 1, 'test name'
       store.values.should == [[1, 'test name']]
@@ -18,28 +18,28 @@ describe ActiveEnum::Storage::MemoryStore do
     end
 
     it 'should raise error if duplicate id' do
-      lambda {
+      expect {
         store.set 1, 'Name 1'
         store.set 1, 'Other Name'
       }.should raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if duplicate name' do
-      lambda {
+      expect {
         store.set 1, 'Name 1'
         store.set 2, 'Name 1'
       }.should raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if duplicate name matches title-case name' do
-      lambda {
+      expect {
         store.set 1, 'Name 1'
         store.set 2, 'name 1'
       }.should raise_error(ActiveEnum::DuplicateValue)
     end
   end
 
-  context "#values" do
+  describe "#values" do
     it 'should return array of stored values' do
       store.set 1, 'Name 1'
       store.values.should == [[1, 'Name 1']]
@@ -52,7 +52,7 @@ describe ActiveEnum::Storage::MemoryStore do
     end
   end
 
-  context "#get_by_id" do
+  describe "#get_by_id" do
     it 'should return the value for a given id' do
       store.set 1, 'test name'
       store.get_by_id(1).should == [1, 'test name']
@@ -63,7 +63,7 @@ describe ActiveEnum::Storage::MemoryStore do
     end
   end
 
-  context "#get_by_name" do
+  describe "#get_by_name" do
     it 'should return the value for a given name' do
       store.set 1, 'test name'
       store.get_by_name('test name').should == [1, 'test name']
@@ -79,7 +79,7 @@ describe ActiveEnum::Storage::MemoryStore do
     end
   end
 
-  context "sort!" do
+  describe "#sort!" do
     it 'should sort values ascending when passed :asc' do
       @order = :asc
       store.set 2, 'Name 2'

@@ -2,13 +2,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ActiveEnum::Base do
 
-  context ".store" do
+  describe ".store" do
     it 'should load the storage class instance using the storage setting' do
       ActiveEnum::Base.send(:store).should be_instance_of(ActiveEnum::Storage::MemoryStore)
     end
   end
 
-  context ".enum_classes" do
+  describe ".enum_classes" do
     it 'should return all enum classes defined use class definition' do
       ActiveEnum.enum_classes = []
       class NewEnum < ActiveEnum::Base; end
@@ -24,13 +24,21 @@ describe ActiveEnum::Base do
     end
   end
 
-  context ".all" do
+  describe ".all" do
     it 'should return an empty array when no values defined' do
       define_enum.all.should == []
     end
+
+    it 'should return an array of arrays with all values defined as [id, name]' do
+      enum = define_enum do
+        value :name => 'Name 1'
+        value :name => 'Name 2'
+      end
+      enum.all.should == [[1,'Name 1'], [2, 'Name 2']]
+    end
   end
 
-  context ".value" do
+  describe ".value" do
     it 'should allow me to define a value with an id and name' do
       enum = define_enum do
         value :id => 1, :name => 'Name'
@@ -86,7 +94,7 @@ describe ActiveEnum::Base do
     end
   end
 
-  context ".meta" do
+  describe ".meta" do
     it 'should return meta values hash for a given index value' do
       enum = define_enum do
         value :id => 1, :name => 'Name', :description => 'extra'
@@ -132,7 +140,7 @@ describe ActiveEnum::Base do
     end
   end
 
-  context ".ids" do
+  describe ".ids" do
     it 'should return array of ids' do
       enum = define_enum do
         value :id => 1, :name => 'Name 1'
@@ -142,7 +150,7 @@ describe ActiveEnum::Base do
     end
   end
 
-  context ".names" do
+  describe ".names" do
     it 'should return array of names' do
       enum = define_enum do
         value :id => 1, :name => 'Name 1'
@@ -181,7 +189,7 @@ describe ActiveEnum::Base do
 
   end
 
-  context ".to_select" do
+  describe ".to_select" do
     it 'should return array for select helpers' do
       enum = define_enum do
         value :id => 1, :name => 'Name 1'

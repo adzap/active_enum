@@ -1,18 +1,18 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class Person < ActiveRecord::Base
-  acts_as_enum :name_column => 'first_name'
-end
+describe ActiveEnum::ActsAsEnum do
+  class Person < ActiveRecord::Base
+    acts_as_enum :name_column => 'first_name'
+  end
 
-class TestPerson < ActiveRecord::Base
-  def self.extended_modules
-    class << self
-      self.included_modules
+  class TestPerson < ActiveRecord::Base
+    def self.extended_modules
+      class << self
+        self.included_modules
+      end
     end
   end
-end
 
-describe ActiveEnum::ActsAsEnum do
   before(:all) do
     Person.create!(:first_name => 'Dave', :last_name => 'Smith')
     Person.create!(:first_name => 'John', :last_name => 'Doe')
