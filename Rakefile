@@ -3,7 +3,11 @@ require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'rspec/core/rake_task'
-require 'lib/active_enum/version'
+if RUBY_VERSION >= "1.9"
+  require_relative 'lib/active_enum/version'
+else
+  require 'lib/active_enum/version'
+end
 
 GEM_NAME = "active_enum"
 GEM_VERSION = ActiveEnum::VERSION
