@@ -70,7 +70,15 @@ module ActiveEnum
         end
       end
 
-        protected
+      def translate(index)
+        if row = get_row(index)
+          I18n.translate(row[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope)
+        end
+      end
+
+      alias :t :translate
+
+      protected
 
       def i18n_scope
         [:activerecord, :enums, self.name.underscore.gsub(/\//, '.')]

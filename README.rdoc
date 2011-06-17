@@ -211,6 +211,12 @@ For example:
 
 If a translation cannot be found, the enum's name attribute is used instead.
 
+The enum class also includes +translate+ method (also aliased as +t+) for translating the enum values. The translation
+can be looked up by either id or name.
+
+  Sex.translate(:male)   # => 'мужчина'
+  Sex.t(:male)           # => 'мужчина'
+
 
 == TODO
 * storage options of memory, database or yaml
