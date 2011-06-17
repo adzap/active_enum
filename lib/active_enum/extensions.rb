@@ -63,6 +63,7 @@ module ActiveEnum
       #   user.sex(:id)
       #   user.sex(:name)
       #   user.sex(:enum)
+      #   user.sex(:translation)
       #   user.sex(:meta_key)
       #
       def define_active_enum_read_method(attribute)
@@ -79,6 +80,8 @@ module ActiveEnum
               enum[value]
             when :enum
               enum
+            when :translation
+              enum.translate(value)
             when Symbol
               (enum.meta(value) || {})[arg]
             else

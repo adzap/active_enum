@@ -217,6 +217,10 @@ can be looked up by either id or name.
   Sex.translate(:male)   # => 'мужчина'
   Sex.t(:male)           # => 'мужчина'
 
+The +ActiveRecord+ attribute method can be used to look up the translated value:
+
+  user.sex(:translation) # => 'мужчина'
+
 
 == TODO
 * storage options of memory, database or yaml

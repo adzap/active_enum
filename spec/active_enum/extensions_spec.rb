@@ -69,6 +69,16 @@ describe ActiveEnum::Extensions do
       it 'should return enum class for attribute' do
         person.sex(:enum).should == Sex
       end
+
+      it 'should return translated value' do
+        begin
+          I18n.backend.store_translations('en', 'activerecord' => {
+              'enums' => {'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}}})
+          person.sex(:translation).should == 'Translated Male'
+        ensure
+          I18n.reload!
+        end
+      end
     end
 
     context "with nil value" do
