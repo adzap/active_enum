@@ -45,7 +45,10 @@ module ActiveEnum
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
-				store.values.map {|v| [v[1], v[0]] }
+        store.values.map do |v|
+          translated = I18n.translate!(v[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope) rescue v[1]
+          [translated, v[0]]
+        end
       end
 
       # Access id or name value. Pass an id number to retrieve the name or
@@ -68,6 +71,12 @@ module ActiveEnum
           store.get_by_name(index)
         end
         row[2] || {} if row
+      end
+
+      protected
+
+      def i18n_scope
+        [:activerecord, :enums, self.name.underscore.gsub(/\//, '.')]
       end
 
       private
