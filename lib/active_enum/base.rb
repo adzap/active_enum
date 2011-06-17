@@ -65,21 +65,26 @@ module ActiveEnum
 
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index)
-        row = if index.is_a?(Fixnum)
-          store.get_by_id(index)
-        else
-          store.get_by_name(index)
+        if row = get_row(index)
+          row[2] || {}
         end
-        row[2] || {} if row
       end
 
-      protected
+        protected
 
       def i18n_scope
         [:activerecord, :enums, self.name.underscore.gsub(/\//, '.')]
       end
 
       private
+
+      def get_row(index)
+        if index.is_a?(Fixnum)
+          store.get_by_id(index)
+        else
+          store.get_by_name(index)
+        end
+      end
 
       def id_and_name_and_meta(hash)
         if hash.has_key?(:id) || hash.has_key?(:name)
