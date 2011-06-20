@@ -46,7 +46,7 @@ module ActiveEnum
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
         store.values.map do |v|
-          translated = I18n.translate!(v[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope) rescue v[1]
+          translated = I18n.translate!(v[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope, :default => v[1])
           [translated, v[0]]
         end
       end
