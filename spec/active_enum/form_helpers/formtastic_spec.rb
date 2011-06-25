@@ -64,8 +64,8 @@ describe ActiveEnum::FormHelpers::Formtastic, :type => :helper do
 
   it 'should use translations when available' do
     begin
-      I18n.backend.store_translations('en', 'activerecord' => {
-          'enums' => {'person' => {'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}}}})
+      I18n.backend.store_translations('en', 'active_enum' => {
+          'person' => {'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}}})
       output = semantic_form_for(Person.new, :url => people_path) do |f|
         concat f.input(:sex)
       end

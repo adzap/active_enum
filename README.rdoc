@@ -197,17 +197,15 @@ The input type will be automatically detected for enumerated attributes. You can
 
 === I18n
 
-The +to_select+ method looks up translations for the enum values in activerecord.enums. The translation key is
+The +to_select+ method looks up translations for the enum values in +active_enum+. The translation key is
 built from the enum class name and the enum value's name attribute downcased and underscored.
 
 For example:
 
-  activerecord:
-    enums:
-      person:
-        sex:
-          male: мужчина
-          female: женский
+  active_enum:
+    sex:
+      male: мужчина
+      female: женский
 
 If a translation cannot be found, the enum's name attribute is used instead.
 

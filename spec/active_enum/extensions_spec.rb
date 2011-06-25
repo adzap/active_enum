@@ -72,8 +72,8 @@ describe ActiveEnum::Extensions do
 
       it 'should return translated value' do
         begin
-          I18n.backend.store_translations('en', 'activerecord' => {
-              'enums' => {'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}}})
+          I18n.backend.store_translations('en', 'active_enum' => {
+              'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}})
           person.sex(:translation).should == 'Translated Male'
         ensure
           I18n.reload!
