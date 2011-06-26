@@ -195,6 +195,39 @@ Or, SimpleForm:
 The input type will be automatically detected for enumerated attributes. You can override with the :as option as normal.
 
 
+=== I18n
+
+The +to_select+ method looks up translations for the enum values in +active_enum+. The translation key is
+built from the enum class name and the enum value's name attribute downcased and underscored.
+
+For example:
+
+  active_enum:
+    sex:
+      male: мужчина
+      female: женский
+
+If a translation cannot be found, the enum's name attribute is used instead.
+
+If the enum class is namespaced, e.g. +User::Sex+, then the translation key is also scoped in the namespace:
+
+   active_enum:
+     user:
+       sex:
+         male: мужчина
+         female: женский
+
+The enum class also includes +translate+ method (also aliased as +t+) for translating the enum values. The translation
+can be looked up by either id or name.
+
+  Sex.translate(:male)   # => 'мужчина'
+  Sex.t(:male)           # => 'мужчина'
+
+The +ActiveRecord+ attribute method can be used to look up the translated value:
+
+  user.sex(:translation) # => 'мужчина'
+
+
 == TODO
 * storage options of memory, database or yaml
 * use custom method name for the enumerated attribute

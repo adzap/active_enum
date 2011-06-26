@@ -206,6 +206,39 @@ describe ActiveEnum::Base do
       end
       enum.to_select.should == [['Name 2',2], ['Name 1',1]]
     end
+
+    it 'should use translations when available' do
+      begin
+        I18n.backend.store_translations('en', 'active_enum' => {
+            'name1' => 'the first', 'name2' => 'the second'})
+        enum = define_enum do
+          value :id => 1, :name => 'name1'
+          value :id => 2, :name => 'name2'
+        end
+        enum.to_select.should include(['the first', 1])
+        enum.to_select.should include(['the second', 2])
+      ensure
+        I18n.reload!
+      end
+    end
+  end
+
+  describe ".translate" do
+    it 'should return the translated value' do
+      begin
+        I18n.backend.store_translations('en', 'active_enum' => {
+            'name1' => 'the first', 'name2' => 'the second'})
+        enum = define_enum do
+          value :id => 1, :name => 'name1'
+          value :id => 2, :name => 'name2'
+        end
+        enum.translate(1).should == 'the first'
+        enum.translate('name1').should == 'the first'
+        enum.translate(:name1).should == 'the first'
+      ensure
+        I18n.reload!
+      end
+    end
   end
 
   def define_enum(&block)

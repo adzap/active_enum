@@ -45,7 +45,10 @@ module ActiveEnum
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
-				store.values.map {|v| [v[1], v[0]] }
+        store.values.map do |v|
+          translated = I18n.translate(v[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope, :default => v[1])
+          [translated, v[0]]
+        end
       end
 
       # Access id or name value. Pass an id number to retrieve the name or
@@ -62,15 +65,34 @@ module ActiveEnum
 
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index)
-        row = if index.is_a?(Fixnum)
+        if row = get_row(index)
+          row[2] || {}
+        end
+      end
+
+      def translate(index)
+        if row = get_row(index)
+          I18n.translate(row[1].downcase.gsub(/\s/, '_'), :scope => i18n_scope)
+        end
+      end
+
+      alias :t :translate
+
+      protected
+
+      def i18n_scope
+        [:active_enum, self.name.underscore.gsub(/\//, '.')]
+      end
+
+      private
+
+      def get_row(index)
+        if index.is_a?(Fixnum)
           store.get_by_id(index)
         else
           store.get_by_name(index)
         end
-        row[2] || {} if row
       end
-
-      private
 
       def id_and_name_and_meta(hash)
         if hash.has_key?(:id) || hash.has_key?(:name)

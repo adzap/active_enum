@@ -63,6 +63,20 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
     output.should have_selector('input#person_first_name')
   end
 
+  it "should use translations when available" do
+    begin
+      I18n.backend.store_translations('en', 'active_enum' => {
+          'person' => {'sex' =>{'male' => 'Translated Male', 'female' => 'Translated Female'}}})
+      output = simple_form_for(Person.new, :url => people_path) do |f|
+        concat f.input(:sex)
+      end
+      output.should have_xpath('//option[@value=1]', :content => 'Translated Male')
+      output.should have_xpath('//option[@value=2]', :content => 'Translated Female')
+    ensure
+      I18n.reload!
+    end
+  end
+
   def people_path
     '/people'
   end
