@@ -15,6 +15,14 @@ module ActiveEnum
   mattr_accessor :storage
   @@storage = :memory
 
+  mattr_accessor :storage_options
+  @@storage_options = {}
+
+  def storage=(*args)
+    @@storage_options = args.extract_options!
+    @@storage = args.first
+  end
+
   mattr_accessor :extend_classes
   @@extend_classes = [ defined?(ActiveRecord) && ActiveRecord::Base ].compact
 
@@ -41,6 +49,10 @@ module ActiveEnum
   def self.define(&block)
     raise "Define requires block" unless block_given?
     EnumDefinitions.new.instance_eval(&block)
+  end
+
+  def self.storage_class
+    @@storage_class ||= "ActiveEnum::Storage::#{storage.to_s.classify}Store".constantize
   end
 
 end

@@ -5,8 +5,8 @@ module ActiveEnum
     class NotImplemented < StandardError; end
 
     class AbstractStore 
-      def initialize(enum_class, order)
-        @enum, @order = enum_class, order
+      def initialize(enum_class, order, options={})
+        @enum, @order, @options = enum_class, order, options
       end
 
       def set(id, name, meta=nil)

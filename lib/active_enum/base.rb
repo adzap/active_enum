@@ -90,11 +90,7 @@ module ActiveEnum
       end
 
       def store
-        @store ||= storage_class.new(self, @order || :asc)
-      end
-
-      def storage_class
-        "ActiveEnum::Storage::#{ActiveEnum.storage.to_s.classify}Store".constantize
+        @store ||= ActiveEnum.storage_class.new(self, @order || :asc, ActiveEnum.storage_options)
       end
 
     end
