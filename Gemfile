@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 group :test do
+  gem 'rake', '0.8.7'
   gem 'ZenTest'
   gem 'rails', '~> 3.0.0'
   gem 'sqlite3-ruby', :require => 'sqlite3'
