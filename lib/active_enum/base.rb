@@ -23,9 +23,13 @@ module ActiveEnum
       end
 
       # Specify order enum values are returned. 
-      # Allowed values are :asc, :desc or :as_defined
+      # Allowed values are :asc, :desc or :natural
       #
       def order(order)
+        if order == :as_defined
+          ActiveSupport::Deprecation.warn("You are using the order :as_defined which has been deprecated. Use :natural.")
+          order = :natural
+        end
         @order = order
       end
 

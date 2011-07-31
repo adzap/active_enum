@@ -131,7 +131,7 @@ describe ActiveEnum::Base do
 
     it 'should return sorted values by id using order setting' do
       enum = define_enum do
-        order :as_defined
+        order :natural
         value :id => 3, :name => 'Name 3'
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'

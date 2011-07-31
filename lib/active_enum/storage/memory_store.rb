@@ -26,7 +26,7 @@ module ActiveEnum
       end
 
       def sort!
-        return if @order == :as_defined
+        return if @order == :natural
 
         case @order
         when :asc

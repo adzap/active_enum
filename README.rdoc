@@ -75,7 +75,7 @@ To define the sorting of returned values use the order method. Which is useful f
     value :id => 2, :name => 'Female'
   end
 
-By default the order is ascending (:asc) but you can also choose descending (:desc) or in order of definition (:as_defined).
+By default the order is ascending (:asc) but you can also choose descending (:desc) or in natural order of definition (:natural).
 The last option is useful when supplying id values but have a specific order needed to display them.
 
 === Enumerate model attributes

@@ -94,8 +94,8 @@ describe ActiveEnum::Storage::MemoryStore do
       store.values.should == [[2, 'Name 2'], [1,'Name 1']]
     end
 
-    it 'should not sort values when passed :as_defined' do
-      @order = :as_defined
+    it 'should not sort values when passed :natural' do
+      @order = :natural
       store.set 1, 'Name 1'
       store.set 3, 'Name 3'
       store.set 2, 'Name 2'
