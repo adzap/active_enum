@@ -1,3 +1,6 @@
+[0.9.3] : 2011-07-31
+- Add Railtie for proper loading of ActiveRecord extensions.
+
 [0.9.2] : 2011-07-31
 - Deprecate :as_defined order in favour of :natural.
 - Allow storage options to passed to ActiveEnum.storage = :foo, :bar => true.
