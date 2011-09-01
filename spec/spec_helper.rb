@@ -7,6 +7,7 @@ require 'action_view'
 require 'action_mailer'
 
 require 'active_enum'
+require 'active_enum/acts_as_enum'
 
 module Config
   class Application < Rails::Application
@@ -31,7 +32,8 @@ class NotActiveRecord
   attr_accessor :name
 end
 
-ActiveEnum.extend_classes = [ActiveRecord::Base, NotActiveRecord]
+ActiveEnum.extend_classes = [ActiveRecord::Base]
+ActiveEnum.extend_classes!
 
 module SpecHelper
   def reset_class(klass, &block)

@@ -34,9 +34,14 @@ describe ActiveEnum do
     end
   end
 
-  describe ".extend_classes" do
+  describe ".extend_classes!" do
     it 'should add enumerate extensions to given classes' do
-      ActiveRecord::Base.should respond_to(:enumerate)
+      ActiveEnum.extend_classes = [NotActiveRecord]
+
+      NotActiveRecord.should_not respond_to(:enumerate)
+
+      ActiveEnum.extend_classes!
+
       NotActiveRecord.should respond_to(:enumerate)
     end
   end

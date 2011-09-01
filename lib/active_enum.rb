@@ -1,6 +1,5 @@
 require 'active_enum/base'
 require 'active_enum/extensions'
-require 'active_enum/acts_as_enum' if defined?(ActiveRecord)
 require 'active_enum/storage/abstract_store'
 
 module ActiveEnum
@@ -24,16 +23,12 @@ module ActiveEnum
   end
 
   mattr_accessor :extend_classes
-  @@extend_classes = [ defined?(ActiveRecord) && ActiveRecord::Base ].compact
-
-  def self.extend_classes=(klasses)
-    @@extend_classes = klasses
-    klasses.each {|klass| klass.send(:include, ActiveEnum::Extensions) }
-  end
+  @@extend_classes = []
 
   # Setup method for plugin configuration
   def self.setup
     yield self
+    extend_classes!
   end
 
   class EnumDefinitions
@@ -53,6 +48,12 @@ module ActiveEnum
 
   def self.storage_class
     @@storage_class ||= "ActiveEnum::Storage::#{storage.to_s.classify}Store".constantize
+  end
+
+  private
+
+  def self.extend_classes!
+    extend_classes.each {|klass| klass.send(:include, ActiveEnum::Extensions) }
   end
 
 end
