@@ -5,8 +5,7 @@ module ActiveEnum
     extend ActiveSupport::Concern
 
     included do
-      class_inheritable_accessor :enumerated_attributes
-      self.enumerated_attributes = {}
+      class_attribute :enumerated_attributes
     end
 
     module ClassMethods
@@ -27,9 +26,9 @@ module ActiveEnum
       #     enumerate :to, :from, :with => Sex
       #
       def enumerate(*attributes, &block)
-        self.enumerated_attributes ||= {}
         options = attributes.extract_options!
 
+        attributes_enum = {}
         attributes.each do |attribute|
           begin
             if block_given?
@@ -39,7 +38,7 @@ module ActiveEnum
             end
 
             attribute = attribute.to_sym
-            enumerated_attributes[attribute] = enum
+            attributes_enum[attribute] = enum
 
             define_active_enum_methods_for_attribute(attribute)
           rescue NameError => e
@@ -47,6 +46,7 @@ module ActiveEnum
             raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
           end
         end
+        self.enumerated_attributes = attributes_enum
       end
 
       def active_enum_for(attribute)

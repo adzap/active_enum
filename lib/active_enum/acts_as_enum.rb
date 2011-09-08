@@ -5,7 +5,7 @@ module ActiveEnum
 
       def acts_as_enum(options={})
         extend ClassMethods
-        class_inheritable_accessor :active_enum_options
+        class_attribute :active_enum_options
         self.active_enum_options = options.reverse_merge(:name_column => 'name')
         scope :enum_values, select("#{primary_key}, #{active_enum_options[:name_column]}").
                             where(active_enum_options[:conditions]).
