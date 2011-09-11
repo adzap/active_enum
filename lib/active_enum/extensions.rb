@@ -46,7 +46,8 @@ module ActiveEnum
             raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
           end
         end
-        self.enumerated_attributes = attributes_enum
+        self.enumerated_attributes ||= {}
+        self.enumerated_attributes.merge!(attributes_enum)
       end
 
       def active_enum_for(attribute)
