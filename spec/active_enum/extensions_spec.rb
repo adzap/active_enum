@@ -22,12 +22,22 @@ describe ActiveEnum::Extensions do
 
   it 'should allow multiple attributes to be enumerated with same enum' do
     Person.enumerate :attending, :staying, :with => Accepted
+
     Person.active_enum_for(:attending).should == Accepted
     Person.active_enum_for(:staying).should == Accepted
   end
 
+  it 'should allow multiple attributes to be enumerated with different enums' do
+    Person.enumerate :sex, :with => Sex
+    Person.enumerate :attending, :with => Accepted
+
+    Person.active_enum_for(:sex).should == Sex 
+    Person.active_enum_for(:attending).should == Accepted
+  end
+
   it 'should allow implicit enumeration class from attribute name' do
     Person.enumerate :sex
+
     Person.active_enum_for(:sex).should == Sex
   end
 
