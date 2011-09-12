@@ -1,3 +1,6 @@
+[0.9.6] : 2011-09-13
+- Fix regression in active_enum_for in models without enumerated attributes. (issue #8). [jasoncodes]
+
 [0.9.5] : 2011-09-11
 - Fix regression in enumerate method to not override set of enumerated attributes with each call. [TeWu]
 
