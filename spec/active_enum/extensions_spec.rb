@@ -12,6 +12,9 @@ describe ActiveEnum::Extensions do
     value :id => 2, :name => 'Maybe'
   end
 
+  class Company < ActiveRecord::Base
+  end
+
   it 'should add class :enumerate method to ActiveRecord' do
     ActiveRecord::Base.should respond_to(:enumerate)
   end
@@ -52,6 +55,14 @@ describe ActiveEnum::Extensions do
     expect {
       Person.enumerate :first_name
     }.should raise_error(ActiveEnum::EnumNotFound)
+  end
+
+  it '.active_enum_for should return nil for unknown enumeration' do
+    Person.active_enum_for(:not_found).should be_nil
+  end
+
+  it '.active_enum_for should return nil for unenumerated AR models' do
+    Company.active_enum_for(:id).should be_nil
   end
 
   context "attribute" do
