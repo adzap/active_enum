@@ -51,6 +51,7 @@ module ActiveEnum
       end
 
       def active_enum_for(attribute)
+        self.enumerated_attributes ||= {}
         enumerated_attributes[attribute.to_sym]
       end
 
