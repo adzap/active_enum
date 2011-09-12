@@ -62,6 +62,13 @@ describe ActiveEnum::FormHelpers::Formtastic, :type => :helper do
     output.should have_selector('input#person_first_name')
   end
 
+  it "should allow models without enumerated attributes to behave normally" do
+    output = semantic_form_for(NoEnumPerson.new, :url => people_path) do |f|
+      concat f.input(:first_name)
+    end
+    output.should have_selector('input#no_enum_person_first_name')
+  end
+
   def people_path
     '/people'
   end
