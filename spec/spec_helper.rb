@@ -26,6 +26,9 @@ ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':m
 require 'schema'
 
 class Person < ActiveRecord::Base; end
+class NoEnumPerson < ActiveRecord::Base
+  set_table_name 'people'
+end
 
 class NotActiveRecord
   include ActiveModel::Validations

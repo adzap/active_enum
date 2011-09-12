@@ -51,7 +51,7 @@ module ActiveEnum
       end
 
       def active_enum_for(attribute)
-        enumerated_attributes[attribute.to_sym]
+        enumerated_attributes && enumerated_attributes[attribute.to_sym]
       end
 
       def define_active_enum_methods_for_attribute(attribute)
