@@ -2,28 +2,30 @@ require 'rspec'
 
 require 'rails'
 require 'active_record'
-require 'action_controller'
+require 'action_controller/railtie'
 require 'action_view'
 require 'action_mailer'
 
 require 'active_enum'
 require 'active_enum/acts_as_enum'
 
-module Config
+module ActiveEnum 
   class Application < Rails::Application
     config.generators do |g|
       g.orm             :active_record
       g.test_framework  :rspec, :fixture => false
     end
+    config.active_support.deprecation = :notify
   end
 end
+ActiveEnum::Application.initialize!
 
 require 'rspec/rails'
 
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
 
-require 'schema'
+require 'support/schema'
 
 class Person < ActiveRecord::Base; end
 class NoEnumPerson < ActiveRecord::Base

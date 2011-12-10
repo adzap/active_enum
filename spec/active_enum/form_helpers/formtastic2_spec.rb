@@ -1,16 +1,13 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require "spec_helper"
 
-begin 
-  require 'formtastic'
-  require 'formtastic/version'
-rescue LoadError
-end
+require 'formtastic'
 
-unless Formtastic.const_defined?(:VERSION)
-require 'active_enum/form_helpers/formtastic'
+if Formtastic.const_defined?(:VERSION) && Formtastic::VERSION =~ /^2\./
+require 'active_enum/form_helpers/formtastic2'
 
-describe ActiveEnum::FormHelpers::Formtastic, :type => :helper do
-  include Formtastic::SemanticFormHelper
+describe ActiveEnum::FormHelpers::Formtastic2, :type => :helper do
+  include Rails.application.routes.url_helpers
+  include Formtastic::Helpers::FormHelper
 
   before do
     reset_class Person do
