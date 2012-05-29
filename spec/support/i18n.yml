@@ -1,0 +1,10 @@
+en:
+  active_enum:
+    top_level_enum:
+      things: Generic things
+      not_found: Should not find this for top level
+
+    namespaced:
+      model_enum:
+        things: Model things
+        not_found: Should not find this for nested
