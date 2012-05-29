@@ -1,0 +1,31 @@
+en:
+  active_enum:
+
+    # Place enum translations for each name defined in the enum
+    # 
+    #   class Sex < ActiveEnum::Base
+    #     value 1 => 'male'
+    #     value 2 => 'female'
+    #   end
+    # 
+    # Becomes
+    #
+    # sex:
+    #   male: Male 
+    #   female: Female 
+    #
+    # For namesapced enums in a model
+    #
+    #   class Person < ActiveRecord::Base
+    #     enumerate :sex do
+    #       value 1 => 'male'
+    #       value 2 => 'female'
+    #     end
+    #   end
+    #
+    # Nest the translations under the underscored model name
+    #  
+    # person:
+    #   sex:
+    #     male: Male 
+    #     female: Female 
