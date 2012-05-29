@@ -49,7 +49,7 @@ module ActiveEnum
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
-				store.values.map {|v| [v[1], v[0]] }
+        store.values.map {|v| [v[1], v[0]] }
       end
 
       # Access id or name value. Pass an id number to retrieve the name or

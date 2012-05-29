@@ -1,10 +1,10 @@
 require "spec_helper"
 
-class TestMemoryStoreEnum < ActiveEnum::Base; end
-class TestOtherAREnum < ActiveEnum::Base; end
-
 describe ActiveEnum::Storage::MemoryStore do
   attr_accessor :store
+
+  class TestMemoryStoreEnum < ActiveEnum::Base; end
+  class TestOtherAREnum < ActiveEnum::Base; end
 
   describe '#set' do
     it 'should store value of id and name' do

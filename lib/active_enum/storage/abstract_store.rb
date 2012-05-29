@@ -1,6 +1,7 @@
 module ActiveEnum
   module Storage
     autoload :MemoryStore, "active_enum/storage/memory_store"
+    autoload :I18nStore, "active_enum/storage/i18n_store"
 
     class NotImplemented < StandardError; end
 
@@ -22,8 +23,15 @@ module ActiveEnum
       end
 
       def values
+        _values
+      end
+
+      private
+      
+      def _values
         raise NotImplemented
       end
+
     end
   end
 end
