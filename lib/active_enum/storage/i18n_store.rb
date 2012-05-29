@@ -5,7 +5,7 @@ module ActiveEnum
     class I18nStore < MemoryStore
       def initialize(enum_class, order, options={})
         super
-        @scope = enum_class.name.underscore.to_sym
+        @scope = [ :active_enum ] + enum_class.name.split("::").map { |nesting| nesting.underscore.to_sym }
       end
 
       def get_by_id(id)
@@ -31,7 +31,7 @@ module ActiveEnum
       private
 
       def translate(key)
-        I18n.translate key, :scope => [ :active_enum, @scope ], :default => ''
+        I18n.translate key, :scope => @scope
       end
 
     end

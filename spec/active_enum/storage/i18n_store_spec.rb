@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe 'ActiveEnum::Storage::I18nStore' do
+describe ActiveEnum::Storage::I18nStore do
   class TestI18nStoreEnum < ActiveEnum::Base; end
   
   let(:enum_class) { TestI18nStoreEnum }
   let(:enum_key) { enum_class.name.underscore }
-  let(:store) { ActiveEnum::Storage::I18nStore.new(enum_class, @order) }
+  let(:store) { ActiveEnum::Storage::I18nStore.new(enum_class, :asc) }
 
   before(:all) do
     @_default_store = ActiveEnum.storage
@@ -49,11 +49,11 @@ describe 'ActiveEnum::Storage::I18nStore' do
       }.should raise_error(ActiveEnum::DuplicateValue)
     end
 
-    it 'should raise error if duplicate name matches title-case name' do
+    it 'should not raise error if duplicate name with alternate case matches' do
       expect {
         store.set 1, 'Name 1'
-        store.set 1, 'name 1'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+        store.set 2, 'name 1'
+      }.should_not raise_error(ActiveEnum::DuplicateValue)
     end
   end
 
@@ -72,6 +72,7 @@ describe 'ActiveEnum::Storage::I18nStore' do
       I18n.locale = :fr
       store.values.should == [ [1, 'Merce'] ]
     end
+
   end
 
   describe "#get_by_id" do
@@ -116,7 +117,7 @@ describe 'ActiveEnum::Storage::I18nStore' do
     end
 
     it 'should sort values ascending when passed :asc' do
-      store = ActiveEnum::Storage::I18nStore.new(enum_class, :asc)
+      store = described_class.new(enum_class, :asc)
 
       store.set 2, 'name2'
       store.set 1, 'name1'
@@ -124,7 +125,7 @@ describe 'ActiveEnum::Storage::I18nStore' do
     end
 
     it 'should sort values descending when passed :desc' do
-      store = ActiveEnum::Storage::I18nStore.new(enum_class, :desc)
+      store = described_class.new(enum_class, :desc)
 
       store.set 1, 'name1'
       store.set 2, 'name2'
@@ -132,13 +133,52 @@ describe 'ActiveEnum::Storage::I18nStore' do
     end
 
     it 'should not sort values when passed :natural' do
-      store = ActiveEnum::Storage::I18nStore.new(enum_class, :natural)
+      store = described_class.new(enum_class, :natural)
 
       store.set 1, 'name1'
       store.set 3, 'name3'
       store.set 2, 'name2'
       store.values.should == [[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']]
     end
+  end
+
+  context "loaded from yaml locale" do
+    before do
+      I18n.load_path << File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'support', 'i18n.yml'))
+      I18n.reload!
+      I18n.locale = :en
+    end
+
+    context "for top level enum" do
+      class TopLevelEnum < ActiveEnum::Base; end
+      let(:enum_class) { TopLevelEnum }
+
+      it 'should return array values from yaml' do
+        store.set 1, 'things'
+        store.get_by_name('things').should eq [1, 'Generic things']
+      end
+
+      it 'should not load locale entry unless defined in enum' do
+        store.set 1, 'things'
+        store.get_by_name('not_found').should be_nil
+      end
+    end
+
+    context "for namespaced model enum" do
+      module Namespaced; class ModelEnum < ActiveEnum::Base; end; end
+      let(:enum_class) { Namespaced::ModelEnum }
+
+      it 'should return array values from yaml' do
+        store.set 1, 'things'
+        store.get_by_name('things').should eq [1, 'Model things']
+      end
+
+      it 'should not load locale entry unless defined in enum' do
+        store.set 1, 'things'
+        store.get_by_name('not_found').should be_nil
+      end
+    end
+
   end
 
 end
