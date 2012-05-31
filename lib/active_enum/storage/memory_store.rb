@@ -31,8 +31,6 @@ module ActiveEnum
         end
       end
 
-      private
-
       def _values
         @_values ||= []
       end
