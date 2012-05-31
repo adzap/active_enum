@@ -5,7 +5,7 @@ module ActiveEnum
       source_root File.expand_path('../templates', __FILE__)
 
       def copy_initializers
-        copy_file 'active_enum.rb', 'config/initializers/active_enum.rb'
+        copy_file 'config.rb', 'config/initializers/active_enum.rb'
       end
 
     end
