@@ -3,12 +3,19 @@ module ActiveEnum
     class LocaleGenerator < Rails::Generators::Base
       desc "Copy ActiveEnum locale file for I18n storage"
       source_root File.expand_path('../templates', __FILE__)
-      class_option :template_engine
+      class_option :lang, :type => :string, :default => 'en', :desc => "Language for locale file"
 
       def copy_initializers
-        copy_file 'active_enum.en.yml', 'config/locales/active_enum.en.yml'
+        template 'locale.yml',  locale_full_path
       end
 
+      def locale_filename
+        "active_enum.#{options[:lang]}.yml"
+      end
+
+      def locale_full_path
+        "config/locales/#{locale_filename}"
+      end
     end
   end
 end

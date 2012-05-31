@@ -1,4 +1,4 @@
-en:
+#{@lang}:
   active_enum:
 
     # Place enum translations for each name defined in the enum
