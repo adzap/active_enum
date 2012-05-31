@@ -10,7 +10,7 @@ ActiveEnum.setup do |config|
   # Return name string as value for attribute method
   # config.use_name_as_value = false
 
-  # Storage of values
+  # Storage of values (:memory, :i18n)
   # config.storage = :memory
 
 end
