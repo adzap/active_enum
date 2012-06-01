@@ -1,10 +1,10 @@
 require 'active_enum/base'
 require 'active_enum/extensions'
 require 'active_enum/storage/abstract_store'
+require 'active_enum/version'
+require 'active_enum/railtie' if defined?(Rails)
 
 module ActiveEnum
-  autoload :VERSION, 'active_enum/version'
-
   mattr_accessor :enum_classes
   @@enum_classes = []
 
