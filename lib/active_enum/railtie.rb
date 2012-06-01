@@ -4,7 +4,7 @@ module ActiveEnum
       ActiveSupport.on_load(:active_record) do
         require 'active_enum/acts_as_enum'
 
-        ActiveEnum.extend_orms = [ ActiveRecord::Base ]
+        ActiveEnum.extend_classes = [ ActiveRecord::Base ]
       end
     end
   end
