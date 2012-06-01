@@ -1,3 +1,5 @@
+require 'simple_form/version'
+
 module ActiveEnum
   module FormHelpers
     module SimpleForm
@@ -12,7 +14,7 @@ module ActiveEnum
 
       end
 
-      class EnumInput < ::SimpleForm::Inputs::CollectionInput
+      module InputExtension
 
         def initialize(*args)
           super
@@ -26,6 +28,16 @@ module ActiveEnum
         
       end
     end
+  end
+end
+
+if SimpleForm::VERSION < '2.0.0'
+  class ActiveEnum::FormHelpers::SimpleForm::EnumInput < ::SimpleForm::Inputs::CollectionInput
+    include ActiveEnum::FormHelpers::SimpleForm::InputExtension
+  end
+else
+  class ActiveEnum::FormHelpers::SimpleForm::EnumInput < ::SimpleForm::Inputs::CollectionSelectInput
+    include ActiveEnum::FormHelpers::SimpleForm::InputExtension
   end
 end
 
