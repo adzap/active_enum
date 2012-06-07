@@ -125,14 +125,15 @@ module ActiveEnum
       #   user.sex?(:male)
       #
       def define_active_enum_question_method(attribute)
-        define_method("#{attribute}?") do |*arg|
-          arg = arg.first
-          if arg
-            send(attribute) == self.class.active_enum_for(attribute)[arg]
-          else
-            super()
+        class_eval <<-DEF
+          def #{attribute}?(*args)
+            if args.first
+              #{attribute} == self.class.active_enum_for(:#{attribute})[args.first]
+            else
+              super()
+            end
           end
-        end
+        DEF
       end
 
     end
