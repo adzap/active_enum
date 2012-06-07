@@ -119,7 +119,7 @@ Access the enum values and the enum class using the attribute method with a symb
   user.sex(:id)     # => 1
   user.sex(:name)   # => 'Male'
   user.sex(:enum)   # => Sex
-  user.sex(:symbol) # => ♂. Can use any meta data key.
+  user.sex(:symbol) # => ♂  ( Can use any meta data key )
 
 You can set the default to return the enum name value for enumerated attribute
 

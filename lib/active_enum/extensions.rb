@@ -83,7 +83,7 @@ module ActiveEnum
             value = super()
             return if value.nil? && arg.nil?
 
-            enum  = self.class.active_enum_for(:#{attribute})
+            enum = self.class.active_enum_for(:#{attribute})
             case arg
             when :id
               value if enum[value]
