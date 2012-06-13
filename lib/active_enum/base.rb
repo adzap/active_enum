@@ -64,6 +64,10 @@ module ActiveEnum
         end
       end
 
+      def include?(value)
+        !self[value].nil?
+      end
+
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index)
         row = if index.is_a?(Fixnum)

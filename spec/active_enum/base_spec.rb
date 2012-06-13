@@ -182,13 +182,29 @@ describe ActiveEnum::Base do
     end
   end
 
+  describe ".include?" do
+    let(:enum) {
+      define_enum do
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
       end
-      enum[:Name_1].should == 1
-      enum[:name_1].should == 1
+    }
+
+    it "should return true if value is a fixnum and matches an id" do
+      enum.include?(1).should be_true
     end
 
+    it "should return false if value is a fixnum and does not match an id" do
+      enum.include?(3).should be_false
+    end
+
+    it "should return true if value is a string and matches a name" do
+      enum.include?('Name 1').should be_true
+    end
+
+    it "should return false if value is a string and does not match a name" do
+      enum.include?('No match').should be_false
+    end
   end
 
   describe ".to_select" do
