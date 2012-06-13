@@ -76,21 +76,21 @@ describe ActiveEnum::Base do
     end
 
     it 'should raise error if the id is a duplicate' do
-      lambda do
+      expect {
         define_enum do
           value :id => 1, :name => 'Name 1'
           value :id => 1, :name => 'Name 2'
         end
-      end.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if the name is a duplicate' do
-      lambda do
+      expect {
         define_enum do
           value :id => 1, :name => 'Name'
           value :id => 2, :name => 'Name'
         end
-      end.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
   end
 
@@ -161,25 +161,27 @@ describe ActiveEnum::Base do
   end
 
   context "element reference method" do
-
-    it 'should return name when given an id' do
-      enum = define_enum do
+    let(:enum) {
+      define_enum do
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
       end
+    }
+
+    it 'should return name when given an id' do
       enum[1].should == 'Name 1'
     end
 
     it 'should return id when given a name' do
-      enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
-      end
       enum['Name 1'].should == 1
     end
 
     it 'should return id when given a symbol of the name' do
-      enum = define_enum do
+      enum[:Name_1].should == 1
+      enum[:name_1].should == 1
+    end
+  end
+
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
       end
@@ -199,7 +201,7 @@ describe ActiveEnum::Base do
     end
 
     it 'should return array sorted using order setting' do
-      enum = define_enum() do
+      enum = define_enum do
         order :desc
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
