@@ -195,8 +195,57 @@ Or, SimpleForm:
 The input type will be automatically detected for enumerated attributes. You can override with the :as option as normal.
 
 
-== TODO
-* storage options of memory, database or yaml
-* use custom method name for the enumerated attribute
+== Storage Backends 
+
+The design allows pluggable backends to be used for stories and retrieving the enum values. At present there are two
+available, memory or I18n. To change the storage engine you alter the storage config value like so:
+
+  ActiveEnum.setup do |config|
+    config.storage = :i18n
+  end
+
+The memory store is default obviously just stores the values in memory.
+
+
+=== I18n Storage
+
+The I18n storage backend stores the ids and names is memory still, but retrieves the name text translation any call to
+the enum public methods. 
+
+To set up the locale file, run
+
+  rails g active_enum:locale
+
+This generates the YML locale template in your default language as configured in the application.rb.
+
+Here are some examples of defining enum translations
+ 
+   class Sex < ActiveEnum::Base
+     value 1 => 'male'
+     value 2 => 'female'
+   end
+ 
+becomes 
+
+  sex:
+    male: Male 
+    female: Female 
+
+For namesapced enums in a model
+
+  class Person < ActiveRecord::Base
+    enumerate :sex do
+      value 1 => 'male'
+      value 2 => 'female'
+    end
+  end
+
+nest the translations under the underscored model name
+  
+  person:
+    sex:
+      male: Male 
+      female: Female 
+
 
 Copyright (c) 2009 Adam Meehan, released under the MIT license

@@ -8,7 +8,7 @@
     #     value 2 => 'female'
     #   end
     # 
-    # Becomes
+    # is defined as 
     #
     # sex:
     #   male: Male 
