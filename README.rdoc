@@ -3,7 +3,7 @@
 Define enum classes in Rails and use them to enumerate ActiveRecord attributes. Brings together some ideas
 of similar plugins that I liked and does it they way I prefer.
 
-Enum values are stored in memory at the moment but I plan to add database and possibly others.
+Enum values are stored in memory at the moment but I plan to add database and possibly others. See Storage Backends.
 
 == Install
 
