@@ -1,3 +1,11 @@
+[0.9.9] : 2012-07-08
+- Really fix Railtie issue this time.
+
+[0.9.8] : 2012-07-02
+- Add I18n storage backend
+- Fix load order issue when relying on Railtie to load ActiveRecord support.
+- Add support for simple_form v2.
+
 [0.9.7] : 2011-12-11
 - Add Formtastic 2 form helper. [fbuenemann]
 
