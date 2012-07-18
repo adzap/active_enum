@@ -87,6 +87,13 @@ describe ActiveEnum::Storage::I18nStore do
       store.get_by_id(1).should == [1, 'Testing']
     end
 
+    it 'should return the value with meta for a given id' do
+      I18n.locale = :en
+
+      store.set 1, 'test', :description => 'meta'
+      store.get_by_id(1).should == [1, 'Testing', { :description => 'meta' }]
+    end
+
     it 'should return nil when id not found' do
       store.get_by_id(1).should be_nil
     end
@@ -100,6 +107,11 @@ describe ActiveEnum::Storage::I18nStore do
     it 'should return the value for a given name' do
       store.set 1, 'test'
       store.get_by_name('test').should == [1, 'Testing']
+    end
+
+    it 'should return the value with meta for a given name' do
+      store.set 1, 'test', :description => 'meta'
+      store.get_by_name('test').should == [1, 'Testing', { :description => 'meta' }]
     end
 
     it 'should return nil when name not found' do

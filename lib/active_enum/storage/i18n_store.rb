@@ -5,12 +5,12 @@ module ActiveEnum
     class I18nStore < MemoryStore
       def get_by_id(id)
         row = _values.assoc(id)
-        [ id, translate(row[1]) ] if row
+        [ id, translate(row[1]), row[2] ].compact if row
       end
 
       def get_by_name(name)
         row = _values.rassoc(name.to_s)
-        [ row[0], translate(row[1]) ] if row
+        [ row[0], translate(row[1]), row[2] ].compact if row
       end
 
       def values
