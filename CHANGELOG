@@ -1,3 +1,6 @@
+[0.9.10] : 2012-07-18
+- Fix I18n storage for meta data. [kengos]
+
 [0.9.9] : 2012-07-08
 - Really fix Railtie issue this time.
 
