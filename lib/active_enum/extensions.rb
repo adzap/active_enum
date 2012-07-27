@@ -85,6 +85,8 @@ module ActiveEnum
 
             enum = self.class.active_enum_for(:#{attribute})
             case arg
+            when nil
+              #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
             when :id
               value if enum[value]
             when :name
@@ -93,8 +95,6 @@ module ActiveEnum
               enum
             when Symbol
               (enum.meta(value) || {})[arg]
-            else
-              #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
             end
           end
         DEF
@@ -110,10 +110,9 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}=(arg)
             if arg.is_a?(Symbol)
-              value = self.class.active_enum_for(:#{attribute})[arg]
-              super(value)
+              super self.class.active_enum_for(:#{attribute})[arg]
             else
-              super(arg)
+              super arg
             end
           end
         DEF
@@ -126,9 +125,9 @@ module ActiveEnum
       #
       def define_active_enum_question_method(attribute)
         class_eval <<-DEF
-          def #{attribute}?(*args)
-            if args.first
-              #{attribute} == self.class.active_enum_for(:#{attribute})[args.first]
+          def #{attribute}?(arg=nil)
+            if arg
+              self.#{attribute} == self.class.active_enum_for(:#{attribute})[arg]
             else
               super()
             end

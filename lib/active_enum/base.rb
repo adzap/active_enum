@@ -54,7 +54,7 @@ module ActiveEnum
 
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
-      def [](index)
+      def get(index)
         if index.is_a?(Fixnum)
           row = store.get_by_id(index)
           row[1] if row
@@ -63,9 +63,10 @@ module ActiveEnum
           row[0] if row
         end
       end
+      alias_method :[], :get
 
       def include?(value)
-        !self[value].nil?
+        !get(value).nil?
       end
 
       # Access any meta data defined for a given id or name. Returns a hash.
