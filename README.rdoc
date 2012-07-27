@@ -108,6 +108,20 @@ Multiple attributes with same enum
     enumerate :to, :from, :with => Sex
   end
 
+
+=== Validations
+
+You can use an enum in a validation of inclusion like so
+
+  class User < ActiveRecord::Base
+    enumerate :sex, :with => Sex
+
+    validates_inclusion_of :sex, :in => Sex
+  end
+
+This works because an enum class responds to #include?().
+
+
 === Attribute value lookup
 
 Access the enum values and the enum class using the attribute method with a symbol for the enum component you want
