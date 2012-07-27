@@ -81,11 +81,11 @@ module ActiveEnum
       private
 
       def id_and_name_and_meta(hash)
-        if hash.has_key?(:id) || hash.has_key?(:name)
+        if hash.has_key?(:name)
           id   = hash.delete(:id) || next_id
           name = hash.delete(:name)
           meta = hash
-          return id, name, (meta.blank? ? nil : meta)
+          return id, name, (meta.empty? ? nil : meta)
         elsif hash.keys.first.is_a?(Fixnum)
           return *Array(hash).first
         else
