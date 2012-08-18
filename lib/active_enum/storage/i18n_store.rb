@@ -28,7 +28,7 @@ module ActiveEnum
       end
 
       def translate(key)
-        I18n.translate key, :scope => i18n_scope
+        I18n.translate key, :scope => i18n_scope, :default => key
       end
 
     end
