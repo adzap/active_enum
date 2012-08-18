@@ -1,3 +1,6 @@
+[0.9.11] : 2012-08-18
+- Use the name key as default value for the name in I18n storage. [kengos]
+
 [0.9.10] : 2012-07-18
 - Fix I18n storage for meta data. [kengos]
 
