@@ -1,6 +1,6 @@
 # Form helper integration
-# require 'active_enum/form_helpers/simple_form'
-# require 'active_enum/form_helpers/formtastic'
+# require 'active_enum/form_helpers/formtastic'  # for Formtastic <2
+# require 'active_enum/form_helpers/formtastic2' # for Formtastic 2.x
 
 ActiveEnum.setup do |config|
 
