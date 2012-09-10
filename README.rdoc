@@ -198,7 +198,11 @@ There is support for Formtastic[http://github.com/justinfrench/formtastic] and S
 to make it easier to use the enum values as select options. The plugins have an almost identical API which is handy.
 You just need to require the extension for the respective plugin in an initialiser:
 
-Formtastic:
+Formtastic 2.x:
+
+  require 'active_enum/form_helpers/formtastic2'
+
+Formtastic <2:
 
   require 'active_enum/form_helpers/formtastic'
 
