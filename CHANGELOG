@@ -1,3 +1,6 @@
+[0.9.12] : 2012-09-11
+- Fixes for generator config template and doc updates. [kuraga]
+
 [0.9.11] : 2012-08-18
 - Use the name key as default value for the name in I18n storage. [kengos]
 
