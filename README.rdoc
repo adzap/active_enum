@@ -80,7 +80,21 @@ The last option is useful when supplying id values but have a specific order nee
 
 === Enumerate model attributes
 
-Use the enum to enumerate an ActiveRecord model attribute
+You can use the enum to enumerate an ActiveRecord model attribute.
+
+Just create a column
+
+  class AddSexColumnToUsers < ActiveRecord::Migration
+    def up
+      add_column :users, :sex, :integer
+    end
+
+    def down
+      remove_column :users, :sex, :integer
+    end
+  end
+
+And the edit your model
 
   class User < ActiveRecord::Base
     enumerate :sex, :with => Sex
