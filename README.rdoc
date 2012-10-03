@@ -266,4 +266,6 @@ nest the translations under the underscored model name
       female: Female 
 
 
+== License
+
 Copyright (c) 2009 Adam Meehan, released under the MIT license
