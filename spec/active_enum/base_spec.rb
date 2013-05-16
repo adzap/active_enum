@@ -161,24 +161,26 @@ describe ActiveEnum::Base do
   end
 
   context "element reference method" do
-    let(:enum) {
-      define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+    context 'integer ids' do
+      let(:enum) {
+        define_enum do
+          value :id => 1, :name => 'Name 1'
+          value :id => 2, :name => 'Name 2'
+        end
+      }
+
+      it 'should return name when given an id' do
+        enum[1].should == 'Name 1'
       end
-    }
 
-    it 'should return name when given an id' do
-      enum[1].should == 'Name 1'
-    end
+      it 'should return id when given a name' do
+        enum['Name 1'].should == 1
+      end
 
-    it 'should return id when given a name' do
-      enum['Name 1'].should == 1
-    end
-
-    it 'should return id when given a symbol of the name' do
-      enum[:Name_1].should == 1
-      enum[:name_1].should == 1
+      it 'should return id when given a symbol of the name' do
+        enum[:Name_1].should == 1
+        enum[:name_1].should == 1
+      end
     end
   end
 
