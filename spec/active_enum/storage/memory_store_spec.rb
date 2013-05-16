@@ -53,13 +53,19 @@ describe ActiveEnum::Storage::MemoryStore do
   end
 
   describe "#get_by_id" do
-    it 'should return the value for a given id' do
+    it 'should return the value for a given integer id' do
       store.set 1, 'test name', :description => 'meta'
       store.get_by_id(1).should == [1, 'test name', {:description => "meta"}]
     end
 
+    it 'should return the value for a given symbol id' do
+      store.set :abc, 'test name', :description => 'meta'
+      store.get_by_id(:abc).should == [:abc, 'test name', {:description => "meta"}]
+    end
+
     it 'should return nil when id not found' do
       store.get_by_id(1).should be_nil
+      store.get_by_id(:abc).should be_nil
     end
   end
 
