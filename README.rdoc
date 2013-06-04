@@ -206,6 +206,10 @@ Formtastic <2:
 
   require 'active_enum/form_helpers/formtastic'
 
+Formtastic Bootstrap:
+
+  require 'active_enum/form_helpers/formtastic2_bootstrap'
+
 Or, SimpleForm:
 
   require 'active_enum/form_helpers/simple_form'
