@@ -127,7 +127,7 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}?(arg=nil)
             if arg
-              self.#{attribute} == self.class.active_enum_for(:#{attribute})[arg]
+                self.#{attribute}(:id) == self.class.active_enum_for(:#{attribute})[arg]
             else
               super()
             end
