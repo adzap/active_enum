@@ -107,15 +107,15 @@ module ActiveEnum
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-        class_eval <<-DEF
-          def #{attribute}=(arg)
-            if arg.is_a?(Symbol)
-              super self.class.active_enum_for(:#{attribute})[arg]
-            else
-              super arg
-            end
-          end
-        DEF
+        # class_eval <<-DEF
+        #   def #{attribute}=(arg)
+        #     if arg.is_a?(Symbol)
+        #       super self.class.active_enum_for(:#{attribute})[arg]
+        #     else
+        #       super arg
+        #     end
+        #   end
+        # DEF
       end
 
       # Define question method to check enum value against attribute value
