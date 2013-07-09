@@ -198,6 +198,10 @@ describe ActiveEnum::Extensions do
         person.sex.should == 'Male'
       end
 
+      it 'should return true for boolean match' do
+        person.sex?(:male).should be_true
+      end
+
       after(:all) { ActiveEnum.use_name_as_value = false }
     end
 
