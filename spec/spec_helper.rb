@@ -8,6 +8,7 @@ require 'action_mailer'
 
 require 'active_enum'
 require 'active_enum/acts_as_enum'
+require 'securerandom'
 
 module ActiveEnum 
   class Application < Rails::Application
@@ -16,6 +17,8 @@ module ActiveEnum
       g.test_framework  :rspec, :fixture => false
     end
     config.active_support.deprecation = :notify
+    config.eager_load = false if Rails.version >= "4.0"
+    config.secret_key_base = SecureRandom.hex(10) if Rails.version >= "4.0"
   end
 end
 ActiveEnum::Application.initialize!
@@ -23,13 +26,13 @@ ActiveEnum::Application.initialize!
 require 'rspec/rails'
 
 ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
+ActiveRecord::Base.establish_connection({:adapter => "#{'jdbc' if defined? JRUBY_VERSION}sqlite3", :database => ':memory:'})
 
 require 'support/schema'
 
 class Person < ActiveRecord::Base; end
 class NoEnumPerson < ActiveRecord::Base
-  set_table_name 'people'
+  self.table_name = 'people'
 end
 
 class NotActiveRecord

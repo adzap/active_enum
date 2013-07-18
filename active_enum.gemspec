@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.test_files       = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]
 
-  s.add_runtime_dependency(%q<activesupport>, ["~> 3.0"])
+  s.add_runtime_dependency(%q<activesupport>, [">= 3.0"])
 end

@@ -51,7 +51,7 @@ describe ActiveEnum::FormHelpers::Formtastic, :type => :helper do
       semantic_form_for(Person.new, :url => people_path) do |f|
         f.input(:attending, :as => :enum)
       end
-    }.should raise_error "Attribute 'attending' has no enum class"
+    }.to raise_error "Attribute 'attending' has no enum class"
   end
 
   it "should not use enum input type if class does not support ActiveEnum" do
