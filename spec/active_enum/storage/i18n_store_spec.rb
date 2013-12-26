@@ -78,6 +78,7 @@ describe ActiveEnum::Storage::I18nStore do
   describe "#get_by_id" do
     before do
       I18n.backend.store_translations :en, :active_enum => { enum_key => { 'test' => 'Testing' } }
+      I18n.backend.store_translations :ja, :active_enum => { }
       I18n.locale = :en
     end
 
