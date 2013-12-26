@@ -25,6 +25,12 @@ platforms :ruby do
   gem 'sqlite3'
 end
 
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'racc'
+  gem 'rubysl-test-unit'
+end
+
 gem 'rake'
 gem 'ZenTest'
 gem 'simple_form'
