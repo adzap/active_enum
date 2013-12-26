@@ -12,5 +12,7 @@ rvm:
   - rbx
 matrix:
   allow_failures:
+    - env: "RAILS_VERSION=master"
+      rvm: jruby-19mode
     - env: "RAILS_VERSION=4.1.0.beta1"
       rvm: jruby-19mode
