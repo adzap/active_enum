@@ -7,9 +7,9 @@ module ActiveEnum
         extend ClassMethods
         class_attribute :active_enum_options
         self.active_enum_options = options.reverse_merge(:name_column => 'name')
-        scope :enum_values, select("#{primary_key}, #{active_enum_options[:name_column]}").
-                            where(active_enum_options[:conditions]).
-                            order("#{primary_key} #{active_enum_options[:order]}")
+        scope :enum_values, -> { select("#{primary_key}, #{active_enum_options[:name_column]}").
+                                 where(active_enum_options[:conditions]).
+                                 order("#{primary_key} #{active_enum_options[:order]}") }
       end
 
     end
