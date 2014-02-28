@@ -1,8 +1,14 @@
 module ActiveEnum
   module Storage
     class MemoryStore < AbstractStore
+      attr_accessor :symbol_ids
 
       def set(id, name, meta=nil)
+        raise ActiveEnum::InvalidId, 'Id cannot be string.' if id.is_a? String
+        raise ActiveEnum::InvalidId, 'Id types cannot be mixed.' unless symbol_ids.nil? or symbol_ids? == id.is_a?(Symbol)
+
+        self.symbol_ids = id.is_a?(Symbol) if self.symbol_ids.nil?
+
         check_duplicate id, name
         _values << [id, name.to_s, meta].compact
         sort!
@@ -35,6 +41,9 @@ module ActiveEnum
         @_values ||= []
       end
 
+      def symbol_ids?
+        !!symbol_ids
+      end
     end
   end
 end

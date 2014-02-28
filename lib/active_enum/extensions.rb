@@ -101,22 +101,23 @@ module ActiveEnum
         DEF
       end
 
-      # Define write method to also handle enum value
+      # Define write method to also handle enum value (only integer ids)
       #
       # Examples:
       #   user.sex = 1
       #   user.sex = :male
       #
       def define_active_enum_write_method(attribute)
-        # class_eval <<-DEF
-        #   def #{attribute}=(arg)
-        #     if arg.is_a?(Symbol)
-        #       super self.class.active_enum_for(:#{attribute})[arg]
-        #     else
-        #       super arg
-        #     end
-        #   end
-        # DEF
+        class_eval <<-DEF
+          def #{attribute}=(arg)
+            enum = self.class.active_enum_for(:#{attribute})
+            if arg.is_a?(Symbol) and !enum.symbol_ids?
+              super enum[arg]
+            else
+              super arg
+            end
+          end
+        DEF
       end
 
       # Define question method to check enum value against attribute value
@@ -128,7 +129,12 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}?(arg=nil)
             if arg
-                self.#{attribute}(:id) == self.class.active_enum_for(:#{attribute})[arg]
+              enum = self.class.active_enum_for(:#{attribute})
+              if enum.symbol_ids? and arg.is_a?(Symbol)
+                self.#{attribute}(:id) == arg
+              else
+                self.#{attribute}(:id) == enum[arg]
+              end
             else
               super()
             end

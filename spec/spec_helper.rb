@@ -9,13 +9,14 @@ require 'action_mailer'
 require 'active_enum'
 require 'active_enum/acts_as_enum'
 
-module ActiveEnum 
+module ActiveEnum
   class Application < Rails::Application
     config.generators do |g|
       g.orm             :active_record
       g.test_framework  :rspec, :fixture => false
     end
     config.active_support.deprecation = :notify
+    I18n.enforce_available_locales = false
   end
 end
 ActiveEnum::Application.initialize!
@@ -26,6 +27,9 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => 'sqlite3', :database => ':memory:'})
 
 require 'support/schema'
+
+class Sex < ActiveEnum::Base; end
+class Accepted < ActiveEnum::Base; end
 
 class Person < ActiveRecord::Base; end
 class NoEnumPerson < ActiveRecord::Base

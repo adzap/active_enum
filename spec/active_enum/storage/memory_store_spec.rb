@@ -37,6 +37,25 @@ describe ActiveEnum::Storage::MemoryStore do
         store.set 2, 'name 1'
       }.should raise_error(ActiveEnum::DuplicateValue)
     end
+
+    it 'should raise error if string id used' do
+      expect {
+        store.set '1', 'Name 1'
+        store.set '2', 'name 1'
+      }.should raise_error(ActiveEnum::InvalidId)
+    end
+
+    it 'should raise error if mixed id types used' do
+      expect {
+        store.set :one, 'Name 1'
+        store.set 2, 'name 2'
+      }.should raise_error(ActiveEnum::InvalidId)
+
+      expect {
+        store.set 1, 'Name 1'
+        store.set :two, 'name 2'
+      }.should raise_error(ActiveEnum::InvalidId)
+    end
   end
 
   describe "#values" do

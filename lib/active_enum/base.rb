@@ -1,6 +1,7 @@
 module ActiveEnum
   class DuplicateValue < StandardError; end
   class InvalidValue < StandardError; end
+  class InvalidId < StandardError; end
 
   class Base
 
@@ -22,7 +23,7 @@ module ActiveEnum
         store.set *id_and_name_and_meta(enum_value)
       end
 
-      # Specify order enum values are returned. 
+      # Specify order enum values are returned.
       # Allowed values are :asc, :desc or :natural
       #
       def order(order)
@@ -60,7 +61,7 @@ module ActiveEnum
           value = row[1] if row
         end
 
-        if (index.is_a?(String) || index.is_a?(Symbol)) && value.nil?
+        if (index.is_a?(String) || (index.is_a?(Symbol) && !symbol_ids?)) && value.nil?
           row = store.get_by_name(index)
           value = row[0] if row
         end
@@ -80,12 +81,16 @@ module ActiveEnum
           value = row[2] if row
         end
 
-        if (index.is_a?(String) || index.is_a?(Symbol)) && value.nil?
+        if (index.is_a?(String) || (index.is_a?(Symbol) && !symbol_ids?)) && value.nil?
           row = store.get_by_name(index)
           value = row[2] if row
         end
 
         value || {}
+      end
+
+      def symbol_ids?
+        store.symbol_ids?
       end
 
       private
