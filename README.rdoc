@@ -50,7 +50,7 @@ Define using symbol ids
     value :id => :f, :name => 'Female'
   end
 
-**NOTE**
+*NOTE*
 If you are using ids as symbols, name cannot be used as symbols in all methods. Symbolized name using works only with
 integer ids.
 
