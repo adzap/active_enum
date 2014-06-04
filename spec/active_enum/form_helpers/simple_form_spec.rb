@@ -34,6 +34,36 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
     output.should have_xpath('//option[@value=2]', :content => 'Female')
   end
 
+  context 'with ids as symbols' do
+    before do
+      controller.stub!(:action_name).and_return('new')
+      reset_class Person do
+        enumerate :sex do
+          value :id => :m, :name => 'Male'
+          value :id => :f, :name => 'Female'
+        end
+      end
+    end
+
+    it "should use enum input type for enumerated attribute" do
+      output = simple_form_for(Person.new, :url => people_path) do |f|
+        concat f.input(:sex)
+      end
+      output.should have_selector('select#person_sex')
+      output.should have_xpath("//option[@value='m']", :content => 'Male')
+      output.should have_xpath("//option[@value='f']", :content => 'Female')
+    end
+
+    it "should use explicit :enum input type" do
+      output = simple_form_for(Person.new, :url => people_path) do |f|
+        concat f.input(:sex, :as => :enum)
+      end
+      output.should have_selector('select#person_sex')
+      output.should have_xpath("//option[@value='m']", :content => 'Male')
+      output.should have_xpath("//option[@value='f']", :content => 'Female')
+    end
+  end
+
   it "should not use enum input type if :as option indicates other type" do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:sex, :as => :string)

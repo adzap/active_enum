@@ -95,11 +95,26 @@ describe ActiveEnum::Base do
   end
 
   describe ".meta" do
-    it 'should return meta values hash for a given index value' do
+    it 'should return meta values hash for a given integer index value' do
       enum = define_enum do
         value :id => 1, :name => 'Name', :description => 'extra'
       end
       enum.meta(1).should == {:description => 'extra'}
+    end
+
+    it 'should return meta values hash for a given symbol index value' do
+      enum = define_enum do
+        value :id => :one, :name => 'Name 1', :description => 'extra'
+      end
+      enum.meta(:one).should == {:description => 'extra'}
+    end
+
+    it 'should match on id before name and return meta values hash' do
+      enum = define_enum do
+        value :id => :one, :name => 'Name 1', :description => 'extra'
+        value :id => :name_1, :name => 'Name 2', :description => 'extra2'
+      end
+      enum.meta(:name_1).should == {:description => 'extra2'}
     end
 
     it 'should return empty hash for index with no meta defined' do
@@ -161,24 +176,63 @@ describe ActiveEnum::Base do
   end
 
   context "element reference method" do
-    let(:enum) {
-      define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+    context 'integer ids' do
+      let(:enum) {
+        define_enum do
+          value :id => 1, :name => 'Name 1'
+          value :id => 2, :name => 'Name 2'
+        end
+      }
+
+      it 'should return name when given an id' do
+        enum[1].should == 'Name 1'
       end
-    }
 
-    it 'should return name when given an id' do
-      enum[1].should == 'Name 1'
+      it 'should return id when given a name' do
+        enum['Name 1'].should == 1
+      end
+
+      it 'should return id when given a symbol of the name' do
+        enum[:Name_1].should == 1
+        enum[:name_1].should == 1
+      end
     end
 
-    it 'should return id when given a name' do
-      enum['Name 1'].should == 1
-    end
+    context 'symbol ids' do
+      let(:enum) {
+        define_enum do
+          value :id => :one, :name => 'Name 1'
+          value :id => :two, :name => 'Name 2'
+        end
+      }
 
-    it 'should return id when given a symbol of the name' do
-      enum[:Name_1].should == 1
-      enum[:name_1].should == 1
+      it 'should return name when given an id' do
+        enum[:one].should == 'Name 1'
+      end
+
+      it 'should return id when given a name' do
+        enum['Name 1'].should == :one
+      end
+
+      it 'should return id when given a symbol of the name' do
+        enum[:Name_1].should == :one
+        enum[:name_1].should == :one
+      end
+
+      context 'ids and names are similar' do
+        let(:enum) {
+          define_enum do
+            value :id => :one, :name => 'two'
+            value :id => :two, :name => 'three'
+          end
+        }
+
+        it 'should match on id before name' do
+          enum[:one].should == 'two'
+          enum[:two].should == 'three'
+          enum[:three].should == :two
+        end
+      end
     end
   end
 
