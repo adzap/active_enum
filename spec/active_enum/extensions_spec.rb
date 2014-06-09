@@ -106,21 +106,26 @@ describe ActiveEnum::Extensions do
 
       context "with undefined value" do
         let(:person) { Person.new(:sex => -1) }
+        let(:person1) { Person.new(:sex => '') }
 
         it 'should return value with no arg' do
           person.sex.should == -1
+          person1.sex.should == ''
         end
 
         it 'should return nil enum id' do
           person.sex(:id).should be_nil
+          person1.sex(:id).should be_nil
         end
 
         it 'should return nil enum name' do
           person.sex(:name).should be_nil
+          person1.sex(:name).should be_nil
         end
 
         it 'should return enum class for attribute' do
           person.sex(:enum).should == Sex
+          person1.sex(:enum).should == Sex
         end
       end
 
@@ -256,6 +261,26 @@ describe ActiveEnum::Extensions do
         let(:person) { Person.new(:sex => nil) }
 
         it 'should return nil with no arg' do
+          person.sex.should be_nil
+        end
+
+        it 'should return nil enum id' do
+          person.sex(:id).should be_nil
+        end
+
+        it 'should return nil enum name' do
+          person.sex(:name).should be_nil
+        end
+
+        it 'should return enum class for attribute' do
+          person.sex(:enum).should == Sex
+        end
+      end   
+      
+      context "with emty string value" do
+        let(:person) { Person.new(:sex => '') }
+
+        it 'should return value with no arg' do
           person.sex.should be_nil
         end
 

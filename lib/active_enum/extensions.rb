@@ -81,10 +81,13 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}(arg=nil)
             value = super()
-            value = value.to_sym if value.is_a?(String)
-            return if value.nil? && arg.nil?
-
             enum = self.class.active_enum_for(:#{attribute})
+            
+            
+            return if arg.nil? && (value.nil? || (enum.symbol_ids? && value.empty?))
+
+            value = value.to_sym if enum.symbol_ids? && !value.nil? 
+
             case arg
             when nil
               #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
