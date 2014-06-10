@@ -81,9 +81,14 @@ describe ActiveEnum::Storage::I18nStore do
       I18n.locale = :en
     end
 
-    it 'should return the value for a given id' do
+    it 'should return the value for a given integer id' do
       store.set 1, 'test'
       store.get_by_id(1).should == [1, 'Testing']
+    end
+
+    it 'should return the value for a given symbol id' do
+      store.set :abc, 'test'
+      store.get_by_id(:abc).should == [:abc, 'Testing']
     end
 
     it 'should return the value with meta for a given id' do
@@ -93,6 +98,7 @@ describe ActiveEnum::Storage::I18nStore do
 
     it 'should return nil when id not found' do
       store.get_by_id(1).should be_nil
+      store.get_by_id(:abc).should be_nil
     end
 
     it 'should return key when translation missing' do

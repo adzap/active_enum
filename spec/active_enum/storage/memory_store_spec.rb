@@ -37,6 +37,25 @@ describe ActiveEnum::Storage::MemoryStore do
         store.set 2, 'name 1'
       }.to raise_error(ActiveEnum::DuplicateValue)
     end
+
+    it 'should raise error if string id used' do
+      expect {
+        store.set '1', 'Name 1'
+        store.set '2', 'name 1'
+      }.should raise_error(ActiveEnum::InvalidId)
+    end
+
+    it 'should raise error if mixed id types used' do
+      expect {
+        store.set :one, 'Name 1'
+        store.set 2, 'name 2'
+      }.should raise_error(ActiveEnum::InvalidId)
+
+      expect {
+        store.set 1, 'Name 1'
+        store.set :two, 'name 2'
+      }.should raise_error(ActiveEnum::InvalidId)
+    end
   end
 
   describe "#values" do
@@ -53,13 +72,19 @@ describe ActiveEnum::Storage::MemoryStore do
   end
 
   describe "#get_by_id" do
-    it 'should return the value for a given id' do
+    it 'should return the value for a given integer id' do
       store.set 1, 'test name', :description => 'meta'
       store.get_by_id(1).should == [1, 'test name', {:description => "meta"}]
     end
 
+    it 'should return the value for a given symbol id' do
+      store.set :abc, 'test name', :description => 'meta'
+      store.get_by_id(:abc).should == [:abc, 'test name', {:description => "meta"}]
+    end
+
     it 'should return nil when id not found' do
       store.get_by_id(1).should be_nil
+      store.get_by_id(:abc).should be_nil
     end
   end
 

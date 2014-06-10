@@ -1,6 +1,7 @@
 module ActiveEnum
   class DuplicateValue < StandardError; end
   class InvalidValue < StandardError; end
+  class InvalidId < StandardError; end
 
   class Base
 
@@ -22,7 +23,7 @@ module ActiveEnum
         store.set *id_and_name_and_meta(enum_value)
       end
 
-      # Specify order enum values are returned. 
+      # Specify order enum values are returned.
       # Allowed values are :asc, :desc or :natural
       #
       def order(order)
@@ -55,13 +56,17 @@ module ActiveEnum
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
       def get(index)
-        if index.is_a?(Fixnum)
+        if index.is_a?(Fixnum) || index.is_a?(Symbol)
           row = store.get_by_id(index)
-          row[1] if row
-        else
-          row = store.get_by_name(index)
-          row[0] if row
+          value = row[1] if row
         end
+
+        if (index.is_a?(String) || (index.is_a?(Symbol) && !symbol_ids?)) && value.nil?
+          row = store.get_by_name(index)
+          value = row[0] if row
+        end
+
+        value
       end
       alias_method :[], :get
 
@@ -71,12 +76,21 @@ module ActiveEnum
 
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index)
-        row = if index.is_a?(Fixnum)
-          store.get_by_id(index)
-        else
-          store.get_by_name(index)
+        if index.is_a?(Fixnum) || index.is_a?(Symbol)
+          row = store.get_by_id(index)
+          value = row[2] if row
         end
-        row[2] || {} if row
+
+        if (index.is_a?(String) || (index.is_a?(Symbol) && !symbol_ids?)) && value.nil?
+          row = store.get_by_name(index)
+          value = row[2] if row
+        end
+
+        value || {}
+      end
+
+      def symbol_ids?
+        store.symbol_ids?
       end
 
       private

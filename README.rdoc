@@ -9,7 +9,7 @@ Enum values are stored in memory at the moment but I plan to add database and po
 
 From version 0.7 onwards this plugin will only have Rails 3 support. If you need Rails 2 compatibility, {check the 0.6 branch}[https://github.com/adzap/active_enum/tree/0.6].
 
-  gem install active_enum 
+  gem install active_enum
 
 Put this in your Gemfile
 
@@ -43,6 +43,17 @@ Define using implicit id values
     value :name => 'Female'
   end
 
+Define using symbol ids
+
+  class Sex < ActiveEnum::Base
+    value :id => :m, :name => 'Male'
+    value :id => :f, :name => 'Female'
+  end
+
+*NOTE*
+If you are using ids as symbols, name cannot be used as symbols in all methods. Symbolized name using works only with
+integer ids.
+
 Beware that if you change the order of values defined in an enum which don't have explicit ids, then the ids will change.
 This could corrupt your data if the enum values have been stored in a model record, as they will no longer map to
 the original enum.
@@ -63,6 +74,18 @@ Enum class usage
   Sex[:male]    # => 1
   Sex.meta(1)   # => { :symbol => '♂' }
   Sex.to_select # => [['Male', 1], ['Female',2]] for select form helpers
+
+When using symbol ids
+
+  class Sex < ActiveEnum::Base
+    value :id => :m, :name => 'Male',   :symbol => '♂'
+    value :id => :f, :name => 'Female', :symbol => '♀'
+  end
+
+  Sex[:m]       # => 'Male'
+  Sex["Male"]   # => :m
+  Sex[:male]    # => nil
+
 
 === Ordering
 
@@ -149,6 +172,14 @@ You can check if the attribute value matches a particular enum value by passing 
   user.sex?('Male')   # => true
   user.sex?('Female') # => false
 
+If you are using symbol ids
+
+  user.sex?(:m)        # => true
+  user.sex?('Male')    # => true
+  user.sex?(:male)     # => false
+  user.sex?(:f)        # => false
+
+
 === Enum lookup
 
 A convenience method on the class is available to the enum class of any enumerated attribute
@@ -213,7 +244,7 @@ Or, SimpleForm:
 The input type will be automatically detected for enumerated attributes. You can override with the :as option as normal.
 
 
-== Storage Backends 
+== Storage Backends
 
 The design allows pluggable backends to be used for stories and retrieving the enum values. At present there are two
 available, memory or I18n. To change the storage engine you alter the storage config value like so:
@@ -228,7 +259,7 @@ The memory store is default obviously just stores the values in memory.
 === I18n Storage
 
 The I18n storage backend stores the ids and names is memory still, but retrieves the name text translation any call to
-the enum public methods. 
+the enum public methods.
 
 To set up the locale file, run
 
@@ -237,17 +268,17 @@ To set up the locale file, run
 This generates the YML locale template in your default language as configured in the application.rb.
 
 Here are some examples of defining enum translations
- 
+
    class Sex < ActiveEnum::Base
      value 1 => 'male'
      value 2 => 'female'
    end
- 
-becomes 
+
+becomes
 
   sex:
-    male: Male 
-    female: Female 
+    male: Male
+    female: Female
 
 For namesapced enums in a model
 
@@ -259,11 +290,11 @@ For namesapced enums in a model
   end
 
 nest the translations under the underscored model name
-  
+
   person:
     sex:
-      male: Male 
-      female: Female 
+      male: Male
+      female: Female
 
 
 == License

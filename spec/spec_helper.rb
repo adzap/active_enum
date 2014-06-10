@@ -10,13 +10,14 @@ require 'active_enum'
 require 'active_enum/acts_as_enum'
 require 'securerandom'
 
-module ActiveEnum 
+module ActiveEnum
   class Application < Rails::Application
     config.generators do |g|
       g.orm             :active_record
       g.test_framework  :rspec, :fixture => false
     end
     config.active_support.deprecation = :notify
+    I18n.enforce_available_locales = false
     config.eager_load = false if Rails.version >= "4.0"
     config.secret_key_base = SecureRandom.hex(10) if Rails.version >= "4.0"
   end
@@ -29,6 +30,9 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.establish_connection({:adapter => "#{'jdbc' if defined? JRUBY_VERSION}sqlite3", :database => ':memory:'})
 
 require 'support/schema'
+
+class Sex < ActiveEnum::Base; end
+class Accepted < ActiveEnum::Base; end
 
 class Person < ActiveRecord::Base; end
 class NoEnumPerson < ActiveRecord::Base

@@ -81,9 +81,13 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}(arg=nil)
             value = super()
-            return if value.nil? && arg.nil?
-
             enum = self.class.active_enum_for(:#{attribute})
+            
+            
+            return if arg.nil? && (value.nil? || (enum.symbol_ids? && value.empty?))
+
+            value = value.to_sym if enum.symbol_ids? && !value.nil? 
+
             case arg
             when nil
               #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
@@ -100,7 +104,7 @@ module ActiveEnum
         DEF
       end
 
-      # Define write method to also handle enum value
+      # Define write method to also handle enum value (only integer ids)
       #
       # Examples:
       #   user.sex = 1
@@ -109,8 +113,9 @@ module ActiveEnum
       def define_active_enum_write_method(attribute)
         class_eval <<-DEF
           def #{attribute}=(arg)
-            if arg.is_a?(Symbol)
-              super self.class.active_enum_for(:#{attribute})[arg]
+            enum = self.class.active_enum_for(:#{attribute})
+            if arg.is_a?(Symbol) and !enum.symbol_ids?
+              super enum[arg]
             else
               super arg
             end
@@ -127,7 +132,12 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}?(arg=nil)
             if arg
-                self.#{attribute}(:id) == self.class.active_enum_for(:#{attribute})[arg]
+              enum = self.class.active_enum_for(:#{attribute})
+              if enum.symbol_ids? and arg.is_a?(Symbol)
+                self.#{attribute}(:id) == arg
+              else
+                self.#{attribute}(:id) == enum[arg]
+              end
             else
               super()
             end
