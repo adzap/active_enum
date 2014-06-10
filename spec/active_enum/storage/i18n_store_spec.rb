@@ -39,21 +39,21 @@ describe ActiveEnum::Storage::I18nStore do
       expect {
         store.set 1, 'Name 1'
         store.set 1, 'Other Name'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if duplicate name' do
       expect {
         store.set 1, 'Name 1'
         store.set 2, 'Name 1'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should not raise error if duplicate name with alternate case matches' do
       expect {
         store.set 1, 'Name 1'
         store.set 2, 'name 1'
-      }.should_not raise_error(ActiveEnum::DuplicateValue)
+      }.not_to raise_error()
     end
   end
 

@@ -7,7 +7,7 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
   include SimpleForm::ActionViewExtensions::FormHelper
 
   before do
-    controller.stub!(:action_name).and_return('new')
+    controller.stub(:action_name).and_return('new')
     reset_class Person do
       enumerate :sex do
         value :id => 1, :name => 'Male'
@@ -76,7 +76,7 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
       simple_form_for(Person.new, :url => people_path) do |f|
         f.input(:attending, :as => :enum)
       end
-    }.should raise_error "Attribute 'attending' has no enum class"
+    }.to raise_error "Attribute 'attending' has no enum class"
   end
 
   it "should not use enum input type if class does not support ActiveEnum" do

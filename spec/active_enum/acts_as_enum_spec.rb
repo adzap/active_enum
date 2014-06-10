@@ -13,9 +13,15 @@ describe ActiveEnum::ActsAsEnum do
     end
   end
 
+  class SortedPerson < ActiveRecord::Base
+    acts_as_enum :name_column => 'first_name', :order => :desc
+  end
+
   before(:all) do
     Person.create!(:first_name => 'Dave', :last_name => 'Smith')
     Person.create!(:first_name => 'John', :last_name => 'Doe')
+    SortedPerson.create!(:first_name => 'Dave', :last_name => 'Smith')
+    SortedPerson.create!(:first_name => 'John', :last_name => 'Doe')
   end
 
   it "should mixin enum class methods only when act_as_enum defined" do
@@ -41,8 +47,7 @@ describe ActiveEnum::ActsAsEnum do
     Person.to_select.should == [['Dave', 1], ['John', 2]]
   end
 
-  it "should return sorted array from order value for select helpers from to_select" do
-    Person.acts_as_enum :name_column => 'first_name', :order => :desc
-    Person.to_select.should == [['John', 2], ['Dave', 1]]
+  it "should return sorted array from order value for select helpers from to_select when an order is specified" do
+    SortedPerson.to_select.should == [['John', 2], ['Dave', 1]]
   end
 end

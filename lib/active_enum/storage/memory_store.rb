@@ -24,7 +24,7 @@ module ActiveEnum
 
       def check_duplicate(id, name)
         if get_by_id(id) || get_by_name(name)
-          raise ActiveEnum::DuplicateValue
+          raise ActiveEnum::DuplicateValue, "id: #{id}, name: #{name}"
         end
       end
 

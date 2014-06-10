@@ -40,7 +40,7 @@ describe ActiveEnum::Extensions do
   it 'should raise error if implicit enumeration class cannot be found' do
     expect {
       Person.enumerate :first_name
-    }.should raise_error(ActiveEnum::EnumNotFound)
+    }.to raise_error(ActiveEnum::EnumNotFound)
   end
 
   context "integer ids" do

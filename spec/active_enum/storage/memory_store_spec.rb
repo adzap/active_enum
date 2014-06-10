@@ -21,21 +21,21 @@ describe ActiveEnum::Storage::MemoryStore do
       expect {
         store.set 1, 'Name 1'
         store.set 1, 'Other Name'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if duplicate name' do
       expect {
         store.set 1, 'Name 1'
         store.set 2, 'Name 1'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if duplicate name matches title-case name' do
       expect {
         store.set 1, 'Name 1'
         store.set 2, 'name 1'
-      }.should raise_error(ActiveEnum::DuplicateValue)
+      }.to raise_error(ActiveEnum::DuplicateValue)
     end
 
     it 'should raise error if string id used' do
