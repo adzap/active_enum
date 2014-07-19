@@ -78,6 +78,10 @@ module ActiveEnum
         end
         row[2] || {} if row
       end
+      
+      def storage=(storage)
+        @store = ActiveEnum.get_storage_class(storage).new(self, @order || :asc, ActiveEnum.storage_options)
+      end
 
       private
 

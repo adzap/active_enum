@@ -47,7 +47,11 @@ module ActiveEnum
   end
 
   def self.storage_class
-    @@storage_class ||= "ActiveEnum::Storage::#{storage.to_s.classify}Store".constantize
+    @@storage_class ||= get_storage_class(storage)
+  end
+  
+  def self.get_storage_class(storage)
+    "ActiveEnum::Storage::#{storage.to_s.classify}Store".constantize
   end
 
   private
