@@ -182,6 +182,11 @@ describe ActiveEnum::Extensions do
         person.sex.should == nil
       end
 
+      it 'should store id value when valid enum name' do
+        person.sex = 'Female'
+        person.sex.should == 2
+      end
+
     end
 
     context "with value as enum name" do
@@ -196,6 +201,11 @@ describe ActiveEnum::Extensions do
 
       it 'should return text name value for attribute' do
         person.sex.should == 'Male'
+      end
+
+      it 'should store value when valid enum name' do
+        person.sex = 'Female'
+        person.sex.should == 'Female'
       end
 
       it 'should return true for boolean match' do
