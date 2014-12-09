@@ -54,6 +54,9 @@ module SpecHelper
   end
 end
 
+I18n.config.enforce_available_locales = false
+
 RSpec.configure do |config|
   config.include SpecHelper
+  config.infer_spec_type_from_file_location!
 end

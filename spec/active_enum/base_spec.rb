@@ -191,19 +191,19 @@ describe ActiveEnum::Base do
     }
 
     it "should return true if value is a fixnum and matches an id" do
-      enum.include?(1).should be_true
+      enum.include?(1).should be_truthy
     end
 
     it "should return false if value is a fixnum and does not match an id" do
-      enum.include?(3).should be_false
+      enum.include?(3).should be_falsey
     end
 
     it "should return true if value is a string and matches a name" do
-      enum.include?('Name 1').should be_true
+      enum.include?('Name 1').should be_truthy
     end
 
     it "should return false if value is a string and does not match a name" do
-      enum.include?('No match').should be_false
+      enum.include?('No match').should be_falsey
     end
   end
 

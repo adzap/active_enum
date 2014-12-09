@@ -149,24 +149,24 @@ describe ActiveEnum::Extensions do
 
     context "question method" do
       it 'should return normal value without arg' do
-        person.sex?.should be_true
+        person.sex?.should be_truthy
         person.sex = nil
-        person.sex?.should be_false
+        person.sex?.should be_falsey
       end
 
       it 'should return true if string name matches for id value' do
-        person.sex?("Male").should be_true
+        person.sex?("Male").should be_truthy
       end
 
       it 'should return true if symbol name matches for id value' do
-        person.sex?(:male).should be_true
-        person.sex?(:Male).should be_true
+        person.sex?(:male).should be_truthy
+        person.sex?(:Male).should be_truthy
       end
 
       it 'should return false if name does not match for id value' do
-        person.sex?("Female").should be_false
-        person.sex?(:female).should be_false
-        person.sex?(:Female).should be_false
+        person.sex?("Female").should be_falsey
+        person.sex?(:female).should be_falsey
+        person.sex?(:Female).should be_falsey
       end
     end
 
@@ -199,7 +199,7 @@ describe ActiveEnum::Extensions do
       end
 
       it 'should return true for boolean match' do
-        person.sex?(:male).should be_true
+        person.sex?(:male).should be_truthy
       end
 
       after(:all) { ActiveEnum.use_name_as_value = false }
