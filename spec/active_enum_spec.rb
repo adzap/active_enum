@@ -24,9 +24,9 @@ describe ActiveEnum do
     end
 
     it 'should pass module into block as configuration object' do
-      ActiveEnum.use_name_as_value.should be_false
+      ActiveEnum.use_name_as_value.should be_falsey
       ActiveEnum.setup {|config| config.use_name_as_value = true }
-      ActiveEnum.use_name_as_value.should be_true
+      ActiveEnum.use_name_as_value.should be_truthy
     end
     
     after :all do
