@@ -31,6 +31,6 @@ gem 'simple_form'
 gem 'formtastic', "~> #{ENV['FORMTASTIC'] || '2.0'}"
 gem 'ruby-debug', :platform => :ruby_18
 gem 'debugger', :platform => :ruby_19
-gem 'rspec', '~> 2.4'
-gem 'rspec-rails', '~> 2.4'
+gem 'rspec', '~> 2.99'
+gem 'rspec-rails', '~> 2.99'
 gem 'webrat'
