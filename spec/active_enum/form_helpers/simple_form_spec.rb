@@ -7,7 +7,7 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
   include SimpleForm::ActionViewExtensions::FormHelper
 
   before do
-    controller.stub(:action_name).and_return('new')
+    allow(controller).to receive(:action_name).and_return('new')
     reset_class Person do
       enumerate :sex do
         value :id => 1, :name => 'Male'
@@ -20,25 +20,25 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:sex)
     end
-    output.should have_selector('select#person_sex')
-    output.should have_xpath('//option[@value=1]', :content => 'Male')
-    output.should have_xpath('//option[@value=2]', :content => 'Female')
+    expect(output).to have_selector('select#person_sex')
+    expect(output).to have_xpath('//option[@value=1]', :text => 'Male')
+    expect(output).to have_xpath('//option[@value=2]', :text => 'Female')
   end
 
   it "should use explicit :enum input type" do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:sex, :as => :enum)
     end
-    output.should have_selector('select#person_sex')
-    output.should have_xpath('//option[@value=1]', :content => 'Male')
-    output.should have_xpath('//option[@value=2]', :content => 'Female')
+    expect(output).to have_selector('select#person_sex')
+    expect(output).to have_xpath('//option[@value=1]', :text => 'Male')
+    expect(output).to have_xpath('//option[@value=2]', :text => 'Female')
   end
 
   it "should not use enum input type if :as option indicates other type" do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:sex, :as => :string)
     end
-    output.should have_selector('input#person_sex')
+    expect(output).to have_selector('input#person_sex')
   end
 
   it "should raise error if attribute for enum input is not enumerated" do
@@ -53,21 +53,21 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
     output = simple_form_for(NotActiveRecord.new, :as => :not_active_record, :url => people_path) do |f|
       concat f.input(:name)
     end
-    output.should have_selector('input#not_active_record_name')
+    expect(output).to have_selector('input#not_active_record_name')
   end
 
   it "should allow non-enum fields to use default input determination" do
     output = simple_form_for(Person.new, :url => people_path) do |f|
       concat f.input(:first_name)
     end
-    output.should have_selector('input#person_first_name')
+    expect(output).to have_selector('input#person_first_name')
   end
 
   it "should allow models without enumerated attributes to behave normally" do
     output = simple_form_for(NoEnumPerson.new, :url => people_path) do |f|
       concat f.input(:first_name)
     end
-    output.should have_selector('input#no_enum_person_first_name')
+    expect(output).to have_selector('input#no_enum_person_first_name')
   end
 
   def people_path

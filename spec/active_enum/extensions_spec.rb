@@ -13,39 +13,39 @@ describe ActiveEnum::Extensions do
   end
 
   it 'should add class :enumerate method to ActiveRecord' do
-    ActiveRecord::Base.should respond_to(:enumerate)
+    expect(ActiveRecord::Base).to respond_to(:enumerate)
   end
 
   it 'should add class :active_enum_for method to ActiveRecord' do
-    ActiveRecord::Base.should respond_to(:active_enum_for)
+    expect(ActiveRecord::Base).to respond_to(:active_enum_for)
   end
 
   it 'should allow multiple attributes to be enumerated with same enum' do
     Person.enumerate :attending, :staying, :with => Accepted
 
-    Person.active_enum_for(:attending).should == Accepted
-    Person.active_enum_for(:staying).should == Accepted
+    expect(Person.active_enum_for(:attending)).to eq(Accepted)
+    expect(Person.active_enum_for(:staying)).to eq(Accepted)
   end
 
   it 'should allow multiple attributes to be enumerated with different enums' do
     Person.enumerate :sex, :with => Sex
     Person.enumerate :attending, :with => Accepted
 
-    Person.active_enum_for(:sex).should == Sex 
-    Person.active_enum_for(:attending).should == Accepted
+    expect(Person.active_enum_for(:sex)).to eq(Sex) 
+    expect(Person.active_enum_for(:attending)).to eq(Accepted)
   end
 
   it 'should allow implicit enumeration class from attribute name' do
     Person.enumerate :sex
 
-    Person.active_enum_for(:sex).should == Sex
+    expect(Person.active_enum_for(:sex)).to eq(Sex)
   end
 
   it 'should create enum namespaced enum class from block' do
     Person.enumerate :sex do
       value :id => 1, :name => 'Male'
     end
-    Person.active_enum_for(:sex).should == ::Person::Sex
+    expect(Person.active_enum_for(:sex)).to eq(::Person::Sex)
   end
 
   it 'should raise error if implicit enumeration class cannot be found' do
@@ -65,19 +65,19 @@ describe ActiveEnum::Extensions do
 
     context "with value" do
       it 'should return value with no arg' do
-        person.sex.should == 1
+        expect(person.sex).to eq(1)
       end
 
       it 'should return enum id for value' do
-        person.sex(:id).should == 1
+        expect(person.sex(:id)).to eq(1)
       end
 
       it 'should return enum name for value' do
-        person.sex(:name).should == 'Male'
+        expect(person.sex(:name)).to eq('Male')
       end
 
       it 'should return enum class for attribute' do
-        person.sex(:enum).should == Sex
+        expect(person.sex(:enum)).to eq(Sex)
       end
     end
 
@@ -85,19 +85,19 @@ describe ActiveEnum::Extensions do
       let(:person) { Person.new(:sex => nil) }
 
       it 'should return nil with no arg' do
-        person.sex.should be_nil
+        expect(person.sex).to be_nil
       end
 
       it 'should return nil enum id' do
-        person.sex(:id).should be_nil
+        expect(person.sex(:id)).to be_nil
       end
 
       it 'should return nil enum name' do
-        person.sex(:name).should be_nil
+        expect(person.sex(:name)).to be_nil
       end
 
       it 'should return enum class for attribute' do
-        person.sex(:enum).should == Sex
+        expect(person.sex(:enum)).to eq(Sex)
       end
     end
 
@@ -105,19 +105,19 @@ describe ActiveEnum::Extensions do
       let(:person) { Person.new(:sex => -1) }
 
       it 'should return value with no arg' do
-        person.sex.should == -1
+        expect(person.sex).to eq(-1)
       end
 
       it 'should return nil enum id' do
-        person.sex(:id).should be_nil
+        expect(person.sex(:id)).to be_nil
       end
 
       it 'should return nil enum name' do
-        person.sex(:name).should be_nil
+        expect(person.sex(:name)).to be_nil
       end
 
       it 'should return enum class for attribute' do
-        person.sex(:enum).should == Sex
+        expect(person.sex(:enum)).to eq(Sex)
       end
     end
 
@@ -134,39 +134,39 @@ describe ActiveEnum::Extensions do
       end
 
       it 'should return meta value for existing key' do
-        person.sex(:description).should == 'Man'
+        expect(person.sex(:description)).to eq('Man')
       end
 
       it 'should return nil for missing meta value' do
-        person.sex(:nonexistent).should be_nil
+        expect(person.sex(:nonexistent)).to be_nil
       end
 
       it 'should return nil for missing index' do
         person.sex = nil
-        person.sex(:description).should be_nil
+        expect(person.sex(:description)).to be_nil
       end
     end
 
     context "question method" do
       it 'should return normal value without arg' do
-        person.sex?.should be_true
+        expect(person.sex?).to be_truthy
         person.sex = nil
-        person.sex?.should be_false
+        expect(person.sex?).to be_falsey
       end
 
       it 'should return true if string name matches for id value' do
-        person.sex?("Male").should be_true
+        expect(person.sex?("Male")).to be_truthy
       end
 
       it 'should return true if symbol name matches for id value' do
-        person.sex?(:male).should be_true
-        person.sex?(:Male).should be_true
+        expect(person.sex?(:male)).to be_truthy
+        expect(person.sex?(:Male)).to be_truthy
       end
 
       it 'should return false if name does not match for id value' do
-        person.sex?("Female").should be_false
-        person.sex?(:female).should be_false
-        person.sex?(:Female).should be_false
+        expect(person.sex?("Female")).to be_falsey
+        expect(person.sex?(:female)).to be_falsey
+        expect(person.sex?(:Female)).to be_falsey
       end
     end
 
@@ -174,12 +174,12 @@ describe ActiveEnum::Extensions do
 
       it 'should store id value when valid enum name' do
         person.sex = :female
-        person.sex.should == 2
+        expect(person.sex).to eq(2)
       end
 
       it 'should store nil value when invalid enum name' do
         person.sex = :invalid
-        person.sex.should == nil
+        expect(person.sex).to eq(nil)
       end
 
     end
@@ -195,11 +195,11 @@ describe ActiveEnum::Extensions do
       end 
 
       it 'should return text name value for attribute' do
-        person.sex.should == 'Male'
+        expect(person.sex).to eq('Male')
       end
 
       it 'should return true for boolean match' do
-        person.sex?(:male).should be_true
+        expect(person.sex?(:male)).to be_truthy
       end
 
       after(:all) { ActiveEnum.use_name_as_value = false }

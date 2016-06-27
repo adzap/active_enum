@@ -1,4 +1,5 @@
-require 'rspec'
+ENV["RAILS_ENV"] ||= 'test'
+require 'spec_helper'
 
 require 'rails'
 require 'active_record'
@@ -23,11 +24,13 @@ module ActiveEnum
 end
 ActiveEnum::Application.initialize!
 
-require 'rspec/rails'
+I18n.enforce_available_locales = false
+I18n.available_locales = ['en', 'ja']
 
 ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.establish_connection({:adapter => "#{'jdbc' if defined? JRUBY_VERSION}sqlite3", :database => ':memory:'})
+ActiveRecord::Base.establish_connection({:adapter => "sqlite3", :database => ':memory:'})
 
+require 'rspec/rails'
 require 'support/schema'
 
 class Person < ActiveRecord::Base; end
@@ -56,4 +59,15 @@ end
 
 RSpec.configure do |config|
   config.include SpecHelper
+
+  # rspec-rails 3 will no longer automatically infer an example group's spec type
+  # from the file location. You can explicitly opt-in to the feature using this
+  # config option.
+  # To explicitly tag specs without using automatic inference, set the `:type`
+  # metadata manually:
+  #
+  #     describe ThingsController, :type => :controller do
+  #       # Equivalent to being in spec/controllers
+  #     end
+  config.infer_spec_type_from_file_location!
 end

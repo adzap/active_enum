@@ -9,12 +9,12 @@ describe ActiveEnum::Storage::MemoryStore do
   describe '#set' do
     it 'should store value of id and name' do
       store.set 1, 'test name'
-      store.values.should == [[1, 'test name']]
+      expect(store.values).to eq([[1, 'test name']])
     end
 
     it 'should store value of id, name and meta hash' do
       store.set 1, 'test name', :description => 'meta'
-      store.values.should == [[1, 'test name', {:description => 'meta'}]]
+      expect(store.values).to eq([[1, 'test name', {:description => 'meta'}]])
     end
 
     it 'should raise error if duplicate id' do
@@ -42,40 +42,40 @@ describe ActiveEnum::Storage::MemoryStore do
   describe "#values" do
     it 'should return array of stored values' do
       store.set 1, 'Name 1'
-      store.values.should == [[1, 'Name 1']]
+      expect(store.values).to eq([[1, 'Name 1']])
     end
 
     it 'should return values for set enum only' do
       alt_store.set 1, 'Other Name 1'
       store.set 1, 'Name 1'
-      store.values.should == [[1, 'Name 1']]
+      expect(store.values).to eq([[1, 'Name 1']])
     end
   end
 
   describe "#get_by_id" do
     it 'should return the value for a given id' do
       store.set 1, 'test name', :description => 'meta'
-      store.get_by_id(1).should == [1, 'test name', {:description => "meta"}]
+      expect(store.get_by_id(1)).to eq([1, 'test name', {:description => "meta"}])
     end
 
     it 'should return nil when id not found' do
-      store.get_by_id(1).should be_nil
+      expect(store.get_by_id(1)).to be_nil
     end
   end
 
   describe "#get_by_name" do
     it 'should return the value for a given name' do
       store.set 1, 'test name'
-      store.get_by_name('test name').should == [1, 'test name']
+      expect(store.get_by_name('test name')).to eq([1, 'test name'])
     end
 
     it 'should return the value with title-cased name for a given lowercase name' do
       store.set 1, 'Test Name'
-      store.get_by_name('test name').should == [1, 'Test Name']
+      expect(store.get_by_name('test name')).to eq([1, 'Test Name'])
     end
 
     it 'should return nil when name not found' do
-      store.get_by_name('test name').should be_nil
+      expect(store.get_by_name('test name')).to be_nil
     end
   end
 
@@ -84,14 +84,14 @@ describe ActiveEnum::Storage::MemoryStore do
       @order = :asc
       store.set 2, 'Name 2'
       store.set 1, 'Name 1'
-      store.values.should == [[1,'Name 1'], [2, 'Name 2']]
+      expect(store.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
 
     it 'should sort values descending when passed :desc' do
       @order = :desc
       store.set 1, 'Name 1'
       store.set 2, 'Name 2'
-      store.values.should == [[2, 'Name 2'], [1,'Name 1']]
+      expect(store.values).to eq([[2, 'Name 2'], [1,'Name 1']])
     end
 
     it 'should not sort values when passed :natural' do
@@ -99,7 +99,7 @@ describe ActiveEnum::Storage::MemoryStore do
       store.set 1, 'Name 1'
       store.set 3, 'Name 3'
       store.set 2, 'Name 2'
-      store.values.should == [[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']]
+      expect(store.values).to eq([[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']])
     end
   end
 

@@ -27,12 +27,12 @@ describe ActiveEnum::Storage::I18nStore do
   describe '#set' do
     it 'should store value of id and name' do
       store.set 1, 'test name'
-      store.send(:_values).should == [[1, 'test name']]
+      expect(store.send(:_values)).to eq([[1, 'test name']])
     end
 
     it 'should store value of id, name and meta hash' do
       store.set 1, 'test name', :description => 'meta'
-      store.send(:_values).should == [[1, 'test name', {:description => 'meta'}]]
+      expect(store.send(:_values)).to eq([[1, 'test name', {:description => 'meta'}]])
     end
 
     it 'should raise error if duplicate id' do
@@ -67,10 +67,10 @@ describe ActiveEnum::Storage::I18nStore do
       store.set 1, 'thanks'
 
       I18n.locale = :en
-      store.values.should == [ [1, 'Thanks'] ]
+      expect(store.values).to eq([ [1, 'Thanks'] ])
 
       I18n.locale = :fr
-      store.values.should == [ [1, 'Merce'] ]
+      expect(store.values).to eq([ [1, 'Merce'] ])
     end
 
   end
@@ -83,22 +83,22 @@ describe ActiveEnum::Storage::I18nStore do
 
     it 'should return the value for a given id' do
       store.set 1, 'test'
-      store.get_by_id(1).should == [1, 'Testing']
+      expect(store.get_by_id(1)).to eq([1, 'Testing'])
     end
 
     it 'should return the value with meta for a given id' do
       store.set 1, 'test', :description => 'meta'
-      store.get_by_id(1).should == [1, 'Testing', { :description => 'meta' }]
+      expect(store.get_by_id(1)).to eq([1, 'Testing', { :description => 'meta' }])
     end
 
     it 'should return nil when id not found' do
-      store.get_by_id(1).should be_nil
+      expect(store.get_by_id(1)).to be_nil
     end
 
     it 'should return key when translation missing' do
       I18n.locale = :ja
       store.set 1, 'test'
-      store.get_by_id(1).should == [1, 'test']
+      expect(store.get_by_id(1)).to eq([1, 'test'])
     end
   end
 
@@ -110,16 +110,16 @@ describe ActiveEnum::Storage::I18nStore do
 
     it 'should return the value for a given name' do
       store.set 1, 'test'
-      store.get_by_name('test').should == [1, 'Testing']
+      expect(store.get_by_name('test')).to eq([1, 'Testing'])
     end
 
     it 'should return the value with meta for a given name' do
       store.set 1, 'test', :description => 'meta'
-      store.get_by_name('test').should == [1, 'Testing', { :description => 'meta' }]
+      expect(store.get_by_name('test')).to eq([1, 'Testing', { :description => 'meta' }])
     end
 
     it 'should return nil when name not found' do
-      store.get_by_name('test').should be_nil
+      expect(store.get_by_name('test')).to be_nil
     end
   end
 
@@ -137,7 +137,7 @@ describe ActiveEnum::Storage::I18nStore do
 
       store.set 2, 'name2'
       store.set 1, 'name1'
-      store.values.should == [[1,'Name 1'], [2, 'Name 2']]
+      expect(store.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
 
     it 'should sort values descending when passed :desc' do
@@ -145,7 +145,7 @@ describe ActiveEnum::Storage::I18nStore do
 
       store.set 1, 'name1'
       store.set 2, 'name2'
-      store.values.should == [[2, 'Name 2'], [1,'Name 1']]
+      expect(store.values).to eq([[2, 'Name 2'], [1,'Name 1']])
     end
 
     it 'should not sort values when passed :natural' do
@@ -154,7 +154,7 @@ describe ActiveEnum::Storage::I18nStore do
       store.set 1, 'name1'
       store.set 3, 'name3'
       store.set 2, 'name2'
-      store.values.should == [[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']]
+      expect(store.values).to eq([[1,'Name 1'], [3,'Name 3'], [2, 'Name 2']])
     end
   end
 
@@ -171,12 +171,12 @@ describe ActiveEnum::Storage::I18nStore do
 
       it 'should return array values from yaml' do
         store.set 1, 'things'
-        store.get_by_name('things').should eq [1, 'Generic things']
+        expect(store.get_by_name('things')).to eq [1, 'Generic things']
       end
 
       it 'should not load locale entry unless defined in enum' do
         store.set 1, 'things'
-        store.get_by_name('not_found').should be_nil
+        expect(store.get_by_name('not_found')).to be_nil
       end
     end
 
@@ -186,12 +186,12 @@ describe ActiveEnum::Storage::I18nStore do
 
       it 'should return array values from yaml' do
         store.set 1, 'things'
-        store.get_by_name('things').should eq [1, 'Model things']
+        expect(store.get_by_name('things')).to eq [1, 'Model things']
       end
 
       it 'should not load locale entry unless defined in enum' do
         store.set 1, 'things'
-        store.get_by_name('not_found').should be_nil
+        expect(store.get_by_name('not_found')).to be_nil
       end
     end
 
