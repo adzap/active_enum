@@ -37,6 +37,10 @@ module ActiveEnum
         store.values
       end
 
+      def each(&block)
+        all.each(&block)
+      end
+
       # Array of all enum id values
       def ids
         store.values.map {|v| v[0] }
