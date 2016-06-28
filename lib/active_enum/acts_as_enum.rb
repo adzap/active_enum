@@ -45,7 +45,7 @@ module ActiveEnum
       end
 
       def lookup_by_name(index)
-        enum_values.where("#{active_enum_options[:name_column]} like ?", index.to_s).first
+        enum_values.where("#{active_enum_options[:name_column]} like lower(?)", index.to_s).first
       end
 
     end
