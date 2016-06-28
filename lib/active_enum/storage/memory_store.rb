@@ -16,12 +16,6 @@ module ActiveEnum
         _values.rassoc(name.to_s) || _values.rassoc(name.to_s.titleize)
       end
 
-      def check_duplicate(id, name)
-        if get_by_id(id) || get_by_name(name)
-          raise ActiveEnum::DuplicateValue, "id: #{id}, name: #{name}"
-        end
-      end
-
       def sort!
         case @order
         when :asc

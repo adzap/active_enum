@@ -22,6 +22,14 @@ module ActiveEnum
         raise NotImplemented
       end
 
+      def check_duplicate(id, name)
+        if get_by_id(id) 
+          raise ActiveEnum::DuplicateValue, "#{@enum}: Duplicate id #{id}"
+        elsif get_by_name(name)
+          raise ActiveEnum::DuplicateValue, "#{@enum}: Duplicate name '#{name}'"
+        end
+      end
+
       def values
         _values
       end

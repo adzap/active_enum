@@ -17,12 +17,6 @@ module ActiveEnum
         _values.map { |(id, name)| get_by_id(id) }
       end
 
-      def check_duplicate(id, name)
-        if _values.assoc(id) || _values.rassoc(name.to_s)
-          raise ActiveEnum::DuplicateValue
-        end
-      end
-
       def i18n_scope
         @i18n_scope ||= [ :active_enum ] + @enum.name.split("::").map { |nesting| nesting.underscore.to_sym }
       end
