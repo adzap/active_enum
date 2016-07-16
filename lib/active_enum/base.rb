@@ -1,6 +1,7 @@
 module ActiveEnum
   class DuplicateValue < StandardError; end
   class InvalidValue < StandardError; end
+  class UndefinedValue < StandardError; end
 
   class Base
 
@@ -22,7 +23,7 @@ module ActiveEnum
         store.set *id_and_name_and_meta(enum_value)
       end
 
-      # Specify order enum values are returned. 
+      # Specify order enum values are returned.
       # Allowed values are :asc, :desc or :natural
       #
       def order(order)
@@ -61,10 +62,12 @@ module ActiveEnum
       def get(index)
         if index.is_a?(Fixnum)
           row = store.get_by_id(index)
-          row[1] if row
+          raise ActiveEnum::UndefinedValue, "The id supplied, #{index}, is undefined in the enum." if row.nil?
+          row[1]
         else
           row = store.get_by_name(index)
-          row[0] if row
+          raise ActiveEnum::UndefinedValue, "The name supplied, #{index}, is undefined in the enum." if row.nil?
+          row[0]
         end
       end
       alias_method :[], :get
@@ -105,7 +108,6 @@ module ActiveEnum
       def store
         @store ||= ActiveEnum.storage_class.new(self, @order || :asc, ActiveEnum.storage_options)
       end
-
     end
 
   end
