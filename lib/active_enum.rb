@@ -34,6 +34,10 @@ module ActiveEnum
     extend_classes!
   end
 
+  def self.config
+    self
+  end
+
   class EnumDefinitions
     def enum(name, &block)
       class_name = name.to_s.camelize

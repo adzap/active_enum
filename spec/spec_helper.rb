@@ -10,6 +10,7 @@ require 'action_mailer'
 require 'active_enum'
 require 'active_enum/acts_as_enum'
 require 'securerandom'
+require 'byebug'
 
 module ActiveEnum 
   class Application < Rails::Application
@@ -32,6 +33,8 @@ ActiveRecord::Base.establish_connection({:adapter => "sqlite3", :database => ':m
 
 require 'rspec/rails'
 require 'support/schema'
+
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
 
 class Person < ActiveRecord::Base; end
 class NoEnumPerson < ActiveRecord::Base
@@ -59,6 +62,7 @@ end
 
 RSpec.configure do |config|
   config.include SpecHelper
+  config.include ConfigHelper
 
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this

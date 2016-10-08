@@ -191,12 +191,7 @@ describe ActiveEnum::Base do
       end
 
       context "with raise_on_not_found" do
-        around(:example) do |example|
-          original = ActiveEnum.raise_on_not_found
-          ActiveEnum.raise_on_not_found = true
-          example.run
-          ActiveEnum.raise_on_not_found = original
-        end
+        with_config :raise_on_not_found, true
 
         it "should raise ActiveEnum::NotFound for missing id" do
           expect { enum['Not a value'] }.to raise_error(ActiveEnum::NotFound)
