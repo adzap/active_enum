@@ -135,10 +135,16 @@ Access the enum values and the enum class using the attribute method with a symb
   user.sex(:enum)   # => Sex
   user.sex(:symbol) # => ♂  ( Can use any meta data key )
 
-You can set the default to return the enum name value for enumerated attribute
+You can set the default to return the enum name value for enumerated attributes
 
-  ActiveEnum.use_name_as_value = true
+  ActiveEnum.setup do |config|
+    config.use_name_as_value = true
+  end
+
+And now the name is returned for the regular attribute read method.
+
   user.sex # => 'Male'
+
 
 === Boolean check
 
