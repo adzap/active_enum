@@ -1,6 +1,7 @@
 module ActiveEnum
   class DuplicateValue < StandardError; end
   class InvalidValue < StandardError; end
+  class NotFound < StandardError; end
 
   class Base
 
@@ -59,15 +60,20 @@ module ActiveEnum
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
       def get(index)
-        if index.is_a?(Fixnum)
-          row = store.get_by_id(index)
-          row[1] if row
-        else
-          row = store.get_by_name(index)
-          row[0] if row
-        end
+        row = get_value(index)
+        return if row.nil?
+        index.is_a?(Fixnum) ? row[1] : row[0]
       end
       alias_method :[], :get
+
+      # Access value row array for a given id or name value.
+      def get_value(index)
+        if index.is_a?(Fixnum)
+          store.get_by_id(index)
+        else
+          store.get_by_name(index)
+        end || (ActiveEnum.raise_on_not_found ? raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") : nil)
+      end
 
       def include?(value)
         !get(value).nil?
@@ -75,11 +81,7 @@ module ActiveEnum
 
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index)
-        row = if index.is_a?(Fixnum)
-          store.get_by_id(index)
-        else
-          store.get_by_name(index)
-        end
+        row = get_value(index)
         row[2] || {} if row
       end
 

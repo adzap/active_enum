@@ -180,6 +180,33 @@ describe ActiveEnum::Base do
       expect(enum[:Name_1]).to eq(1)
       expect(enum[:name_1]).to eq(1)
     end
+
+    context "for missing value" do
+      it "should return nil for missing id" do
+        expect(enum['Not a value']).to eq nil
+      end
+
+      it "should return nil for missing name" do
+        expect(enum[0]).to eq nil
+      end
+
+      context "with raise_on_not_found" do
+        around(:example) do |example|
+          original = ActiveEnum.raise_on_not_found
+          ActiveEnum.raise_on_not_found = true
+          example.run
+          ActiveEnum.raise_on_not_found = original
+        end
+
+        it "should raise ActiveEnum::NotFound for missing id" do
+          expect { enum['Not a value'] }.to raise_error(ActiveEnum::NotFound)
+        end
+
+        it "should raise ActiveEnum::NotFound for missing name" do
+          expect { enum[0] }.to raise_error(ActiveEnum::NotFound)
+        end
+      end
+    end
   end
 
   describe ".include?" do

@@ -11,6 +11,9 @@ module ActiveEnum
   mattr_accessor :use_name_as_value
   @@use_name_as_value = false
 
+  mattr_accessor :raise_on_not_found
+  @@raise_on_not_found = false
+
   mattr_accessor :storage
   @@storage = :memory
 
