@@ -99,6 +99,14 @@ describe ActiveEnum::Extensions do
       it 'should return enum class for attribute' do
         expect(person.sex(:enum)).to eq(Sex)
       end
+
+      context "and raise_on_not_found" do
+        with_config :raise_on_not_found, true
+
+        it "should not raise error when attribute is nil" do
+          expect { person.sex(:id) }.to_not raise_error
+        end
+      end
     end
 
     context "with undefined value" do
