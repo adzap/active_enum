@@ -155,6 +155,25 @@ A convenience method on the class is available to the enum class of any enumerat
 
   User.active_enum_for(:sex) # => Sex
 
+== Raise exception when value not found
+
+When a value if not found for a given id or name the default behaviour is to return nil. If you would like to raise an error use
+
+  ActiveEnum.setup do |config|
+    config.raise_on_not_found = true
+  end
+
+Then for the following examples
+  
+  Sex['Other']
+
+  # Or
+
+  Sex[3]
+
+will raise an ActiveEnum::NotFound exception.
+
+
 === Bulk definition
 
 Define enum classes in bulk without class files, in an initializer file for example.

@@ -9,7 +9,7 @@ ActiveEnum.setup do |config|
   # Return name string as value for attribute method
   # config.use_name_as_value = false
 
-  # Raise error if enum value for a given id or name is not found
+  # Raise exception ActiveEnum::NotFound if enum value for a given id or name is not found
   # config.raise_on_not_found = false
 
   # Storage of values (:memory, :i18n)
