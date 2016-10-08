@@ -30,7 +30,7 @@ module ActiveEnum
 
   # Setup method for plugin configuration
   def self.setup
-    yield self
+    yield config
     extend_classes!
   end
 
