@@ -15,7 +15,7 @@ From gem version 1.0 onwards this plugin will only have Rails 4+ support. If you
 
 Put this in your Gemfile
 
-  gem 'active_enum', '~> 1.0'
+  gem 'active_enum', '~> 1.0.0.pre'
 
 Then generate the config initializer file
 
