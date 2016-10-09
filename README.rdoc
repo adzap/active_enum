@@ -7,13 +7,15 @@ Enum values are stored in memory at the moment but I plan to add database and po
 
 == Install
 
-From version 0.7 onwards this plugin will only have Rails 3 support. If you need Rails 2 compatibility, {check the 0.6 branch}[https://github.com/adzap/active_enum/tree/0.6].
+Supprots Ruby versions 2.0+.
+
+From gem version 1.0 onwards this plugin will only have Rails 4+ support. If you need Rails 3 compatibility, {check the 0.9 branch}[https://github.com/adzap/active_enum/tree/0.9].
 
   gem install active_enum 
 
 Put this in your Gemfile
 
-  gem 'active_enum'
+  gem 'active_enum', '~> 1.0'
 
 Then generate the config initializer file
 
