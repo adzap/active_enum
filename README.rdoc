@@ -219,11 +219,10 @@ Giving you the familiar enum methods
 
 === Form Helpers
 
-There is support for SimpleForm[http://github.com/plataformatec/simple_form]
-to make it easier to use the enum values as select options. The plugins have an almost identical API which is handy.
-You just need to require the extension for the respective plugin in an initialiser:
+There is support for SimpleForm[http://github.com/plataformatec/simple_form] version 3+.
+to make it easier to use the enum values as select options. 
 
-SimpleForm:
+In the initializer:
 
   require 'active_enum/form_helpers/simple_form'
 
