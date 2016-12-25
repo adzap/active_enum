@@ -62,13 +62,13 @@ module ActiveEnum
       def get(index)
         row = get_value(index)
         return if row.nil?
-        index.is_a?(Fixnum) ? row[1] : row[0]
+        index.is_a?(Integer) ? row[1] : row[0]
       end
       alias_method :[], :get
 
       # Access value row array for a given id or name value.
       def get_value(index)
-        if index.is_a?(Fixnum)
+        if index.is_a?(Integer)
           store.get_by_id(index)
         else
           store.get_by_name(index)
@@ -93,7 +93,7 @@ module ActiveEnum
           name = hash.delete(:name)
           meta = hash
           return id, name, (meta.empty? ? nil : meta)
-        elsif hash.keys.first.is_a?(Fixnum)
+        elsif hash.keys.first.is_a?(Integer)
           return *Array(hash).first
         else
           raise ActiveEnum::InvalidValue, "The value supplied, #{hash}, is not a valid format."
