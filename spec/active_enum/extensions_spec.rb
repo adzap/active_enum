@@ -47,7 +47,7 @@ describe ActiveEnum::Extensions do
     end
     expect(Person.active_enum_for(:sex)).to eq(::Person::Sex)
   end
-
+  
   it 'should raise error if implicit enumeration class cannot be found' do
     expect {
       Person.enumerate :first_name
@@ -214,5 +214,33 @@ describe ActiveEnum::Extensions do
     end
 
   end
+  
+  context "with specified storage" do
+    let(:person) { Person.new(:sex => 1) }
 
+    before do
+      @default_locale = I18n.locale
+      I18n.backend.store_translations :en, :active_enum => { :person => { :sex => { 'male' => 'Male', 'female' => 'Female' } } }
+      I18n.locale = :en
+
+      reset_class Person do
+        enumerate :sex, storage: :i18n do
+          value 1 => 'male'
+          value 2 => 'female'
+        end
+      end
+    end
+
+    after do
+      I18n.locale = @default_locale
+    end
+
+    it 'should load the specified storage class instance' do
+      Person.active_enum_for(:sex).send(:store).should be_instance_of(ActiveEnum::Storage::I18nStore)
+    end
+
+    it 'should return text name value for attribute' do
+      person.sex(:name).should == 'Male'
+    end
+  end
 end
