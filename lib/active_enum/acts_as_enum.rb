@@ -29,7 +29,7 @@ module ActiveEnum
       end
 
       def [](index)
-        if index.is_a?(Fixnum)
+        if index.is_a?(Integer)
           v = lookup_by_id(index)
           v.send(active_enum_options[:name_column]) unless v.blank?
         else
