@@ -64,7 +64,7 @@ module ActiveEnum
         enum_class_name = "#{name}::#{attribute.to_s.camelize}"
         eval("class #{enum_class_name} < ActiveEnum::Base; end")
         enum = enum_class_name.constantize
-        enum.class_eval &block
+        enum.class_eval(&block)
         enum
       end
 

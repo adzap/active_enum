@@ -20,7 +20,7 @@ module ActiveEnum
       #   value 1 => 'Foo'
       #
       def value(enum_value)
-        store.set *id_and_name_and_meta(enum_value)
+        store.set(*id_and_name_and_meta(enum_value))
       end
 
       # Specify order enum values are returned. 
@@ -44,17 +44,17 @@ module ActiveEnum
 
       # Array of all enum id values
       def ids
-        store.values.map {|v| v[0] }
+        store.values.map { |v| v[0] }
       end
 
       # Array of all enum name values
       def names
-        store.values.map {|v| v[1] }
+        store.values.map { |v| v[1] }
       end
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
-        store.values.map {|v| [v[1], v[0]] }
+        store.values.map { |v| [v[1], v[0]] }
       end
 
       # Access id or name value. Pass an id number to retrieve the name or

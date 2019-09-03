@@ -17,15 +17,15 @@ module ActiveEnum
     module ClassMethods
 
       def ids
-        enum_values.map {|v| v.id }
+        enum_values.map { |v| v.id }
       end
 
       def names
-        enum_values.map {|v| v.send(active_enum_options[:name_column]) }
+        enum_values.map { |v| v.send(active_enum_options[:name_column]) }
       end
 
       def to_select
-        enum_values.map {|v| [v.send(active_enum_options[:name_column]), v.id] }
+        enum_values.map { |v| [v.send(active_enum_options[:name_column]), v.id] }
       end
 
       def [](index)

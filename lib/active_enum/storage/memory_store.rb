@@ -4,7 +4,7 @@ module ActiveEnum
 
       def set(id, name, meta=nil)
         check_duplicate id, name
-        _values << [id, name.to_s, meta].compact
+        _values << [ id, name.to_s, meta ].compact
         sort!
       end
 

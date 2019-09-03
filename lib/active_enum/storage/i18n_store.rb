@@ -14,7 +14,7 @@ module ActiveEnum
       end
 
       def values
-        _values.map { |(id, name)| get_by_id(id) }
+        _values.map { |(id, _)| get_by_id(id) }
       end
 
       def i18n_scope
