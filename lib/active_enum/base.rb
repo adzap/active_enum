@@ -66,15 +66,6 @@ module ActiveEnum
       end
       alias_method :[], :get
 
-      # Access value row array for a given id or name value.
-      def get_value(index)
-        if index.is_a?(Integer)
-          store.get_by_id(index)
-        else
-          store.get_by_name(index)
-        end || (ActiveEnum.raise_on_not_found ? raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") : nil)
-      end
-
       def include?(value)
         !get(value).nil?
       end
@@ -86,6 +77,15 @@ module ActiveEnum
       end
 
       private
+
+      # Access value row array for a given id or name value.
+      def get_value(index)
+        if index.is_a?(Integer)
+          store.get_by_id(index)
+        else
+          store.get_by_name(index)
+        end || (ActiveEnum.raise_on_not_found ? raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") : nil)
+      end
 
       def id_and_name_and_meta(hash)
         if hash.has_key?(:name)
