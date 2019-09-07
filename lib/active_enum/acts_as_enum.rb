@@ -29,25 +29,37 @@ module ActiveEnum
       end
 
       def [](index)
-        if index.is_a?(Integer)
-          v = lookup_by_id(index)
-          v.send(active_enum_options[:name_column]) unless v.blank?
-        else
-          v = lookup_by_name(index)
-          v.id unless v.blank?
-        end
+        row = get_value(index)
+        return if row.nil?
+        index.is_a?(Integer) ? row.send(active_enum_options[:name_column]) : row.id
+      end
+
+      # Access any meta data defined for a given id or name. Returns a hash.
+      def meta(index)
+        row = lookup_relation(index).unscope(:select).first
+        row&.attributes.except(primary_key.to_s, active_enum_options[:name_column].to_s)
+      end
+
+      # Enables use as a delimiter in inclusion validation
+      def include?(value)
+        !self[value].nil?
       end
 
       private
 
-      def lookup_by_id(index)
-        enum_values.find_by_id(index)
+      def get_value(index)
+        lookup_relation(index).first || begin
+          raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") if ActiveEnum.raise_on_not_found
+        end
       end
-
-      def lookup_by_name(index)
-        enum_values.where("#{active_enum_options[:name_column]} like lower(?)", index.to_s).first
+      
+      def lookup_relation(index)
+        if index.is_a?(Integer)
+          enum_values.where(id: index)
+        else
+          enum_values.where("#{active_enum_options[:name_column]} like lower(?)", index.to_s)
+        end
       end
-
     end
 
   end
