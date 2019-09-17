@@ -24,8 +24,3 @@ end
 
 desc 'Default: run specs.'
 task :default => :spec
-
-task :all do
-  sh "export FORMTASTIC=2.0 && bundle install && bundle exec rake"
-  sh "export FORMTASTIC=1.2 && bundle install && bundle exec rake"
-end
