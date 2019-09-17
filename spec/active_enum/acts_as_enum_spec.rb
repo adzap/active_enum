@@ -60,4 +60,22 @@ describe ActiveEnum::ActsAsEnum do
       expect(Person.meta(1)).to eq(Person.find(1).attributes.except('id', 'first_name'))
     end
   end
+
+  context '#include?' do
+    it "should return true if value is integer and model has id" do
+      expect(Person.exists?(id: 1)).to eq(true)
+      expect(Person.include?(1)).to eq(true)
+    end
+
+    it "should return false if value is integer and model does not have id" do
+      expect(Person.exists?(id: 100)).to eq(false)
+      expect(Person.include?(100)).to eq(false)
+    end
+
+    it "should return super if value is a module" do
+      expect(Person.include?(ActiveRecord::Attributes)).to eq(true)
+
+      expect(Person.include?(Module.new)).to eq(false)
+    end
+  end
 end

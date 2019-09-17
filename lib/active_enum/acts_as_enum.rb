@@ -42,6 +42,8 @@ module ActiveEnum
 
       # Enables use as a delimiter in inclusion validation
       def include?(value)
+        return super if value.is_a?(Module)
+
         !self[value].nil?
       end
 
