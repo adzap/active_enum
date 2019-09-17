@@ -112,7 +112,7 @@ module ActiveEnum
             if arg.is_a?(Symbol)
               super self.class.active_enum_for(:#{attribute})[arg]
             else
-              super arg
+              super
             end
           end
         DEF
