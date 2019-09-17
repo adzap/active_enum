@@ -248,6 +248,20 @@ describe ActiveEnum::Base do
     end
   end
 
+  describe ".to_grouped_select" do
+    it 'should return array for grouped select helpers grouped by meta key value' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1', :category => 'Foo'
+        value :id => 2, :name => 'Name 2', :category => 'Bar'
+      end
+
+      expect(enum.to_grouped_select(:category)).to eq([
+        [ 'Foo', [ ['Name 1',1] ] ],
+        [ 'Bar', [ ['Name 2',2] ] ]
+      ])
+    end
+  end
+
   def define_enum(&block)
     Class.new(ActiveEnum::Base, &block)
   end

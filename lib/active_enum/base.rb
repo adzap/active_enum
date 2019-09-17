@@ -54,7 +54,14 @@ module ActiveEnum
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
       def to_select
-        store.values.map { |v| [v[1], v[0]] }
+        store.values.map { |v| [v[1].html_safe, v[0]] }
+      end
+
+      # Return enum values in a nested array suitable to pass to a Rails form grouped select helper.
+      def to_grouped_select(group_by)
+        store.values.group_by { |(_id, _name, meta)| meta.fetch(group_by) }.map { |group, collection|
+          [ group, collection.map { |(id, name, _meta)| [ name.html_safe, id ] } ]
+        }
       end
 
       # Access id or name value. Pass an id number to retrieve the name or
