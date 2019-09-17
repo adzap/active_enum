@@ -5,6 +5,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.integer  :sex
     t.integer  :attending
     t.integer  :staying
+    t.integer  :employment_status
   end
 
   create_table :sorted_people, :force => true do |t|

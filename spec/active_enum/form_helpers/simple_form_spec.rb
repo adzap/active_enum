@@ -13,6 +13,16 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
         value :id => 1, :name => 'Male'
         value :id => 2, :name => 'Female'
       end
+
+      enumerate :employment_status do
+        value :id => 1, :name => 'Full-time', group: 'Waged'
+        value :id => 3, :name => 'Part-time', group: 'Waged'
+        value :id => 4, :name => 'Casual', group: 'Waged'
+        value :id => 5, :name => 'Student', group: 'Un-waged'
+        value :id => 6, :name => 'Retired', group: 'Un-waged'
+        value :id => 7, :name => 'Unemployed', group: 'Un-waged'
+        value :id => 8, :name => 'Carer', group: 'Un-waged'
+      end
     end
   end
 
@@ -32,6 +42,15 @@ describe ActiveEnum::FormHelpers::SimpleForm, :type => :helper do
     expect(output).to have_selector('select#person_sex')
     expect(output).to have_xpath('//option[@value=1]', :text => 'Male')
     expect(output).to have_xpath('//option[@value=2]', :text => 'Female')
+  end
+
+  it "should use explicit :grouped_enum input type" do
+    output = simple_form_for(Person.new, :url => people_path) do |f|
+      concat f.input(:employment_status, :as => :grouped_enum, :group_by => :group)
+    end
+    expect(output).to have_selector('select#person_employment_status')
+    expect(output).to have_xpath('//optgroup[@label="Waged"]/option[@value=1]', :text => 'Full-time')
+    expect(output).to have_xpath('//optgroup[@label="Un-waged"]/option[@value=8]', :text => 'Carer')
   end
 
   it "should not use enum input type if :as option indicates other type" do
