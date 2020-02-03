@@ -45,6 +45,12 @@ describe ActiveEnum::ActsAsEnum do
     end
   end
 
+  context '#values' do
+    it "should return array of arrays containing id and name column values" do
+      expect(Person.values).to eq([[1, 'Dave'], [2, 'John']])
+    end
+  end
+
   context '#to_select' do
     it "should return array for select helpers" do
       expect(Person.to_select).to eq([['Dave', 1], ['John', 2]])

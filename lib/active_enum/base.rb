@@ -34,9 +34,11 @@ module ActiveEnum
         @order = order
       end
 
-      def all
+      # Array of arrays of stored values defined id, name, meta values hash
+      def values
         store.values
       end
+      alias_method :all, :values
 
       def each(&block)
         all.each(&block)

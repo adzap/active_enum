@@ -16,6 +16,10 @@ module ActiveEnum
 
     module ClassMethods
 
+      def values
+        enum_values.map { |v| [ v.id, v.send(active_enum_options[:name_column]) ] }
+      end
+
       def ids
         enum_values.map { |v| v.id }
       end

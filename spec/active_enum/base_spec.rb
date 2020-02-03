@@ -24,9 +24,9 @@ describe ActiveEnum::Base do
     end
   end
 
-  describe ".all" do
+  describe ".values" do
     it 'should return an empty array when no values defined' do
-      expect(define_enum.all).to eq([])
+      expect(define_enum.values).to eq([])
     end
 
     it 'should return an array of arrays with all values defined as [id, name]' do
@@ -34,7 +34,7 @@ describe ActiveEnum::Base do
         value :name => 'Name 1'
         value :name => 'Name 2'
       end
-      expect(enum.all).to eq([[1,'Name 1'], [2, 'Name 2']])
+      expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
   end
 
@@ -43,28 +43,28 @@ describe ActiveEnum::Base do
       enum = define_enum do
         value :id => 1, :name => 'Name'
       end
-      expect(enum.all).to eq([[1,'Name']])
+      expect(enum.values).to eq([[1,'Name']])
     end
 
     it 'should allow me to define a value with a name only' do
       enum = define_enum do
         value :name => 'Name'
       end
-      expect(enum.all).to eq([[1,'Name']])
+      expect(enum.values).to eq([[1,'Name']])
     end
 
     it 'should allow me to define a value as hash with id as key and name as value' do
       enum = define_enum do
         value 1 => 'Name'
       end
-      expect(enum.all).to eq([[1,'Name']])
+      expect(enum.values).to eq([[1,'Name']])
     end
 
     it 'should allow to define meta data value with extra key value pairs' do
       enum = define_enum do
         value :id => 1, :name => 'Name', :description => 'extra'
       end
-      expect(enum.all).to eq([[1,'Name',{:description => 'extra'}]])
+      expect(enum.values).to eq([[1,'Name',{:description => 'extra'}]])
     end
 
     it 'should increment value ids when defined without ids' do
@@ -72,7 +72,7 @@ describe ActiveEnum::Base do
         value :name => 'Name 1'
         value :name => 'Name 2'
       end
-      expect(enum.all).to eq([[1,'Name 1'], [2, 'Name 2']])
+      expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
 
     it 'should raise error if the id is a duplicate' do
@@ -117,7 +117,7 @@ describe ActiveEnum::Base do
         value :id => 2, :name => 'Name 2'
         value :id => 1, :name => 'Name 1'
       end
-      expect(enum.all).to eq([[1,'Name 1'], [2, 'Name 2']])
+      expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
 
     it 'should return sorted values by id using order setting' do
@@ -126,7 +126,7 @@ describe ActiveEnum::Base do
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
       end
-      expect(enum.all).to eq([[2, 'Name 2'], [1,'Name 1']])
+      expect(enum.values).to eq([[2, 'Name 2'], [1,'Name 1']])
     end
 
     it 'should return sorted values by id using order setting' do
@@ -136,7 +136,7 @@ describe ActiveEnum::Base do
         value :id => 1, :name => 'Name 1'
         value :id => 2, :name => 'Name 2'
       end
-      expect(enum.all).to eq([[3,'Name 3'], [1,'Name 1'], [2, 'Name 2']])
+      expect(enum.values).to eq([[3,'Name 3'], [1,'Name 1'], [2, 'Name 2']])
     end
   end
 
