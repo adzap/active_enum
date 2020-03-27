@@ -260,6 +260,18 @@ describe ActiveEnum::Base do
         [ 'Bar', [ ['Name 2',2] ] ]
       ])
     end
+
+    it 'should group any value missing the group_by key by nil' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1', :category => 'Foo'
+        value :id => 2, :name => 'Name 2'
+      end
+
+      expect(enum.to_grouped_select(:category)).to eq([
+        [ 'Foo', [ ['Name 1',1] ] ],
+        [ nil, [ ['Name 2',2] ] ]
+      ])
+    end
   end
 
   def define_enum(&block)

@@ -61,7 +61,7 @@ module ActiveEnum
 
       # Return enum values in a nested array suitable to pass to a Rails form grouped select helper.
       def to_grouped_select(group_by)
-        store.values.group_by { |(_id, _name, meta)| meta.fetch(group_by) }.map { |group, collection|
+        store.values.group_by { |(_id, _name, meta)| (meta || {})[group_by] }.map { |group, collection|
           [ group, collection.map { |(id, name, _meta)| [ name.html_safe, id ] } ]
         }
       end
