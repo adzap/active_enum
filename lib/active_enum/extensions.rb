@@ -105,11 +105,12 @@ module ActiveEnum
       # Examples:
       #   user.sex = 1
       #   user.sex = :male
+      #   user.sex = 'Male'
       #
       def define_active_enum_write_method(attribute)
         class_eval <<-DEF
           def #{attribute}=(arg)
-            if arg.is_a?(Symbol)
+            if arg.is_a?(Symbol) || arg.is_a?(String)
               super self.class.active_enum_for(:#{attribute})[arg]
             else
               super
