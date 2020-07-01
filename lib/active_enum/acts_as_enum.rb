@@ -7,9 +7,9 @@ module ActiveEnum
         extend ClassMethods
         class_attribute :active_enum_options
         self.active_enum_options = options.reverse_merge(:name_column => 'name')
-        scope :enum_values, proc { select("#{primary_key}, #{active_enum_options[:name_column]}").
+        scope :enum_values, proc { select(Arel.sql("#{primary_key}, #{active_enum_options[:name_column]}")).
                                    where(active_enum_options[:conditions]).
-                                   order("#{primary_key} #{active_enum_options[:order]}") }
+                                   order(Arel.sql("#{primary_key} #{active_enum_options[:order]}")) }
       end
 
     end
@@ -63,7 +63,7 @@ module ActiveEnum
         if index.is_a?(Integer)
           enum_values.where(id: index)
         else
-          enum_values.where("#{active_enum_options[:name_column]} like lower(?)", index.to_s)
+          enum_values.where("lower(#{active_enum_options[:name_column]}) = lower(?)", Arel.sql(index.to_s))
         end
       end
     end
