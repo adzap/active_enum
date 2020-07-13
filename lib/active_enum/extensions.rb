@@ -110,7 +110,7 @@ module ActiveEnum
         class_eval <<-DEF
           def #{attribute}=(arg)
             if arg.is_a?(Symbol)
-              super self.class.active_enum_for(:#{attribute})[arg]
+              super(self.class.active_enum_for(:#{attribute})[arg])
             else
               super
             end
