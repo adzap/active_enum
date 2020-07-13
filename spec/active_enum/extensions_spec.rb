@@ -176,6 +176,11 @@ describe ActiveEnum::Extensions do
         expect(person.sex?(:female)).to be_falsey
         expect(person.sex?(:Female)).to be_falsey
       end
+
+      it 'should return false if attribute is nil regardless of enum value' do
+        person.sex = nil
+        expect(person.sex?(:nonexistent)).to be_falsey
+      end
     end
 
     context "with value as enum name symbol" do
