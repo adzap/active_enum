@@ -76,7 +76,7 @@ module ActiveEnum
       alias_method :[], :get
 
       def include?(value)
-        !get(value).nil?
+        !get_value(value, false).nil?
       end
 
       # Access any meta data defined for a given id or name. Returns a hash.
@@ -88,12 +88,12 @@ module ActiveEnum
       private
 
       # Access value row array for a given id or name value.
-      def get_value(index)
+      def get_value(index, raise_on_not_found = ActiveEnum.raise_on_not_found)
         if index.is_a?(Integer)
           store.get_by_id(index)
         else
           store.get_by_name(index)
-        end || (ActiveEnum.raise_on_not_found ? raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") : nil)
+        end || (raise_on_not_found ? raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") : nil)
       end
 
       def id_and_name_and_meta(hash)
