@@ -98,12 +98,12 @@ module ActiveEnum
 
       def id_and_name_and_meta(hash)
         if hash.has_key?(:name)
-          id   = hash.delete(:id) || next_id
-          name = hash.delete(:name)
-          meta = hash
+          id   = hash.fetch(:id) { next_id }
+          name = hash.fetch(:name).freeze
+          meta = hash.except(:id, :name).freeze
           return id, name, (meta.empty? ? nil : meta)
         elsif hash.keys.first.is_a?(Integer)
-          return *Array(hash).first
+          return *Array(hash).first.tap { |arr| arr[1].freeze }
         else
           raise ActiveEnum::InvalidValue, "The value supplied, #{hash}, is not a valid format."
         end
