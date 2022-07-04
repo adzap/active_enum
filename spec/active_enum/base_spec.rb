@@ -272,6 +272,18 @@ describe ActiveEnum::Base do
         [ nil, [ ['Name 2',2] ] ]
       ])
     end
+
+    it 'shoud transform group name with custom group transform proc' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1', :category => 'Foo'
+        value :id => 2, :name => 'Name 2'
+      end
+
+      expect(enum.to_grouped_select(:category, group_transform: proc { |group| group.to_s.upcase })).to eq([
+        [ 'FOO', [ ['Name 1',1] ] ],
+        [ '', [ ['Name 2',2] ] ]
+      ])
+    end
   end
 
   def define_enum(&block)
