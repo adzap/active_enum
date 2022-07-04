@@ -92,9 +92,9 @@ module ActiveEnum
             when :id
               value if enum[value]
             when :name
-              enum[value]
+              enum[value].dup
             when Symbol
-              (enum.meta(value) || {})[arg]
+              (enum.meta(value) || {})[arg].try(:dup)
             end
           end
         DEF
