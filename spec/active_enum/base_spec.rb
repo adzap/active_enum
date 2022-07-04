@@ -286,6 +286,16 @@ describe ActiveEnum::Base do
     end
   end
 
+  describe ".to_h" do
+    it 'should return hash of ids as keys and names as values' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      expect(enum.to_h).to eq({ 1 => 'Name 1', 2 => 'Name 2' })
+    end
+  end
+
   def define_enum(&block)
     Class.new(ActiveEnum::Base, &block)
   end

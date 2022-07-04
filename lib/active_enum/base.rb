@@ -67,6 +67,13 @@ module ActiveEnum
         }
       end
 
+      # Return a simple hash of key value pairs id => name for each value
+      def to_h
+        store.values.inject({}) { |hash, row|
+          hash.merge(row[0] => row[1])
+        }
+      end
+
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
       def get(index)
