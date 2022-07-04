@@ -74,6 +74,12 @@ module ActiveEnum
         }
       end
 
+      # Return count of values defined
+      def length
+        store.values.length
+      end
+      alias_method :size, :length
+
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
       def get(index)

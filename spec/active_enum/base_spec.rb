@@ -296,6 +296,29 @@ describe ActiveEnum::Base do
     end
   end
 
+  describe ".length" do
+    it 'should return number of values defined' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      expect(enum.length).to eq 2
+    end
+
+    it 'should return 0 when no values defined' do
+      enum = define_enum {}
+      expect(enum.length).to eq 0
+    end
+
+    it 'should be aliased as size' do
+      enum = define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+      expect(enum.size).to eq enum.length
+    end
+  end
+
   def define_enum(&block)
     Class.new(ActiveEnum::Base, &block)
   end
