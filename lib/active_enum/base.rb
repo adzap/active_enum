@@ -24,7 +24,7 @@ module ActiveEnum
         store.set(*id_and_name_and_meta(enum_value))
       end
 
-      # Specify order enum values are returned. 
+      # Specify order enum values are returned.
       # Allowed values are :asc, :desc or :natural
       #
       def order(order)
@@ -82,20 +82,25 @@ module ActiveEnum
 
       # Access id or name value. Pass an id number to retrieve the name or
       # a symbol or string to retrieve the matching id.
-      def get(index)
+      def get(index, raise_on_not_found:  ActiveEnum.raise_on_not_found)
+        row = get_value(index, raise_on_not_found)
+        return if row.nil?
+        index.is_a?(Integer) ? row[1] : row[0]
+      end
+
+      def [](index)
         row = get_value(index)
         return if row.nil?
         index.is_a?(Integer) ? row[1] : row[0]
       end
-      alias_method :[], :get
 
       def include?(value)
         !get_value(value, false).nil?
       end
 
       # Access any meta data defined for a given id or name. Returns a hash.
-      def meta(index)
-        row = get_value(index)
+      def meta(index, raise_on_not_found: ActiveEnum.raise_on_not_found)
+        row = get_value(index, raise_on_not_found)
         row[2] || {} if row
       end
 

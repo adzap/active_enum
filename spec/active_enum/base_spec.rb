@@ -190,7 +190,7 @@ describe ActiveEnum::Base do
         expect(enum[0]).to eq nil
       end
 
-      context "with raise_on_not_found" do
+      context "with config raise_on_not_found" do
         with_config :raise_on_not_found, true
 
         it "should raise ActiveEnum::NotFound for missing id" do
@@ -200,6 +200,27 @@ describe ActiveEnum::Base do
         it "should raise ActiveEnum::NotFound for missing name" do
           expect { enum[0] }.to raise_error(ActiveEnum::NotFound)
         end
+      end
+    end
+  end
+
+  describe '.get' do
+    with_config :raise_on_not_found, false
+
+    let(:enum) {
+      define_enum do
+        value :id => 1, :name => 'Name 1'
+        value :id => 2, :name => 'Name 2'
+      end
+    }
+
+    context "with raise_on_not_found: false" do
+      it "should raise ActiveEnum::NotFound for missing id" do
+        expect { enum.get('Not a value', raise_on_not_found: true) }.to raise_error(ActiveEnum::NotFound)
+      end
+
+      it "should raise ActiveEnum::NotFound for missing name" do
+        expect { enum.get(0, raise_on_not_found: true) }.to raise_error(ActiveEnum::NotFound)
       end
     end
   end
