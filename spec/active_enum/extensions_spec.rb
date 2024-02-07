@@ -31,7 +31,7 @@ describe ActiveEnum::Extensions do
     Person.enumerate :sex, :with => Sex
     Person.enumerate :attending, :with => Accepted
 
-    expect(Person.active_enum_for(:sex)).to eq(Sex) 
+    expect(Person.active_enum_for(:sex)).to eq(Sex)
     expect(Person.active_enum_for(:attending)).to eq(Accepted)
   end
 
@@ -201,11 +201,11 @@ describe ActiveEnum::Extensions do
       before(:all) { ActiveEnum.use_name_as_value = true }
       let(:person) { Person.new(:sex =>1) }
 
-      before do 
+      before do
         reset_class Person do
           enumerate :sex, :with => Sex
         end
-      end 
+      end
 
       it 'should return text name value for attribute' do
         expect(person.sex).to eq('Male')
@@ -216,6 +216,27 @@ describe ActiveEnum::Extensions do
       end
 
       after(:all) { ActiveEnum.use_name_as_value = false }
+    end
+
+    context "with skip_accessors: true" do
+      before(:all) do
+        reset_class Person do
+          enumerate :sex, with: Sex, skip_accessors: true
+        end
+      end
+
+      it 'read method should not accept arg' do
+        expect{ person.sex(:name) }.to raise_error ArgumentError
+      end
+
+      it 'write method should not accept name' do
+        person.sex = :male
+        expect(person.sex).to_not eq Sex[:male]
+      end
+
+      it 'question method should not accept arg' do
+        expect{ person.sex?(:male) }.to raise_error ArgumentError
+      end
     end
 
   end

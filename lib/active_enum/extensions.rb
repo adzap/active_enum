@@ -41,7 +41,7 @@ module ActiveEnum
             attribute = attribute.to_sym
             attributes_enum[attribute] = enum
 
-            define_active_enum_methods_for_attribute(attribute)
+            define_active_enum_methods_for_attribute(attribute, options) unless options[:skip_accessors]
           rescue NameError => e
             raise e unless e.message =~ /uninitialized constant/
             raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
@@ -54,10 +54,10 @@ module ActiveEnum
         enumerated_attributes && enumerated_attributes[attribute.to_sym]
       end
 
-      def define_active_enum_methods_for_attribute(attribute)
-        define_active_enum_read_method(attribute)
-        define_active_enum_write_method(attribute)
-        define_active_enum_question_method(attribute)
+      def define_active_enum_methods_for_attribute(attribute, options={})
+        define_active_enum_read_method(attribute) unless options[:skip_read]
+        define_active_enum_write_method(attribute) unless options[:skip_write]
+        define_active_enum_question_method(attribute) unless options[:skip_predicate]
       end
 
       def define_implicit_enum_class_for_attribute(attribute, block)
