@@ -13,8 +13,8 @@ describe ActiveEnum::Storage::MemoryStore do
     end
 
     it 'should store value of id, name and meta hash' do
-      store.set 1, 'test name', :description => 'meta'
-      expect(store.values).to eq([[1, 'test name', {:description => 'meta'}]])
+      store.set 1, 'test name', description: 'meta'
+      expect(store.values).to eq([[1, 'test name', {description: 'meta'}]])
     end
 
     it 'should raise error if duplicate id' do
@@ -54,8 +54,8 @@ describe ActiveEnum::Storage::MemoryStore do
 
   describe "#get_by_id" do
     it 'should return the value for a given id' do
-      store.set 1, 'test name', :description => 'meta'
-      expect(store.get_by_id(1)).to eq([1, 'test name', {:description => "meta"}])
+      store.set 1, 'test name', description: 'meta'
+      expect(store.get_by_id(1)).to eq([1, 'test name', {description: "meta"}])
     end
 
     it 'should return nil when id not found' do

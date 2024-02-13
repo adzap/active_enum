@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ActiveEnum::Storage::I18nStore do
   class TestI18nStoreEnum < ActiveEnum::Base; end
-  
+
   let(:enum_class) { TestI18nStoreEnum }
   let(:enum_key) { enum_class.name.underscore }
   let(:store) { ActiveEnum::Storage::I18nStore.new(enum_class, :asc) }
@@ -31,8 +31,8 @@ describe ActiveEnum::Storage::I18nStore do
     end
 
     it 'should store value of id, name and meta hash' do
-      store.set 1, 'test name', :description => 'meta'
-      expect(store.send(:_values)).to eq([[1, 'test name', {:description => 'meta'}]])
+      store.set 1, 'test name', description: 'meta'
+      expect(store.send(:_values)).to eq([[1, 'test name', { description: 'meta' }]])
     end
 
     it 'should raise error if duplicate id' do
@@ -59,8 +59,8 @@ describe ActiveEnum::Storage::I18nStore do
 
   describe "#values" do
     before do
-      I18n.backend.store_translations :en, :active_enum => { enum_key => { :thanks => 'Thanks' } }
-      I18n.backend.store_translations :fr, :active_enum => { enum_key => { :thanks => 'Merce' } }
+      I18n.backend.store_translations :en, active_enum: { enum_key => { thanks: 'Thanks' } }
+      I18n.backend.store_translations :fr, active_enum: { enum_key => { thanks: 'Merce' } }
     end
 
     it 'should return array of stored values for current locale' do
@@ -77,7 +77,7 @@ describe ActiveEnum::Storage::I18nStore do
 
   describe "#get_by_id" do
     before do
-      I18n.backend.store_translations :en, :active_enum => { enum_key => { 'test' => 'Testing' } }
+      I18n.backend.store_translations :en, active_enum: { enum_key => { 'test' => 'Testing' } }
       I18n.locale = :en
     end
 
@@ -87,8 +87,8 @@ describe ActiveEnum::Storage::I18nStore do
     end
 
     it 'should return the value with meta for a given id' do
-      store.set 1, 'test', :description => 'meta'
-      expect(store.get_by_id(1)).to eq([1, 'Testing', { :description => 'meta' }])
+      store.set 1, 'test', description: 'meta'
+      expect(store.get_by_id(1)).to eq([1, 'Testing', { description: 'meta' }])
     end
 
     it 'should return nil when id not found' do
@@ -104,7 +104,7 @@ describe ActiveEnum::Storage::I18nStore do
 
   describe "#get_by_name" do
     before do
-      I18n.backend.store_translations :en, :active_enum => { enum_key => { 'test' => 'Testing' } }
+      I18n.backend.store_translations :en, active_enum: { enum_key => { 'test' => 'Testing' } }
       I18n.locale = :en
     end
 
@@ -114,8 +114,8 @@ describe ActiveEnum::Storage::I18nStore do
     end
 
     it 'should return the value with meta for a given name' do
-      store.set 1, 'test', :description => 'meta'
-      expect(store.get_by_name('test')).to eq([1, 'Testing', { :description => 'meta' }])
+      store.set 1, 'test', description: 'meta'
+      expect(store.get_by_name('test')).to eq([1, 'Testing', { description: 'meta' }])
     end
 
     it 'should return nil when name not found' do
@@ -125,7 +125,7 @@ describe ActiveEnum::Storage::I18nStore do
 
   describe "#sort!" do
     before do
-      I18n.backend.store_translations :en, :active_enum => { enum_key => { 
+      I18n.backend.store_translations :en, active_enum: { enum_key => {
         'name1' => 'Name 1',
         'name2' => 'Name 2',
         'name3' => 'Name 3',

@@ -31,8 +31,8 @@ describe ActiveEnum::Base do
 
     it 'should return an array of arrays with all values defined as [id, name]' do
       enum = define_enum do
-        value :name => 'Name 1'
-        value :name => 'Name 2'
+        value name: 'Name 1'
+        value name: 'Name 2'
       end
       expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
@@ -41,14 +41,14 @@ describe ActiveEnum::Base do
   describe ".value" do
     it 'should allow me to define a value with an id and name' do
       enum = define_enum do
-        value :id => 1, :name => 'Name'
+        value id: 1, name: 'Name'
       end
       expect(enum.values).to eq([[1,'Name']])
     end
 
     it 'should allow me to define a value with a name only' do
       enum = define_enum do
-        value :name => 'Name'
+        value name: 'Name'
       end
       expect(enum.values).to eq([[1,'Name']])
     end
@@ -62,15 +62,15 @@ describe ActiveEnum::Base do
 
     it 'should allow to define meta data value with extra key value pairs' do
       enum = define_enum do
-        value :id => 1, :name => 'Name', :description => 'extra'
+        value id: 1, name: 'Name', description: 'extra'
       end
-      expect(enum.values).to eq([[1,'Name',{:description => 'extra'}]])
+      expect(enum.values).to eq([[1,'Name',{description: 'extra'}]])
     end
 
     it 'should increment value ids when defined without ids' do
       enum = define_enum do
-        value :name => 'Name 1'
-        value :name => 'Name 2'
+        value name: 'Name 1'
+        value name: 'Name 2'
       end
       expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
@@ -78,8 +78,8 @@ describe ActiveEnum::Base do
     it 'should raise error if the id is a duplicate' do
       expect {
         define_enum do
-          value :id => 1, :name => 'Name 1'
-          value :id => 1, :name => 'Name 2'
+          value id: 1, name: 'Name 1'
+          value id: 1, name: 'Name 2'
         end
       }.to raise_error(ActiveEnum::DuplicateValue)
     end
@@ -87,8 +87,8 @@ describe ActiveEnum::Base do
     it 'should raise error if the name is a duplicate' do
       expect {
         define_enum do
-          value :id => 1, :name => 'Name'
-          value :id => 2, :name => 'Name'
+          value id: 1, name: 'Name'
+          value id: 2, name: 'Name'
         end
       }.to raise_error(ActiveEnum::DuplicateValue)
     end
@@ -97,14 +97,14 @@ describe ActiveEnum::Base do
   describe ".meta" do
     it 'should return meta values hash for a given index value' do
       enum = define_enum do
-        value :id => 1, :name => 'Name', :description => 'extra'
+        value id: 1, name: 'Name', description: 'extra'
       end
-      expect(enum.meta(1)).to eq({:description => 'extra'})
+      expect(enum.meta(1)).to eq({description: 'extra'})
     end
 
     it 'should return empty hash for index with no meta defined' do
       enum = define_enum do
-        value :id => 1, :name => 'Name'
+        value id: 1, name: 'Name'
       end
       expect(enum.meta(1)).to eq({})
     end
@@ -112,7 +112,7 @@ describe ActiveEnum::Base do
     context "with raise_on_not_found: false" do
       let(:enum) {
         define_enum do
-          value :id => 1, :name => 'Name', :description => 'extra'
+          value id: 1, name: 'Name', description: 'extra'
         end
       }
 
@@ -129,8 +129,8 @@ describe ActiveEnum::Base do
   context "sorting" do
     it 'should return values ascending by default' do
       enum = define_enum do
-        value :id => 2, :name => 'Name 2'
-        value :id => 1, :name => 'Name 1'
+        value id: 2, name: 'Name 2'
+        value id: 1, name: 'Name 1'
       end
       expect(enum.values).to eq([[1,'Name 1'], [2, 'Name 2']])
     end
@@ -138,8 +138,8 @@ describe ActiveEnum::Base do
     it 'should return sorted values by id using order setting' do
       enum = define_enum do
         order :desc
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.values).to eq([[2, 'Name 2'], [1,'Name 1']])
     end
@@ -147,9 +147,9 @@ describe ActiveEnum::Base do
     it 'should return sorted values by id using order setting' do
       enum = define_enum do
         order :natural
-        value :id => 3, :name => 'Name 3'
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 3, name: 'Name 3'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.values).to eq([[3,'Name 3'], [1,'Name 1'], [2, 'Name 2']])
     end
@@ -158,8 +158,8 @@ describe ActiveEnum::Base do
   describe ".ids" do
     it 'should return array of ids' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.ids).to eq([1,2])
     end
@@ -168,8 +168,8 @@ describe ActiveEnum::Base do
   describe ".names" do
     it 'should return array of names' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.names).to eq(['Name 1', 'Name 2'])
     end
@@ -178,8 +178,8 @@ describe ActiveEnum::Base do
   context "element reference method" do
     let(:enum) {
       define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
     }
 
@@ -224,8 +224,8 @@ describe ActiveEnum::Base do
 
     let(:enum) {
       define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
     }
 
@@ -243,8 +243,8 @@ describe ActiveEnum::Base do
   describe ".include?" do
     let(:enum) {
       define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
     }
 
@@ -268,8 +268,8 @@ describe ActiveEnum::Base do
   describe ".to_select" do
     it 'should return array for select helpers' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.to_select).to eq([['Name 1',1], ['Name 2',2]])
     end
@@ -277,8 +277,8 @@ describe ActiveEnum::Base do
     it 'should return array sorted using order setting' do
       enum = define_enum do
         order :desc
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.to_select).to eq([['Name 2',2], ['Name 1',1]])
     end
@@ -287,8 +287,8 @@ describe ActiveEnum::Base do
   describe ".to_grouped_select" do
     it 'should return array for grouped select helpers grouped by meta key value' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1', :category => 'Foo'
-        value :id => 2, :name => 'Name 2', :category => 'Bar'
+        value id: 1, name: 'Name 1', category: 'Foo'
+        value id: 2, name: 'Name 2', category: 'Bar'
       end
 
       expect(enum.to_grouped_select(:category)).to eq([
@@ -299,8 +299,8 @@ describe ActiveEnum::Base do
 
     it 'should group any value missing the group_by key by nil' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1', :category => 'Foo'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1', category: 'Foo'
+        value id: 2, name: 'Name 2'
       end
 
       expect(enum.to_grouped_select(:category)).to eq([
@@ -311,8 +311,8 @@ describe ActiveEnum::Base do
 
     it 'shoud transform group name with custom group transform proc' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1', :category => 'Foo'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1', category: 'Foo'
+        value id: 2, name: 'Name 2'
       end
 
       expect(enum.to_grouped_select(:category, group_transform: proc { |group| group.to_s.upcase })).to eq([
@@ -325,8 +325,8 @@ describe ActiveEnum::Base do
   describe ".to_h" do
     it 'should return hash of ids as keys and names as values' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.to_h).to eq({ 1 => 'Name 1', 2 => 'Name 2' })
     end
@@ -335,8 +335,8 @@ describe ActiveEnum::Base do
   describe ".length" do
     it 'should return number of values defined' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.length).to eq 2
     end
@@ -348,8 +348,8 @@ describe ActiveEnum::Base do
 
     it 'should be aliased as size' do
       enum = define_enum do
-        value :id => 1, :name => 'Name 1'
-        value :id => 2, :name => 'Name 2'
+        value id: 1, name: 'Name 1'
+        value id: 2, name: 'Name 2'
       end
       expect(enum.size).to eq enum.length
     end

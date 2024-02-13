@@ -2,14 +2,14 @@ require "spec_helper"
 
 describe ActiveEnum::Extensions do
   class Sex < ActiveEnum::Base
-    value :id => 1, :name => 'Male'
-    value :id => 2, :name => 'Female'
+    value id: 1, name: 'Male'
+    value id: 2, name: 'Female'
   end
 
   class Accepted < ActiveEnum::Base
-    value :id => 0, :name => 'No'
-    value :id => 1, :name => 'Definitely'
-    value :id => 2, :name => 'Maybe'
+    value id: 0, name: 'No'
+    value id: 1, name: 'Definitely'
+    value id: 2, name: 'Maybe'
   end
 
   it 'should add class :enumerate method to ActiveRecord' do
@@ -21,15 +21,15 @@ describe ActiveEnum::Extensions do
   end
 
   it 'should allow multiple attributes to be enumerated with same enum' do
-    Person.enumerate :attending, :staying, :with => Accepted
+    Person.enumerate :attending, :staying, with: Accepted
 
     expect(Person.active_enum_for(:attending)).to eq(Accepted)
     expect(Person.active_enum_for(:staying)).to eq(Accepted)
   end
 
   it 'should allow multiple attributes to be enumerated with different enums' do
-    Person.enumerate :sex, :with => Sex
-    Person.enumerate :attending, :with => Accepted
+    Person.enumerate :sex, with: Sex
+    Person.enumerate :attending, with: Accepted
 
     expect(Person.active_enum_for(:sex)).to eq(Sex)
     expect(Person.active_enum_for(:attending)).to eq(Accepted)
@@ -43,7 +43,7 @@ describe ActiveEnum::Extensions do
 
   it 'should create enum namespaced enum class from block' do
     Person.enumerate :sex do
-      value :id => 1, :name => 'Male'
+      value id: 1, name: 'Male'
     end
     expect(Person.active_enum_for(:sex)).to eq(::Person::Sex)
   end
@@ -55,11 +55,11 @@ describe ActiveEnum::Extensions do
   end
 
   context "attribute" do
-    let(:person) { Person.new(:sex => 1) }
+    let(:person) { Person.new(sex: 1) }
 
     before(:all) do
       reset_class Person do
-        enumerate :sex, :with => Sex
+        enumerate :sex, with: Sex
       end
     end
 
@@ -82,7 +82,7 @@ describe ActiveEnum::Extensions do
     end
 
     context "with nil value" do
-      let(:person) { Person.new(:sex => nil) }
+      let(:person) { Person.new(sex: nil) }
 
       it 'should return nil with no arg' do
         expect(person.sex).to be_nil
@@ -110,7 +110,7 @@ describe ActiveEnum::Extensions do
     end
 
     context "with undefined value" do
-      let(:person) { Person.new(:sex => -1) }
+      let(:person) { Person.new(sex: -1) }
 
       it 'should return value with no arg' do
         expect(person.sex).to eq(-1)
@@ -138,13 +138,13 @@ describe ActiveEnum::Extensions do
     end
 
     context "with meta data" do
-      let(:person) { Person.new(:sex => 1) }
+      let(:person) { Person.new(sex: 1) }
 
       before(:all) do
         reset_class Person do
           enumerate :sex do
-            value :id => 1, :name => 'Male',   :description => 'Man'
-            value :id => 2, :name => 'Female', :description => 'Woman'
+            value id: 1, name: 'Male',   description: 'Man'
+            value id: 2, name: 'Female', description: 'Woman'
           end
         end
       end
@@ -163,7 +163,7 @@ describe ActiveEnum::Extensions do
       end
 
       context "and global raise_on_not_found set to true" do
-        let(:person) { Person.new(:sex => -1) }
+        let(:person) { Person.new(sex: -1) }
         with_config :raise_on_not_found, true
 
         it "should not raise error when attribute value is invalid" do
@@ -220,7 +220,7 @@ describe ActiveEnum::Extensions do
 
       before do
         reset_class Person do
-          enumerate :sex, :with => Sex
+          enumerate :sex, with: Sex
         end
       end
 
