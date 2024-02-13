@@ -100,7 +100,7 @@ describe ActiveEnum::Extensions do
         expect(person.sex(:enum)).to eq(Sex)
       end
 
-      context "and raise_on_not_found" do
+      context "and global raise_on_not_found set to true" do
         with_config :raise_on_not_found, true
 
         it "should not raise error when attribute is nil" do
@@ -127,10 +127,18 @@ describe ActiveEnum::Extensions do
       it 'should return enum class for attribute' do
         expect(person.sex(:enum)).to eq(Sex)
       end
+
+      context "and global raise_on_not_found set to true" do
+        with_config :raise_on_not_found, true
+
+        it "should not raise error when attribute value is invalid" do
+          expect { person.sex(:id) }.to_not raise_error
+        end
+      end
     end
 
     context "with meta data" do
-      let(:person) { Person.new(:sex =>1) }
+      let(:person) { Person.new(:sex => 1) }
 
       before(:all) do
         reset_class Person do
@@ -152,6 +160,15 @@ describe ActiveEnum::Extensions do
       it 'should return nil for missing index' do
         person.sex = nil
         expect(person.sex(:description)).to be_nil
+      end
+
+      context "and global raise_on_not_found set to true" do
+        let(:person) { Person.new(:sex => -1) }
+        with_config :raise_on_not_found, true
+
+        it "should not raise error when attribute value is invalid" do
+          expect { person.sex(:nonexistent) }.to_not raise_error
+        end
       end
     end
 

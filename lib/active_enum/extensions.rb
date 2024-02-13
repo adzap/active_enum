@@ -90,11 +90,11 @@ module ActiveEnum
             when nil
               #{ActiveEnum.use_name_as_value ? 'enum[value]' : 'value' }
             when :id
-              value if enum[value]
+              value if enum.get(value, raise_on_not_found: false)
             when :name
-              enum[value].dup
+              enum.get(value, raise_on_not_found: false).dup
             when Symbol
-              (enum.meta(value) || {})[arg].try(:dup)
+              (enum.meta(value, raise_on_not_found: false) || {})[arg].try(:dup)
             end
           end
         DEF
