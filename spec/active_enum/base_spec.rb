@@ -109,6 +109,21 @@ describe ActiveEnum::Base do
       expect(enum.meta(1)).to eq({})
     end
 
+    context "with raise_on_not_found: false" do
+      let(:enum) {
+        define_enum do
+          value :id => 1, :name => 'Name', :description => 'extra'
+        end
+      }
+
+      it "should raise ActiveEnum::NotFound for missing id" do
+        expect { enum.meta(0, raise_on_not_found: true) }.to raise_error(ActiveEnum::NotFound)
+      end
+
+      it "should raise ActiveEnum::NotFound for missing name" do
+        expect { enum.meta('Not a value', raise_on_not_found: true) }.to raise_error(ActiveEnum::NotFound)
+      end
+    end
   end
 
   context "sorting" do
