@@ -4,8 +4,6 @@ module ActiveEnum
   class NotFound < StandardError; end
 
   class Base
-    DEFAULT_GROUPED_SELECT_TRANSFORM = proc { |group| group&.html_safe }
-
     class << self
       attr_accessor :store
 
@@ -61,7 +59,7 @@ module ActiveEnum
       end
 
       # Return enum values in a nested array suitable to pass to a Rails form grouped select helper.
-      def to_grouped_select(group_by, group_transform: DEFAULT_GROUPED_SELECT_TRANSFORM)
+      def to_grouped_select(group_by, group_transform: ActiveEnum.default_select_group_transform, value_transform: ActiveEnum.default_select_value_transform)
         store.values.group_by { |(_id, _name, meta)| (meta || {})[group_by] }.map { |group, collection|
           [ group_transform.call(group), collection.map { |(id, name, _meta)| [ name.html_safe, id ] } ]
         }

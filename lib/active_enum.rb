@@ -20,6 +20,9 @@ module ActiveEnum
   mattr_accessor :storage_options
   @@storage_options = {}
 
+  mattr_accessor :default_select_group_transform
+  @@default_select_group_transform = proc { |group| group&.html_safe }
+
   def storage=(*args)
     @@storage_options = args.extract_options!
     @@storage = args.first
