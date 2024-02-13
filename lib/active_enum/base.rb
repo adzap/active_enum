@@ -54,8 +54,8 @@ module ActiveEnum
       end
 
       # Return enum values in an array suitable to pass to a Rails form select helper.
-      def to_select
-        store.values.map { |v| [v[1].html_safe, v[0]] }
+      def to_select(value_transform: ActiveEnum.default_select_value_transform)
+        store.values.map(&value_transform)
       end
 
       # Return enum values in a nested array suitable to pass to a Rails form grouped select helper.
