@@ -89,9 +89,7 @@ module ActiveEnum
       end
 
       def [](index)
-        row = get_value(index)
-        return if row.nil?
-        index.is_a?(Integer) ? row[1] : row[0]
+        get(index)
       end
 
       def include?(value)
