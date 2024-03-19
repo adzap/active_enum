@@ -31,17 +31,40 @@ describe ActiveEnum::ActsAsEnum do
   end
 
   context "#[]" do
-    it "should return name column value when passing id to [] method" do
+    it "should return name column value when passed id" do
       expect(Person[1]).to eq('Dave')
     end
 
-    it "should return id column value when passing string name to [] method" do
+    it "should return id column value when passed string name" do
       expect(Person['Dave']).to eq(1)
       expect(Person['dave']).to eq(1)
     end
 
-    it "should return id column value when passing symbol name to [] method" do
+    it "should return id column value when passed symbol name" do
       expect(Person[:dave]).to eq(1)
+    end
+  end
+
+  context '#get' do
+    it "should return name column value when passed id" do
+      expect(Person.get(1)).to eq('Dave')
+    end
+
+    it "should return id column value when passed string name" do
+      expect(Person.get('Dave')).to eq(1)
+      expect(Person.get('dave')).to eq(1)
+    end
+
+    it "should return id column value when passed symbol name" do
+      expect(Person.get(:dave)).to eq(1)
+    end
+
+    it "should not raise for missing id when raise_on_not_found is false" do
+      expect { Person.get(0, raise_on_not_found: false) }.to_not raise_error
+    end
+
+    it "should raise for missing id when raise_on_not_found is true" do
+      expect { Person.get(0, raise_on_not_found: true) }.to raise_error(ActiveEnum::NotFound)
     end
   end
 

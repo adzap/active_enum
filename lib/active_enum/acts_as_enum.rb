@@ -6,7 +6,7 @@ module ActiveEnum
       def acts_as_enum(options={})
         extend ClassMethods
         class_attribute :active_enum_options
-        self.active_enum_options = options.reverse_merge(:name_column => 'name')
+        self.active_enum_options = options.reverse_merge(name_column: 'name')
         scope :enum_values, proc { select(Arel.sql("#{primary_key}, #{active_enum_options[:name_column]}")).
                                    where(active_enum_options[:conditions]).
                                    order(Arel.sql("#{primary_key} #{active_enum_options[:order]}")) }
@@ -33,14 +33,19 @@ module ActiveEnum
       end
 
       def [](index)
-        row = get_value(index)
+        get(index)
+      end
+
+      def get(index, raise_on_not_found: ActiveEnum.raise_on_not_found)
+        row = get_value(index, raise_on_not_found)
         return if row.nil?
         index.is_a?(Integer) ? row.send(active_enum_options[:name_column]) : row.id
       end
 
       # Access any meta data defined for a given id or name. Returns a hash.
-      def meta(index)
+      def meta(index, raise_on_not_found: ActiveEnum.raise_on_not_found)
         row = lookup_relation(index).unscope(:select).first
+        raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") if raise_on_not_found
         row&.attributes.except(primary_key.to_s, active_enum_options[:name_column].to_s)
       end
 
@@ -53,12 +58,12 @@ module ActiveEnum
 
       private
 
-      def get_value(index)
+      def get_value(index, raise_on_not_found = ActiveEnum.raise_on_not_found)
         lookup_relation(index).first || begin
-          raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") if ActiveEnum.raise_on_not_found
+          raise(ActiveEnum::NotFound, "#{self} value for '#{index}' was not found") if raise_on_not_found
         end
       end
-      
+
       def lookup_relation(index)
         if index.is_a?(Integer)
           enum_values.where(id: index)
