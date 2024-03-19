@@ -26,6 +26,8 @@ module ActiveEnum
       # Allowed values are :asc, :desc or :natural
       #
       def order(order)
+        raise "Invalid order '#{order}' in #{self}" unless order.in?([:asc, :desc, :as_defined, :natural])
+
         if order == :as_defined
           ActiveSupport::Deprecation.warn("You are using the order :as_defined which has been deprecated. Use :natural.")
           order = :natural
