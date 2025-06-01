@@ -10,7 +10,7 @@ require 'action_mailer'
 require 'active_enum'
 require 'active_enum/acts_as_enum'
 require 'securerandom'
-require 'byebug'
+require 'debug'
 
 module ActiveEnum 
   class Application < Rails::Application
