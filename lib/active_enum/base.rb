@@ -5,7 +5,7 @@ module ActiveEnum
 
   class Base
     class << self
-      attr_accessor :store
+      attr_reader :store
 
       def inherited(subclass)
         ActiveEnum.enum_classes << subclass
