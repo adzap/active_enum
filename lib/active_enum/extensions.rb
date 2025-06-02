@@ -43,7 +43,7 @@ module ActiveEnum
 
             define_active_enum_methods_for_attribute(attribute, options) unless options[:skip_accessors]
           rescue NameError => e
-            raise e unless e.message =~ /uninitialized constant/
+            raise e unless e.message.match?(/uninitialized constant/)
             raise ActiveEnum::EnumNotFound, "Enum class could not be found for attribute '#{attribute}' in class #{self}. Specify the enum class using the :with option."
           end
         end
