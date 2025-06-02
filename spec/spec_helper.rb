@@ -1,5 +1,4 @@
 ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
 
 require 'rails'
 require 'active_record'
@@ -9,21 +8,16 @@ require 'action_mailer'
 
 require 'active_enum'
 require 'active_enum/acts_as_enum'
-require 'securerandom'
-require 'debug'
 
-module ActiveEnum 
+module ActiveEnum
   class Application < Rails::Application
     config.generators do |g|
       g.orm             :active_record
       g.test_framework  :rspec, :fixture => false
     end
     config.active_support.deprecation = :notify
-    config.eager_load = false if Rails.version >= "4.0"
-    config.secret_key_base = SecureRandom.hex(10) if Rails.version >= "4.0"
   end
 end
-ActiveEnum::Application.initialize!
 
 I18n.enforce_available_locales = false
 I18n.available_locales = ['en', 'ja']
