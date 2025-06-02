@@ -1,5 +1,6 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require 'logger'
 require 'rails'
 require 'active_record'
 require 'action_controller/railtie'
