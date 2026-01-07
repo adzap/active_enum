@@ -93,7 +93,7 @@ module ActiveEnum
             when :name
               enum.get(value, raise_on_not_found: false).dup
             when Symbol
-              (enum.meta(value, raise_on_not_found: false) || {})[arg].try(:dup)
+              (enum.meta(value, raise_on_not_found: false) || {})[arg].dup
             end
           end
         DEF
