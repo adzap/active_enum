@@ -6,6 +6,7 @@ module ActiveEnum
   class Base
     class << self
       attr_reader :store
+      EMPTY_META = {}.freeze
 
       def inherited(subclass)
         ActiveEnum.enum_classes << subclass
@@ -99,7 +100,7 @@ module ActiveEnum
       # Access any meta data defined for a given id or name. Returns a hash.
       def meta(index, raise_on_not_found: ActiveEnum.raise_on_not_found)
         row = get_value(index, raise_on_not_found)
-        row[2] || {} if row
+        row[2] || EMPTY_META if row
       end
 
       private
