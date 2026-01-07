@@ -61,9 +61,8 @@ module ActiveEnum
       end
 
       def define_implicit_enum_class_for_attribute(attribute, block)
-        enum_class_name = "#{name}::#{attribute.to_s.camelize}"
-        eval("class #{enum_class_name} < ActiveEnum::Base; end")
-        enum = enum_class_name.constantize
+        enum_class_name = attribute.to_s.camelize
+        enum = const_set(enum_class_name, Class.new(ActiveEnum::Base))
         enum.class_eval(&block)
         enum
       end
