@@ -113,6 +113,11 @@ describe ActiveEnum::Storage::I18nStore do
       expect(store.get_by_name('test')).to eq([1, 'Testing'])
     end
 
+    it 'should return the value when given its translated name' do
+      store.set 1, 'test'
+      expect(store.get_by_name('Testing')).to eq([1, 'Testing'])
+    end
+
     it 'should return the value with meta for a given name' do
       store.set 1, 'test', description: 'meta'
       expect(store.get_by_name('test')).to eq([1, 'Testing', { description: 'meta' }])
